@@ -1,0 +1,10 @@
+:root {
+    --font-family: "Nunito Sans", sans-serif;
+    --btn-busy-color: #FFFFFF;
+    --btn-primary-disabled-bg-color: rgba(115, 92, 254, 0.25);
+    --btn-primary-disabled-color: #FFFFFF;
+    --btn-primary-enabled-bg-color: #735CFE;
+    --btn-primary-enabled-color: #FFFFFF;
+    --content-color: #313C59;
+  }
+  

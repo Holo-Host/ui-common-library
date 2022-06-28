@@ -1,0 +1,12 @@
+{
+    "mode": "Chaperone.HCC",
+    "app_id": "hha",
+    "log_level": true,
+    "connection": {
+      "secure": false,
+      "host": "localhost",
+      "port": 8888,
+      "path": "/"
+    },
+    "hcc_admin_port": 4444
+}
