@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style>
-@import '../public/styles/common.css';
+@import '../artifacts/styles/common.css';
 
 html {
   overflow-y: scroll;
