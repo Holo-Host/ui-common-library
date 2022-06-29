@@ -34,12 +34,12 @@ export default {
             infoLink: 'https://holo.host/faq-tag/elemental-chat',
             skipRegistration: false,
             anonymousAllowed: false,
-            membraneProofServer: {
-              url: "https://devnet-membrane-proof-service.holo.host",
-              payload: {
-                role: 'publisher'
-              }
-            }
+            // membraneProofServer: {
+            //   url: "https://devnet-membrane-proof-service.holo.host",
+            //   payload: {
+            //     role: 'publisher'
+            //   }
+            // }
           }
         })
       } catch (e) {
