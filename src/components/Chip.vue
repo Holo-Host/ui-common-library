@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped>
-@import '../../node_modules/vue-select/dist/vue-select.css';
+@import '/node_modules/vue-select/dist/vue-select.css';
 
 .select-items {
     width: 100%;

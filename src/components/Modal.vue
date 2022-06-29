@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ExIcon from 'components/icons/ExIcon'
+import ExIcon from './icons/ExIcon'
 
 export default {
   name: 'Modal',

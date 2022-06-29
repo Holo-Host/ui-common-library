@@ -8,7 +8,7 @@
 
 <script>
 
-import Icon from 'components/icons/Icon.vue'
+import Icon from './Icon.vue'
 
 export default {
   name: 'SmallQuestionIconIcon',
