@@ -7,7 +7,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import ExIcon from 'components/icons/ExIcon'
+import ExIcon from './icons/ExIcon'
 
 export default {
   name: 'FlashMessage',
