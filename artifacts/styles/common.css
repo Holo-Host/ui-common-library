@@ -6,6 +6,20 @@
     --btn-primary-enabled-bg-color: #735CFE;
     --btn-primary-enabled-color: #FFFFFF;
     --content-color: #313C59;
+
+    /* Required to be present in the project using the components */
+    --white-color: #FFFFFF;
+    --black-color: #000000;
+
+    --grey-color: #606c8b;
+    --grey-dark-color: #313c59;
+
+    --violet-color: #E339FF;
+    --red-color: #ff5f5f;
+
+    /* Project specific theme colors */
+    --primary-color: #00cad9;
+    --primary-light-color: rgba(0, 202, 217, 25);
 }
 
 html {

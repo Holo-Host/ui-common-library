@@ -77,7 +77,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
   align-items: center;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 </style>
 
@@ -120,7 +120,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
   font-weight: bold;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 
 .body {

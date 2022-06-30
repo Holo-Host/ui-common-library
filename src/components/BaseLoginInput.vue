@@ -171,7 +171,7 @@ const {
     display: block;
     font-size: 12px;
     line-height: 16px;
-    color: #606c8b;
+    color: var(--grey-color);
     text-transform: uppercase;
   }
 
@@ -202,14 +202,14 @@ const {
     }
 
     &.invalid {
-      border-color: #ff5f5f;
+      border-color: var(--red-color);
     }
   }
 
   &__error {
     margin: 5px 0 4px 1px;
     font-size: 12px;
-    color: #ff5f5f;
+    color: var(--red-color);
   }
 
   .eye-icon {

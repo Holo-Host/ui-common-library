@@ -142,7 +142,7 @@ const {
     display: block;
     width: 100%;
     margin-top: 0;
-    border: 1px solid #606c8b;
+    border: 1px solid var(--grey-color);
     border-radius: 5px;
     padding: 9px 14px;
     font-size: 14px;
@@ -150,7 +150,7 @@ const {
 
     &:focus {
       outline: none;
-      border: 1px solid #00cad9;
+      border: 1px solid var(--primary-color);
     }
 
     &::placeholder {
@@ -166,14 +166,14 @@ const {
     }
 
     &.invalid {
-      border-color: #ff5f5f;
+      border-color: var(--red-color);
     }
   }
 
   &__error {
     margin: 5px 0 4px 1px;
     font-size: 12px;
-    color: #ff5f5f;
+    color: var(--red-color);
     font-weight: 600;
   }
 
