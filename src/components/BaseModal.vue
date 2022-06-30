@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import ExIcon from 'components/icons/ExIcon'
+import ExIcon from './icons/ExIcon'
 
 defineProps({
   hasCloseButton: {

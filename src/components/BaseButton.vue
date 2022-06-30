@@ -40,8 +40,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import FlatSpinner from '@/components/FlatSpinner.vue'
-import { EButtonType, ESpinnerSize } from '@/types/ui'
+import FlatSpinner from './FlatSpinner.vue'
+import { EButtonType, ESpinnerSize } from '../types/ui'
 
 const props = defineProps({
   type: {

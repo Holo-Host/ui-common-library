@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import RightArrowIcon from 'components/icons/RightArrowIcon.vue'
+import RightArrowIcon from './icons/RightArrowIcon.vue'
 import { computed, useSlots } from 'vue'
 
 const slots = useSlots()

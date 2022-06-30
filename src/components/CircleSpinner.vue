@@ -14,8 +14,8 @@
 </template>
 
 <script setup>
-import { ESpinnerSize } from 'src/types/ui'
-import { EOverlayTheme } from 'src/utils/notifications'
+import { ESpinnerSize } from '../types/ui'
+import { EOverlayTheme } from '../utils/notifications'
 
 const kSpinnerSizes = {
   [ESpinnerSize.none]: ['scale-0'],

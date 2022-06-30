@@ -67,8 +67,8 @@
 <script setup>
 import InvisibleEyeIcon from './icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from './icons/VisibleEyeIcon.vue'
-import { useInput } from '@/composables/useInput'
-import { EInputType } from '@/types/ui'
+import { useInput } from '../composables/useInput'
+import { EInputType } from '../types/ui'
 
 const props = defineProps({
   autocomplete: {
