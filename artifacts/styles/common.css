@@ -6,5 +6,31 @@
     --btn-primary-enabled-bg-color: #735CFE;
     --btn-primary-enabled-color: #FFFFFF;
     --content-color: #313C59;
-  }
-  
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body,
+html {
+    height: 100%;
+}
+
+#app {
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #fafcfe;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.inactive {
+    opacity: 0.2;
+}
+
+.bold {
+    font-weight: bold;
+}
