@@ -113,14 +113,14 @@ function onClick() {
   }
 
   &.primary {
-    color: #fff;
-    border: solid 1px #00cad9;
-    background-color: #00cad9;
+    color: white;
+    border: solid 1px var(--primary-color);
+    background-color: var(--primary-color);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #606c8b;
+      box-shadow: 0 0 0 2px var(--grey-color);
     }
 
     &.disabled {
@@ -129,20 +129,20 @@ function onClick() {
   }
 
   &.secondary {
-    color: #fff;
-    border: solid 1px #606c8b;
-    background-color: #606c8b;
+    color: white;
+    border: solid 1px var(--grey-color);
+    background-color: var(--grey-color);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #00cad9;
+      box-shadow: 0 0 0 2px white;
     }
 
     &.disabled {
-      background-color: #fff;
-      color: #606c8b;
-      border: solid 1px #606c8b;
+      background-color: white;
+      color: var(--grey-color);
+      border: solid 1px var(--grey-color);
     }
   }
 

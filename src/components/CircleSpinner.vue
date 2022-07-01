@@ -7,7 +7,7 @@
   >
     <div
       class="dot-spin"
-      :class="[theme === EOverlayTheme.light ? 'text-host-console' : 'text-white']"
+      :class="[theme === EOverlayTheme.light ? 'color-primary' : 'color-white']"
       data-test-circle-spinner-dots
     />
   </div>
@@ -113,12 +113,12 @@ defineProps({
   }
 }
 
-.text-white {
-  color: #fff;
+.color-white {
+  color: white;
 }
 
-.text-host-console {
-  color: #00cad9;
+.color-primary {
+  color: var(--primary-color);
 }
 </style>
 

@@ -86,15 +86,15 @@ const computedScale = computed(() => ({
 }
 
 .loader-dot.primary {
-  background-color: #00cad9;
+  background-color: var(--primary-color);
 }
 
 .loader-dot.secondary {
-  background-color: #606c8b;
+  background-color: var(--grey-color);
 }
 
 .loader-dot.white {
-  background-color: #fff;
+  background-color: white;
 }
 
 @keyframes grow {
