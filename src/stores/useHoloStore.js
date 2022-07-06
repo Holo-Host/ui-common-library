@@ -9,7 +9,7 @@ const WebSdk = process.env.VUE_APP_MOCK_WEB_SDK
 
 let client
 
-const makeUseHoloStore = ({ connectionArgs, useSignalStore }) => defineStore('holo', {
+const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore }) => defineStore('holo', {
   state: () => ({
     agentState: {},
     happId: null,
@@ -72,12 +72,20 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore }) => defineStore('ho
     async callZome (args) {
       const { roleId, zomeName, fnName, payload } = args
 
-      const result = await client.zomeCall({
-        roleId,
-        zomeName,
-        fnName,
-        payload
-      })      
+      this.callIsLoading({ zomeName, fnName })
+
+      let result
+
+      try {
+        result = await client.zomeCall({
+          roleId,
+          zomeName,
+          fnName,
+          payload
+        })  
+      } finally {
+        this.callIsNotLoading({ zomeName, fnName })
+      }
 
       // result may be of form { type: 'ok', data: ... } or { type 'error', data: ... }, we're letting the caller deal with that
       return result
@@ -91,6 +99,16 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore }) => defineStore('ho
       console.log("Setting agent state: ", agentState);
       if (agentState.unrecoverableError) {
         console.error('unrecoverable agent state', agentState.unrecoverableError)
+      }
+    },
+    callIsLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsLoading(callSpec)
+      }
+    },
+    callIsNotLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsNotLoading(callSpec)
       }
     },
   }

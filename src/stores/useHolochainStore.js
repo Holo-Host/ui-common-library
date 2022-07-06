@@ -4,7 +4,7 @@ import { AppWebsocket } from "@holochain/client";
 import { HC_APP_TIMEOUT } from "src/utils/const"
 import { presentHcSignal } from "src/utils"
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore }) => defineStore('holochain', {
+const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore, useIsLoadingStore }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
@@ -63,6 +63,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore })
 
       const { cell_id } = cellDatum
 
+      this.callIsLoading({ zomeName, fnName })
+
       try {
         const result = await this.client.callZome(
           {
@@ -81,11 +83,23 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore })
           type: 'ok',
           data: result
         }
-      } catch (e) {
+      } catch (e) {        
         // unthrow the error from holochain, to match the chaperone pattern of just returning the error object
         return e
+      } finally {
+        this.callIsNotLoading({ zomeName, fnName })
       }
-    }
+    },
+    callIsLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsLoading(callSpec)
+      }
+    },
+    callIsNotLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsNotLoading(callSpec)
+      }
+    },
   }
 })
 

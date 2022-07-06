@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { encodeAgentId } from 'src/utils/agent'
 import { inspect } from 'util'
 
-const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('client', {
+const makeUseClientStore = ({ useInterfaceStore, onInit, useIsLoadingStore }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
@@ -34,26 +34,33 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       const zomePath = `${zomeName}.${fnName}`
       console.log(`calling ${zomePath} with ${inspect(payload)}`)
 
-      this.callIsLoading(zomePath)
-
       if (!this.isReady) {
-        this.callIsNotLoading(zomePath)
         throw new Error('Tried to make zome call while client is not ready')
       }
 			
-      const result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
+      this.callIsLoading({ zomeName, fnName })
+
+      let result
+
+      try {
+        result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
+      } finally {
+        this.callIsNotLoading({ zomeName, fnName })
+      }
 
       console.log(`${zomePath} returned with ${inspect(result)}`)
-      this.callIsNotLoading(zomePath)
 
 			return result
-
     },
-    callIsLoading (zomePath) {
-      this.isLoading[zomePath] = true
+    callIsLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsLoading(callSpec)
+      }
     },
-    callIsNotLoading (zomePath) {
-      this.isLoading[zomePath] = false
+    callIsNotLoading (callSpec) {
+      if (useIsLoadingStore) {
+        useIsLoadingStore().callIsNotLoading(callSpec)
+      }
     },
     setAgentKeyFromAppInfo (appInfo) {
       const {
