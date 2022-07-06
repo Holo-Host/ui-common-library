@@ -39,11 +39,9 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore })
         // This is a temporary addition, until chaperone is updated to include app info as part of agent state
         client.appInfo().then((appInfo) => {
           this.appInfo = appInfo
-          // can this line be done using subscription instead? That seems better. If client subscribes to appInfo
         })
         
         if (agentState.isAvailable && !agentState.isAnonymous) {
-          // better to use a subscription? In this case probably not
           this.isReady = true
         } else {
           this.isReady = false
