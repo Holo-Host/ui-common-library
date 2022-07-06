@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
-import BaseInput from '@/components/BaseInput.vue'
-import { EInputType } from '@/types/ui'
+import BaseInput from '../BaseInput.vue'
+import { EInputType } from '../../types/ui'
 
 describe('BaseInput.vue', () => {
   const setup = (props) => {

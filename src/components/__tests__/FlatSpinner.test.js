@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import FlatSpinner from '@/components/FlatSpinner.vue'
+import FlatSpinner from '../FlatSpinner.vue'
 
 describe('FlatSpinner', () => {
   const setup = (props) => {

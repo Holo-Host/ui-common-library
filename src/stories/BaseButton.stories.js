@@ -1,5 +1,5 @@
-import BaseButton from '@/components/BaseButton.vue'
-import { EButtonType, ESpinnerSize } from '@/types/ui'
+import BaseButton from '../components/BaseButton.vue'
+import { EButtonType, ESpinnerSize } from '../types/ui'
 
 export default {
   title: 'BaseButton',
