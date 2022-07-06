@@ -1,4 +1,4 @@
-import FlatSpinner from '@/components/FlatSpinner.vue'
+import FlatSpinner from '../components/FlatSpinner.vue'
 
 export default {
   title: 'FlatSpinner',

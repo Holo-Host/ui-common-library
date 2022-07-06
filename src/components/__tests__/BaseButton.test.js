@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import BaseButton from '@/components/BaseButton.vue'
-import { EButtonType, ESpinnerSize } from '@/types/ui'
+import BaseButton from '../BaseButton.vue'
+import { EButtonType, ESpinnerSize } from '../../types/ui'
 
 describe('BaseButton.vue', () => {
   const setup = (props) => {

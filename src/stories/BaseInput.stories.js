@@ -1,5 +1,5 @@
-import BaseInput from '@/components/BaseInput.vue'
-import { EInputType } from '@/types/ui'
+import BaseInput from '../components/BaseInput.vue'
+import { EInputType } from '../types/ui'
 
 export default {
   title: 'BaseInput',

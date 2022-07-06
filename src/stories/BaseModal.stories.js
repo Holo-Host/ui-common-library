@@ -1,4 +1,4 @@
-import BaseModal from '@/components/BaseModal.vue'
+import BaseModal from '../components/BaseModal.vue'
 
 export default {
   title: 'BaseModal',
