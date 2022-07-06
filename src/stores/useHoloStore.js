@@ -1,7 +1,8 @@
-import { inspect } from 'util'
 import { defineStore } from 'pinia'
 import RealWebSdk from '@holo-host/web-sdk'
 import MockWebSdk from '../../__mocks__/@holo-host/web-sdk'
+import useIsLoadingStore from './useIsLoadingStore'
+import useSignalStore from './useSignalStore'
 
 const WebSdk = process.env.VUE_APP_MOCK_WEB_SDK
   ? MockWebSdk
@@ -9,7 +10,7 @@ const WebSdk = process.env.VUE_APP_MOCK_WEB_SDK
 
 let client
 
-const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore }) => defineStore('holo', {
+const makeUseHoloStore = ({ connectionArgs }) => defineStore('holo', {
   state: () => ({
     agentState: {},
     happId: null,
@@ -70,7 +71,7 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore })
     async callZome (args) {
       const { roleId, zomeName, fnName, payload } = args
 
-      this.callIsLoading({ zomeName, fnName })
+      useIsLoadingStore().callIsLoading({ zomeName, fnName })
 
       let result
 
@@ -82,7 +83,7 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore })
           payload
         })  
       } finally {
-        this.callIsNotLoading({ zomeName, fnName })
+        useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
 
       // result may be of form { type: 'ok', data: ... } or { type 'error', data: ... }, we're letting the caller deal with that
@@ -97,16 +98,6 @@ const makeUseHoloStore = ({ connectionArgs, useSignalStore, useIsLoadingStore })
       console.log("Setting agent state: ", agentState);
       if (agentState.unrecoverableError) {
         console.error('unrecoverable agent state', agentState.unrecoverableError)
-      }
-    },
-    callIsLoading (callSpec) {
-      if (useIsLoadingStore) {
-        useIsLoadingStore().callIsLoading(callSpec)
-      }
-    },
-    callIsNotLoading (callSpec) {
-      if (useIsLoadingStore) {
-        useIsLoadingStore().callIsNotLoading(callSpec)
       }
     },
   }

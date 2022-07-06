@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import { inspect } from 'util'
-import { AppWebsocket } from "@holochain/client";
-import { HC_APP_TIMEOUT } from "src/utils/const"
-import { presentHcSignal } from "src/utils"
+import { AppWebsocket } from "@holochain/client"
+import { presentHcSignal } from '../utils'
+import useIsLoadingStore from './useIsLoadingStore'
+import useSignalStore from './useSignalStore'
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore, useIsLoadingStore }) => defineStore('holochain', {
+const HC_APP_TIMEOUT = 35_000
+
+const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
@@ -63,7 +66,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore, u
 
       const { cell_id } = cellDatum
 
-      this.callIsLoading({ zomeName, fnName })
+      useIsLoadingStore().callIsLoading({ zomeName, fnName })
 
       try {
         const result = await this.client.callZome(
@@ -87,17 +90,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, useSignalStore, u
         // unthrow the error from holochain, to match the chaperone pattern of just returning the error object
         return e
       } finally {
-        this.callIsNotLoading({ zomeName, fnName })
-      }
-    },
-    callIsLoading (callSpec) {
-      if (useIsLoadingStore) {
-        useIsLoadingStore().callIsLoading(callSpec)
-      }
-    },
-    callIsNotLoading (callSpec) {
-      if (useIsLoadingStore) {
-        useIsLoadingStore().callIsNotLoading(callSpec)
+        useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
     },
   }

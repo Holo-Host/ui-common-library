@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { encodeAgentId } from 'src/utils/agent'
+import { encodeAgentId } from '../utils/agent'
 import { inspect } from 'util'
 
 const makeUseClientStore = ({ useInterfaceStore, onInit, useIsLoadingStore }) => defineStore('client', {

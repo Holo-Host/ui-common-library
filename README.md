@@ -33,7 +33,7 @@ context your in), which actually provides implementations of the above functiona
 `useClientStore.js`, `useHoloStore.js`, and `useHolochainStore.js` each export a factory function, (`makeUse[X]Store`) that take extra configuration args.
 
 ### useSignalStore
-`signalStore` allows you to subscribe to signals from your holo or holochain connection. You pass useSignalStore into the factory function of those two stores, and then you can pass a callback to the store to be called whenever you get a signal
+`signalStore` allows you to subscribe to signals from your holo or holochain connection. Pass a callback to the store to be called whenever you get a signal from either holo or holochain
 ```
 useSignalStore().addCallback(signal => console.log('got signal', signal))
 ```
@@ -50,7 +50,11 @@ type Signal = {
 ```
 
 ### useIsLoadingStore
-`isLoadingStore` allows you to check the loading status of a particular zomeName, fnName pair. If you're writing a hybrid app, pass useIsLoadingStore into `makeUseClientStore` (you can also pass it direclty to `makeUseHoloStore` or `makeUseHolochainStore`)
+`isLoadingStore` allows you to check the loading status of a particular zomeName, fnName pair. calling
+```
+useIsLoadingStore().isLoading({ zomeName, fnName })
+```
+will return a bool
 
 ### Example
 
@@ -58,7 +62,6 @@ type Signal = {
 import makeUseClientStore from "@uicommon/stores/useClientStore"
 import makeUseHolochainStore from "@uicommon/stores/useHolochainStore"
 import useSignalStore from "@uicommon/stores/useSignalStore"
-import useIsLoadingStore from "@uicommon/stores/useIsLoadingStore"
 import makeUseHoloStore from "@uicommon/stores/useHoloStore"
 import makeUseYourCustomDnaStore from "./useYourCustomDnaStore"
 
@@ -68,7 +71,6 @@ export const useUiStore = useUiStoreRaw
 export const useHolochainStore = makeUseHolochainStore({
   installed_app_id: 'your-local-installed-app-id',
   app_ws_url: 'http://localhost:8888', // path to your local hc app websocket
-  useSignalStore
 })
 
 const CHAPERONE_URL = process.env.VUE_APP_CHAPERONE_SERVER_URL
@@ -76,7 +78,6 @@ const CHAPERONE_URL = process.env.VUE_APP_CHAPERONE_SERVER_URL
   : "http://localhost:24274"
 
 export const useHoloStore = makeUseHoloStore({
-  useSignalStore,
   // Connection args is passed directly to WebSdkApi.connect, see here for details: https://github.com/Holo-Host/web-sdk
   connectionArgs: {
     chaperoneUrl: CHAPERONE_URL,
@@ -84,7 +85,6 @@ export const useHoloStore = makeUseHoloStore({
 })
 
 export const useClientStore = makeUseClientStore({
-  useIsLoadingStore,
   useInterfaceStore: IS_HOLO_HOSTED ? useHoloStore : useHolochainStore,
   onInit: () => {
     useSignalStore().addCallback(signal => useYourCustomDnaStore().handleSignal(signal))
@@ -92,8 +92,7 @@ export const useClientStore = makeUseClientStore({
  })
 
 export const useYourCustomDnaStore = makeUseYourCustomDnaStore({ 
-  useClientStore, 
-  useIsLoadingStore
+  useClientStore
 })
 
 ```
