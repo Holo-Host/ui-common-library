@@ -1,16 +1,11 @@
 import { defineStore } from 'pinia'
-import RealWebSdk from '@holo-host/web-sdk'
-import MockWebSdk from '../../__mocks__/@holo-host/web-sdk'
+import WebSdk from '@holo-host/web-sdk'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 
-const WebSdk = process.env.VUE_APP_MOCK_WEB_SDK
-  ? MockWebSdk
-  : RealWebSdk
-
 let client
 
-const makeUseHoloStore = ({ connectionArgs }) => defineStore('holo', {
+const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {
   state: () => ({
     agentState: {},
     happId: null,
@@ -31,7 +26,11 @@ const makeUseHoloStore = ({ connectionArgs }) => defineStore('holo', {
   actions: {
     async initialize() {
       try {
-        client = await WebSdk.connect(connectionArgs)
+        if (MockWebSdk) {
+          client = await MockWebSdk.connect(connectionArgs)
+        } else {
+          client = await WebSdk.connect(connectionArgs)
+        }
       } catch (e) {
         throw e
       }
