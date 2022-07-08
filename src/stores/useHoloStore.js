@@ -52,17 +52,21 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       // Set agent state in case `agent-state` event is never emitted. This is the case with Mock Web SDK because it never emits events
       this.agentState = client.agent
     },
+
     signIn () {
       this.isAuthFormOpen = true
       return client.signIn({ cancellable: false })
     },
+
     signUp () {
       this.isAuthFormOpen = true
       client.signUp({ cancellable: false })
     },
+
     signOut () {
       client.signOut()
     },
+
     async callZome (args) {
       const { roleId, zomeName, fnName, payload } = args
 
@@ -84,10 +88,12 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       // result may be of form { type: 'ok', data: ... } or { type 'error', data: ... }, we're letting the caller deal with that
       return result
     },
+
     async loadAppInfo () {
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
+    
     setAgentState (agentState) {
       this.agentState = agentState
       console.log("Setting agent state: ", agentState);
