@@ -40,6 +40,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         this.isReady = false
       }
     },
+
     async loadAppInfo () {
     	try {
 				const appInfo = await this.client.appInfo({
@@ -53,6 +54,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 				console.error('appInfo() returned error.', inspect(error))
 			}
     },
+    
     async callZome ({ roleId, zomeName, fnName, payload = null }) {
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
