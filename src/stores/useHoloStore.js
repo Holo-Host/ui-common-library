@@ -10,15 +10,15 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     agentState: {},
     happId: null,
     connectionError: null,
-    is_auth_form_open: false,
+    isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
     isReady: false,
     appInfo: null
   }),
   getters: {
-    is_anonymous: state => state.agentState.isAnonymous,
-    is_available: state => state.agentState.isAvailable,
-    is_logged_in: state => state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
+    isAnonymous: state => state.agentState.isAnonymous,
+    isAvailable: state => state.agentState.isAvailable,
+    isLoggedIn: state => state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
     error: state => !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.cell_data[0],
     agentId: state => state.agentState.id,
@@ -41,13 +41,9 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
           this.appInfo = appInfo
         })
         
-        if (agentState.isAvailable && !agentState.isAnonymous) {
-          this.isReady = true
-        } else {
-          this.isReady = false
-        }
-
         this.agentState = agentState
+
+        this.isReady = this.isLoggedIn
       })
       client.on('signal', payload => useSignalStore().handleSignal(payload))
 
@@ -57,11 +53,11 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.agentState = client.agent
     },
     signIn () {
-      this.is_auth_form_open = true
+      this.isAuthFormOpen = true
       return client.signIn({ cancellable: false })
     },
     signUp () {
-      this.is_auth_form_open = true
+      this.isAuthFormOpen = true
       client.signUp({ cancellable: false })
     },
     signOut () {
