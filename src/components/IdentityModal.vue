@@ -3,20 +3,18 @@
     <div class='modal-content'>
       <p class="modal-title">Your Address & Identity</p>
       <p>
-        This Identicon design and hash ID are both unique representations of this Publisher Portal and associated HoloFuel address.
-        Consider this address like a bank account, or crypto wallet.
-        When you see this identicon, you know it’s your account.
+        {{ body }}
       </p>
-      <p class="publisher-name"><b>{{publisherName}}</b></p>
+      <p><b>{{name}}</b></p>
       <div class="identicon">
         <Identicon size="60" :holoHash="agentKey" role='img' aria-label="Agent Identity Icon"/>
       </div>
-      <p class="publisher-id"><b>{{agentId}}</b></p>
+      <p><b>{{agentId}}</b></p>
       <p><b>TIP:</b> Clicking on an identicon will copy the associated address for easy transacting in HoloFuel. </p>
     </div>
     <div class='footer'>
       <div class='buttons'>      
-        <Button class='save-button' :color="'primary-enabled'" @click="onIUndertandClick">I understand</Button>
+        <Button class='save-button' :color="'primary-enabled'" @click="onIUnderstandClick">I understand</Button>
       </div>
     </div>
   </Modal>  
@@ -26,7 +24,6 @@
 import Modal from './Modal'
 import Button from './Button'
 import Identicon from './Identicon.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'IdentityModal',
@@ -39,14 +36,26 @@ export default {
     handleClose: {
       type: Function,
       required: true
+    },
+    body: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    agentId: {
+      type: String,
+      required: true
+    },
+    agentKey: {
+      type: Uint8Array,
+      required: true
     }
   },
-  computed: {
-    ...mapGetters('holo', ['agentKey','agentId']),
-    ...mapGetters('holofuel', ['publisherName']),
-  },
   methods: {
-    onIUndertandClick () {
+    onIUnderstandClick () {
       this.handleClose();
     }
   }
