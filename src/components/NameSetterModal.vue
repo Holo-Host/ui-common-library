@@ -1,30 +1,28 @@
 <template>
-  <Modal :handleClose="handleClose" :shouldCloseOnAwayClick="false" :showEx="false" modalClass='publisher-name-modal'>
+  <Modal :handleClose="handleClose" :shouldCloseOnAwayClick="false" :showEx="false" modalClass='set-name-modal'>
     <div class='modal-content'>
       <p class="modal-title">
-        Welcome to Publisher Portal
+        {{ title }}
       </p>
       <p>
-        Publisher Portal comes coupled with an associated HoloFuel account. Give these associated accounts an Account Display Name. 
-        This will show up on invoices and transactions between you and other HoloFuel users. You will NOT be able to change the name once saved. 
+        {{ body }}
       </p>
-      <input type="text" id="publisher-name" v-model="publisherName" class="modal-input" placeholder="Enter Account Display Name " >
+      <input type="text" id="publisher-name" v-model="name" class="modal-input" placeholder="Enter Account Display Name " >
     </div>
     <div class='footer'>
       <div class='buttons'>      
-        <Button class='save-button' :color="confirmButtonColor" :disabled="confirmDisabled" :isBusy="isBusy" @click="onSavePublisherName">Save</Button>
+        <Button class='save-button' :color="confirmButtonColor" :disabled="confirmDisabled" :isBusy="isBusy" @click="onSaveName">Save</Button>
       </div>
     </div>  
   </Modal>  
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import Modal from 'components/Modal'
-import Button from 'components/Button'
+import Modal from './Modal'
+import Button from './Button'
 
 export default {
-  name: 'PublisherNameModal',
+  name: 'NameSetterModal',
   components: {
     Modal,
     Button,
@@ -33,38 +31,54 @@ export default {
     handleClose: {
       type: Function,
       required: true
+    },
+    updateMyName: {
+      type: Function,
+      required: true
+    },
+    openIdentityModal: {
+      type: Function,
+      required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    body: {
+      type: String,
+      required: true
     }
   },
   data () {
     return {
-      publisherName: '',
+      name: '',
       isBusy: false
     }
   },
   computed: {
     confirmDisabled () {
-        return this.publisherName.trim().length === 0
+        return this.name.trim().length === 0
     },    
     confirmButtonColor () {
       return this.confirmDisabled ? 'primary-disabled' : 'primary-enabled'
     }
   },
   methods: {
-    ...mapActions('ui', ['openIdentityModal'],),
-    ...mapActions('holofuel', ['updateMyNickname'],),
-    async onSavePublisherName () {
-        this.isBusy = true;
+    async onSaveName () {
+        this.isBusy = true
 
-        await this.updateMyNickname(this.publisherName.trim());
-        this.handleClose();
-        this.openIdentityModal();
+        await this.updateMyName(this.name.trim())
+        this.handleClose()
+
+        this.openIdentityModal()
+        this.isBusy = false
     }
   }
 }
 </script>
 
 <style>
-.publisher-name-modal.modal {
+.set-name-modal.modal {
   max-width: 40rem;
   display: flex;
   flex-direction: column;
