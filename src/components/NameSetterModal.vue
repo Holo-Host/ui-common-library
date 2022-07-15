@@ -65,16 +65,13 @@ export default {
   },
   methods: {
     async onSaveName () {
-        console.log('^&* onSaveName', this.updateMyName)
         this.isBusy = true
 
         await this.updateMyName(this.name.trim())
         this.handleClose()
-        console.log('^&* opening identity', this.updateMyName)
 
         this.openIdentityModal()
         this.isBusy = false
-        console.log('^&* done with name setter identity', this.updateMyName)
     }
   }
 }
