@@ -1,8 +1,8 @@
 <template>
   <div
-    v-if="size !== ESpinnerSize.none"
+    v-if="scale !== ESpinnerSize.none"
     class="loader"
-    :class="[kSpinnerSizes[size]]"
+		:style="computedScale"
     data-test-circle-spinner-wrapper
   >
     <div
@@ -14,28 +14,25 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { ESpinnerSize } from '../types/ui'
 import { EOverlayTheme } from '../utils/notifications'
 
-const kSpinnerSizes = {
-  [ESpinnerSize.none]: ['scale-0'],
-  [ESpinnerSize.small]: ['scale-50'],
-  [ESpinnerSize.medium]: ['scale-100'],
-  [ESpinnerSize.large]: ['scale-150'],
-  [ESpinnerSize.xl]: ['scale-200']
-}
-
-defineProps({
-  size: {
-    type: Number,
-    default: ESpinnerSize.small
-  },
+const props = defineProps({
+	scale: {
+		type: Number,
+		default: ESpinnerSize.small
+	},
 
   theme: {
     type: Number,
     default: EOverlayTheme.light
   }
 })
+
+const computedScale = computed(() => ({
+	transform: `scale(${props.scale})`
+}))
 </script>
 
 <style lang="scss" scoped>
