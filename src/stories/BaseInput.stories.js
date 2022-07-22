@@ -10,6 +10,7 @@ export default {
     autofocus: false,
     isDisabled: false,
     isValid: true,
+    isHorizontal: false,
     inputType: {
       options: [
         EInputType.text,
@@ -18,7 +19,21 @@ export default {
         EInputType.password,
         EInputType.number,
         EInputType.tel
-      ]
+      ],
+      control: {
+        type: 'select',
+        control: {
+          type: 'select',
+          labels: {
+            [EInputType.text]: 'text',
+            [EInputType.email]: 'email',
+            [EInputType.url]: 'url',
+            [EInputType.password]: 'password',
+            [EInputType.number]: 'number',
+            [EInputType.tel]: 'tel'
+          }
+        }
+      }
     },
     id: '',
     name: '',
@@ -46,6 +61,7 @@ Default.args = {
   autofocus: false,
   isDisabled: false,
   isValid: true,
+  isHorizontal: false,
   inputType: EInputType.text,
   id: '',
   name: '',
@@ -66,7 +82,7 @@ WithPlaceholder.args = {
 export const WithLabel = kTemplate.bind({})
 WithLabel.args = {
   ...Default.args,
-  label: 'Label'
+  label: 'Label:'
 }
 
 export const PasswordType = kTemplate.bind({})

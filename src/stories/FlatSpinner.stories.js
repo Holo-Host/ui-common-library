@@ -4,6 +4,12 @@ export default {
   title: 'FlatSpinner',
   component: FlatSpinner,
 
+  parameters: {
+    backgrounds: {
+      default: 'light'
+    }
+  },
+
   argTypes: {
     scale: '0.5',
     color: {
