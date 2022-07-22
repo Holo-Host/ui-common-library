@@ -11,7 +11,7 @@
           class="base-modal__close-button"
           @click="emit('close')"
         >
-          <ExIcon class="ex-icon" size="16" />
+          <ExIcon class="ex-icon" :size="16" />
         </button>
 
         <div class="base-modal__content">

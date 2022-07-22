@@ -16,7 +16,7 @@
         <CircleSpinner
           v-if="type === EOverlayType.loading"
           :theme="theme"
-          :size="ESpinnerSize.xl"
+					:scale="ESpinnerSize.medium"
         />
         <img
           v-if="type !== EOverlayType.loading && icon"
