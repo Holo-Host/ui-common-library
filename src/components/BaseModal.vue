@@ -2,33 +2,33 @@
   <Transition>
     <div
       v-if="isVisible"
-      class="base-modal-overlay"
+      class="base-modal__overlay"
       @click="isDismissible ? emit('close') : () => {}"
     >
       <div class="base-modal" @click.stop>
         <button
           v-if="isDismissible && hasCloseButton"
-          class="base-modal-close-button"
+          class="base-modal__close-button"
           @click="emit('close')"
         >
           <ExIcon class="ex-icon" size="16" />
         </button>
 
-        <div class="base-modal-content">
-          <span v-if="title" class="base-modal-title">
+        <div class="base-modal__content">
+          <span v-if="title" class="base-modal__title">
             {{ title }}
           </span>
 
-          <h4 v-if="subTitle" class="base-modal-sub-title">
+          <h4 v-if="subTitle" class="base-modal__sub-title">
             {{ subTitle }}
           </h4>
 
-          <div class="base-modal-message-content">
+          <div class="base-modal__message-content">
             <slot></slot>
           </div>
         </div>
 
-        <div class="base-modal-buttons">
+        <div class="base-modal__buttons">
           <slot name="buttons"></slot>
         </div>
       </div>
@@ -69,20 +69,7 @@ defineProps({
 const emit = defineEmits(['close'])
 </script>
 
-<style scoped>
-.base-modal-overlay {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
-  z-index: 200;
-  background-color: rgba(49, 60, 89, 0.67);
-  width: 100vw;
-  height: 100vh;
-}
-
+<style lang="scss" scoped>
 .base-modal {
   position: relative;
   margin: auto;
@@ -93,55 +80,68 @@ const emit = defineEmits(['close'])
   padding: 26px;
   opacity: 1;
   max-width: 580px;
-}
 
-.base-modal-content {
-  display: flex;
-  align-items: center;
-  padding: 26px 65px;
-  flex-direction: column;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-align: center;
-  color: #313c59;
-}
+	&__overlay {
+		position: fixed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		top: 0;
+		left: 0;
+		z-index: 200;
+		background-color: rgba(49, 60, 89, 0.67);
+		width: 100vw;
+		height: 100vh;
+	}
 
-.base-modal-title {
-  font-size: 22px;
-  line-height: 30px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 0 0 12px 0;
-}
+	&__content {
+		display: flex;
+		align-items: center;
+		padding: 26px 65px;
+		flex-direction: column;
+		font-style: normal;
+		font-weight: 600;
+		font-size: 14px;
+		line-height: 19px;
+		text-align: center;
+		color: #313c59;
+	}
 
-.base-modal-sub-title {
-  font-size: 14px;
-  line-height: 19px;
-  margin: 0 0 65px 0;
-}
+	&__title {
+		font-size: 22px;
+		line-height: 30px;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		margin: 0 0 12px 0;
+	}
 
-.base-modal-message-content {
-  margin-top: 8px;
-  font-weight: 400;
-}
+	&__sub-title {
+		font-size: 14px;
+		line-height: 19px;
+		margin: 0 0 65px 0;
+	}
 
-.base-modal-buttons {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 26px;
-}
+	&__message-content {
+		margin-top: 8px;
+		font-weight: 400;
+	}
 
-.base-modal-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  border: none;
-  padding: 0;
-  background-color: transparent;
-  cursor: pointer;
+	&__buttons {
+		display: flex;
+		justify-content: center;
+		padding-bottom: 26px;
+	}
+
+	&__close-button {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		border: none;
+		padding: 0;
+		background-color: transparent;
+		cursor: pointer;
+	}
 }
 
 @media screen and (max-width: 1050px) {
@@ -149,34 +149,34 @@ const emit = defineEmits(['close'])
     pointer-events: all;
     flex-basis: 100%;
     height: fit-content;
-  }
 
-  .base-modal-content {
-    padding: 26px 0 28px;
-    margin: 0 -6px;
-  }
+		&__content {
+			padding: 26px 0 28px;
+			margin: 0 -6px;
+		}
 
-  .base-modal-title {
-    margin-bottom: 6px;
-  }
+		&__title {
+			margin-bottom: 6px;
+		}
 
-  .base-modal-sub-title {
-    margin-bottom: 26px;
+		&__sub-title {
+			margin-bottom: 26px;
+		}
   }
 }
 
 @media screen and (max-width: 568px) {
   .base-modal {
     margin: 10px;
-  }
 
-  .base-modal-content {
-    padding: 0;
-    margin: 0 -6px;
-  }
+		&__content {
+			padding: 0;
+			margin: 0 -6px;
+		}
 
-  .base-modal-buttons {
-    padding-bottom: 10px;
+		&__buttons {
+			padding-bottom: 10px;
+		}
   }
 }
 

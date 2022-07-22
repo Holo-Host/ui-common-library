@@ -7,12 +7,19 @@ export default {
 
   argTypes: {
     type: {
-      options: [EButtonType.primary, EButtonType.secondary],
+      options: [
+        EButtonType.primary,
+        EButtonType.secondary,
+        EButtonType.tertiary,
+        EButtonType.gray
+      ],
       control: {
         type: 'select',
         labels: {
           [EButtonType.primary]: 'primary',
-          [EButtonType.secondary]: 'secondary'
+          [EButtonType.secondary]: 'secondary',
+          [EButtonType.tertiary]: 'tertiary',
+          [EButtonType.gray]: 'gray'
         }
       }
     },
