@@ -1,10 +1,25 @@
 <template>
   <div
     class="base-input"
-    :class="{ 'disabled' : isDisabled }"
+    :class="{ 'base-input--disabled' : isDisabled, 'base-input--is-horizontal': isHorizontal }"
     data-test-base-input-wrapper
   >
-    <div>
+		<slot
+			v-if="label"
+			name="label"
+			:input-id="inputId"
+		>
+			<label
+				:for="inputId"
+				class="base-input__label"
+				:class="{ 'base-input__label--is-horizontal': isHorizontal }"
+				data-test-base-input-label
+			>
+				{{ label }}
+			</label>
+		</slot>
+
+    <div class="base-input__content">
       <input
         :id="inputId"
         ref="inputRef"
@@ -68,6 +83,11 @@ const props = defineProps({
     default: true
   },
 
+	isHorizontal: {
+		type: Boolean,
+		default: false
+	},
+
   inputType: {
     type: String,
     default: EInputType.text,
@@ -103,6 +123,11 @@ const props = defineProps({
     default: ''
   },
 
+	label: {
+		type: String,
+		default: ''
+	},
+
   hasErrors: {
     type: Boolean,
     default: false
@@ -132,21 +157,47 @@ const {
 .base-input {
   position: relative;
 
-  &.disabled {
+	&--is-horizontal {
+		display: flex;
+		align-items: center;
+	}
+
+  &--disabled {
     opacity: 0.6;
     pointer-events: hover;
     cursor: not-allowed;
   }
 
+	&__label {
+		display: block;
+		font-size: 14px;
+		font-weight: 700;
+		line-height: 19px;
+		margin-bottom: 8px;
+		color: var(--dark-grey-color);
+
+		&--is-horizontal {
+			margin-right: 10px;
+			margin-bottom: 0;
+			color: var(--grey-color);
+		}
+	}
+
+	&__content {
+		position: relative;
+		width: 100%;
+	}
+
   &__input {
     display: block;
     width: 100%;
     margin-top: 0;
+		color: var(--dark-grey-color);
     border: 1px solid var(--grey-color);
     border-radius: 5px;
     padding: 9px 14px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 400;
 
     &:focus {
       outline: none;
@@ -179,8 +230,8 @@ const {
 
   .eye-icon {
     position: absolute;
-    right: 0;
-    top: -8px;
+    right: -20px;
+    top: 5px;
     cursor: pointer;
   }
 }

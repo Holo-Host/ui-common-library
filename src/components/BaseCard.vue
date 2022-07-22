@@ -105,7 +105,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
   align-items: center;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  background-color: #f0fcfd;
+  background-color: var(--primary-light-color);
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
@@ -143,11 +143,16 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 .more {
   font-size: 14px;
   line-height: 19px;
-  color: rgba(0, 202, 217, 0.18);
+  color: var(--primary-color);
   margin: auto 26px 13px auto;
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.right-arrow-icon {
+	margin-left: 4px;
+	color: var(--primary-color);
 }
 
 @media screen and (max-width: 1050px) {
