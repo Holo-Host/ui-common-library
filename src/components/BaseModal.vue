@@ -74,7 +74,7 @@ const emit = defineEmits(['close'])
   position: relative;
   margin: auto;
   background-color: white;
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 2px 20px rgba(32, 39, 57, 0.5);
   z-index: 20;
   padding: 26px;
