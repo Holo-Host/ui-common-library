@@ -3,7 +3,8 @@
     :disabled="isDisabled"
     class="base-button"
     :class="[{ 'disabled' : isDisabled }, kButtonTypeClass[type] ]"
-    data-test-base-button-wrapper
+		:style="computedCustomStyle"
+		data-test-base-button-wrapper
     @click="onClick"
   >
     <!-- loading spinner -->
@@ -17,7 +18,6 @@
       <FlatSpinner
         :scale="0.5"
         :color="spinnerColor"
-        class="-ml-4 mb-4"
         data-test-base-button-spinner
       />
     </span>
@@ -48,7 +48,7 @@ const props = defineProps({
     type: Number,
     default: EButtonType.primary,
     validator(value) {
-      return [EButtonType.primary, EButtonType.secondary, EButtonType.gray].includes(value)
+      return [EButtonType.primary, EButtonType.secondary, EButtonType.gray, EButtonType.custom].includes(value)
     }
   },
 
@@ -73,6 +73,11 @@ const props = defineProps({
   title: {
     type: String,
     default: ''
+  },
+
+  customTheme: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -83,7 +88,8 @@ const kButtonTypeClass = {
   [EButtonType.primary]: 'primary',
   [EButtonType.secondary]: 'secondary',
   [EButtonType.tertiary]: 'tertiary',
-  [EButtonType.gray]: 'gray'
+  [EButtonType.gray]: 'gray',
+  [EButtonType.custom]: 'custom'
 }
 
 const kSpinnerColor = {
@@ -106,9 +112,27 @@ const kSpinnerColor = {
 }
 
 const spinnerColor = computed(() => {
+  if (props.type === EButtonType.custom) {
+    return props.customTheme.spinnerColor
+  }
+
 	const spinnerColor = kSpinnerColor[props.type]
 
 	return props.isDisabled ? spinnerColor.disabled : spinnerColor.enabled
+})
+
+const computedCustomStyle = computed(() => {
+  if (props.type === EButtonType.custom) {
+    return {
+      color: props.customTheme.fontColor,
+      backgroundColor: props.customTheme.backgroundColor,
+      borderColor: props.customTheme.backgroundColor,
+      border: `solid 1px ${props.customTheme.backgroundColor}`,
+      boxShadow: `0 0 1px 0 ${props.customTheme.backgroundColor}`
+    }
+  }
+
+  return {}
 })
 
 const emit = defineEmits(['click'])
@@ -202,6 +226,12 @@ function onClick() {
       background-color: white;
       color: var(--grey-color);
       border: solid 1px var(--grey-color);
+    }
+  }
+
+  &.custom {
+    &:focus {
+      outline: none;
     }
   }
 
