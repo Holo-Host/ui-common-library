@@ -7,6 +7,9 @@ module.exports = {
   },
   moduleFileExtensions: ['vue', 'js', 'json', 'jsx'],
   moduleNameMapper: {
+    "^@vue/(.*)$": "<rootDir>/testing/node_modules/@vue/$1",
+    "^@testing-library/(.*)$": "<rootDir>/testing/node_modules/@testing-library/$1",
+    "^vue": "<rootDir>/testing/node_modules/vue",
     "src/(.*)$": "<rootDir>/src/$1",
     "pages/(.*)$": "<rootDir>/src/pages/$1",
     "components/(.*)$": "<rootDir>/src/components/$1",
