@@ -4,8 +4,13 @@ A collection of components, stores and other javascript code for use in holo hap
 
 ### Run tests
 ```
+cd testing 
+yarn install
+cd ..
 npm run test
 ```
+
+The separate testing directory with it's own package.json is necessary so we can exlude vue from the main `node_modules`
 
 ### Compiles and minifies for production
 ```
