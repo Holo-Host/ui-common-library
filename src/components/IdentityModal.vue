@@ -7,23 +7,23 @@
       </p>
       <p><b>{{name}}</b></p>
       <div class="identicon">
-        <Identicon size="60" :holoHash="agentKey" role='img' aria-label="Agent Identity Icon"/>
+        <Identicon v-if="agentKey" size="60" :agentKey="agentKey" role='img' aria-label="Agent Identity Icon"/>
       </div>
       <p><b>{{agentId}}</b></p>
       <p><b>TIP:</b> Clicking on an identicon will copy the associated address for easy transacting in HoloFuel. </p>
     </div>
     <div class='footer'>
-      <div class='buttons'>      
+      <div class='buttons'>
         <Button class='save-button' :color="'primary-enabled'" @click="onIUnderstandClick">I understand</Button>
       </div>
     </div>
-  </Modal>  
+  </Modal>
 </template>
 
 <script>
 import Modal from './Modal'
 import Button from './Button'
-import Identicon from './Identicon2.vue'
+import Identicon from './Identicon.vue'
 
 export default {
   name: 'IdentityModal',
@@ -43,7 +43,6 @@ export default {
     },
     name: {
       type: String,
-      required: true
     },
     agentId: {
       type: String,
