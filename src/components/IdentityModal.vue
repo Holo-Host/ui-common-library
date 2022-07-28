@@ -23,7 +23,7 @@
 <script>
 import Modal from './Modal'
 import Button from './Button'
-import Identicon from './Identicon.vue'
+import Identicon from './Identicon2.vue'
 
 export default {
   name: 'IdentityModal',

@@ -30,7 +30,6 @@ const props = defineProps({
 
   styleProp: {
     type: Object,
-    default: () => {}
   }
 })
 

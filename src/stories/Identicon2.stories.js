@@ -1,4 +1,4 @@
-import Identicon2 from 'components/IdentIcon2.vue'
+import Identicon2 from 'components/Identicon2.vue'
 
 export default {
   title: 'Identicon2',
