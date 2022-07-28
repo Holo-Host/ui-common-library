@@ -16,10 +16,12 @@
 
     --violet-color: #E339FF;
     --red-color: #ff5f5f;
+    --green-color: #21BE98;
+    --yellow-light-color: #ffe871;
 
     /* Project specific theme colors */
-    --primary-color: #00cad9;
-    --primary-light-color: rgba(0, 202, 217, 25);
+    --primary-color: #735CFE;
+    --primary-light-color: #C7D3FF;
 }
 
 html {

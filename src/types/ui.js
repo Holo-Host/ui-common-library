@@ -14,7 +14,10 @@ export const EAlertType = {
 
 export const EButtonType = {
   primary: 0,
-  secondary: 1
+  secondary: 1,
+  tertiary: 2,
+  gray: 3,
+  custom: 99
 }
 
 export const EInputType = {

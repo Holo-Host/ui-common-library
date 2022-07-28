@@ -11,6 +11,7 @@ module.exports = {
         pages: path.resolve(__dirname, 'src/pages'),
         utils: path.resolve(__dirname, 'src/utils'),
         types: path.resolve(__dirname, 'src/types'),
+        '@uicommon': path.resolve(__dirname, 'ui-common-library/src'),
       }
     }
   }

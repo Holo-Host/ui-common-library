@@ -3,7 +3,8 @@
     :disabled="isDisabled"
     class="base-button"
     :class="[{ 'disabled' : isDisabled }, kButtonTypeClass[type] ]"
-    data-test-base-button-wrapper
+		:style="computedCustomStyle"
+		data-test-base-button-wrapper
     @click="onClick"
   >
     <!-- loading spinner -->
@@ -16,8 +17,7 @@
     >
       <FlatSpinner
         :scale="0.5"
-        :color="type === EButtonType.secondary && isDisabled ? 'secondary' : 'white'"
-        class="-ml-4 mb-4"
+        :color="spinnerColor"
         data-test-base-button-spinner
       />
     </span>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import FlatSpinner from './FlatSpinner.vue'
 import { EButtonType, ESpinnerSize } from '../types/ui'
 
@@ -48,7 +48,7 @@ const props = defineProps({
     type: Number,
     default: EButtonType.primary,
     validator(value) {
-      return [EButtonType.primary, EButtonType.secondary].includes(value)
+      return [EButtonType.primary, EButtonType.secondary, EButtonType.gray, EButtonType.custom].includes(value)
     }
   },
 
@@ -73,6 +73,11 @@ const props = defineProps({
   title: {
     type: String,
     default: ''
+  },
+
+  customTheme: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -81,8 +86,54 @@ const content = ref()
 
 const kButtonTypeClass = {
   [EButtonType.primary]: 'primary',
-  [EButtonType.secondary]: 'secondary'
+  [EButtonType.secondary]: 'secondary',
+  [EButtonType.tertiary]: 'tertiary',
+  [EButtonType.gray]: 'gray',
+  [EButtonType.custom]: 'custom'
 }
+
+const kSpinnerColor = {
+	[EButtonType.primary]: {
+		enabled: 'white',
+		disabled: 'white'
+	},
+	[EButtonType.secondary]: {
+		enabled: 'secondary',
+		disabled: 'secondary'
+	},
+	[EButtonType.tertiary]: {
+		enabled: 'primary',
+		disabled: 'primary'
+	},
+	[EButtonType.gray]: {
+		enabled: 'white',
+		disabled: 'secondary'
+	},
+}
+
+const spinnerColor = computed(() => {
+  if (props.type === EButtonType.custom) {
+    return props.customTheme.spinnerColor
+  }
+
+	const spinnerColor = kSpinnerColor[props.type]
+
+	return props.isDisabled ? spinnerColor.disabled : spinnerColor.enabled
+})
+
+const computedCustomStyle = computed(() => {
+  if (props.type === EButtonType.custom) {
+    return {
+      color: props.customTheme.fontColor,
+      backgroundColor: props.customTheme.backgroundColor,
+      borderColor: props.customTheme.backgroundColor,
+      border: `solid 1px ${props.customTheme.backgroundColor}`,
+      boxShadow: `0 0 1px 0 ${props.customTheme.backgroundColor}`
+    }
+  }
+
+  return {}
+})
 
 const emit = defineEmits(['click'])
 
@@ -128,7 +179,39 @@ function onClick() {
     }
   }
 
-  &.secondary {
+	&.secondary {
+    color: var(--grey-dark-color);
+    border: solid 1px var(--primary-light-color);
+    background-color: var(--primary-light-color);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--grey-color);
+    }
+
+    &.disabled {
+      opacity: 0.4;
+    }
+  }
+
+	&.tertiary {
+    color: var(--primary-color);
+    border: solid 1px var(--primary-color);
+    background-color: white;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--grey-color);
+    }
+
+    &.disabled {
+      opacity: 0.4;
+    }
+  }
+
+  &.gray {
     color: white;
     border: solid 1px var(--grey-color);
     background-color: var(--grey-color);
@@ -143,6 +226,12 @@ function onClick() {
       background-color: white;
       color: var(--grey-color);
       border: solid 1px var(--grey-color);
+    }
+  }
+
+  &.custom {
+    &:focus {
+      outline: none;
     }
   }
 
