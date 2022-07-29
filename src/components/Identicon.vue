@@ -1,5 +1,5 @@
 <template>
- <canvas ref='canvas' width="1" height="1" :class="['identicon-button', $attrs.class]"
+ <canvas ref="canvas" width="1" height="1" :class="['identicon-button', $attrs.class]"
     :style="style"
     data-testid='identicon'
     @click="copyToClipboard"
@@ -10,85 +10,92 @@
   </div>
 </template>
 
-<script>
-import renderIcon from '../utils/identicon'
-import { copyToClipboard } from '../utils/clipboardUtils'
+<script setup>
+import renderIconRaw from '../utils/identicon'
+import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
 import { encodeAgentId } from '../utils/agent'
+import { computed, watchEffect, ref } from 'vue'
 
-export default {
-  name: 'Identicon',
-  props: {
-    agentKey: {
-      type: Uint8Array,
-      required: true
-    },
-    size: String,
-    styleProp: Object,
-    tooltipLeft: Boolean
+const props = defineProps({
+  clickable: {
+    type: Boolean,
+    default: true
   },
-  data () {
-    return {
-      tooltipVisible: false,
-      copied: false
-    }
+
+  agentKey: {
+    type: Uint8Array,
+    required: true
   },
-  methods: {
-    copyToClipboard () {
-      copyToClipboard(this.encodedKey)
-      this.copied = true
-    },
-    renderIcon () {
-      renderIcon(this.opts, this.$refs.canvas)
-    },
-    showTooltip () {
-      this.tooltipVisible = true
-      this.copied = false
-    },
-    hideTooltip () {
-      this.tooltipVisible = false
-      this.copied = false
-    },
+
+  size: {
+    type: String,
+    required: true
   },
-  computed: {
-    opts () {
-      return {
-        hash: this.agentKey,
-        size: this.size
-      }
-    },
-    style () {
-      return {
-        'border-radius': '50%',
-        'width': `${this.size}px`,
-        'height': `${this.size}px`,
-        ...this.styleProp
-      }
-    },
-    tooltipStyle () {
-      if (this.tooltipLeft) {
-        return {
-          'right': '50px'
-        }
-      } else {
-        return {}
-      }
-    },
-    encodedKey () {
-      return encodeAgentId(this.agentKey)
-    }
-  },
-  mounted () {
-    this.renderIcon()
-  },
-  watch: {
-    agentKey () {
-      this.renderIcon()
-    },
-    size () {
-      this.renderIcon()
-    }
-  }
+
+  styleProp: Object,
+
+  tooltipLeft: Boolean
+})
+
+const canvas = ref()
+const tooltipVisible = ref()
+const copied = ref()
+
+const options = computed(() => ({
+  hash: props.agentKey,
+  size: props.size,
+}))
+
+
+const encodedKey = computed(() => encodeAgentId(props.agentKey))
+
+function copyToClipboard () {
+  if (!props.clickable) return
+
+  copyToClipboardRaw(encodedKey.value)
+  copied.value = true
 }
+
+function showTooltip () {
+  if (!props.clickable) return
+
+  tooltipVisible.value = true
+  copied.value = false
+}
+
+function hideTooltip () {
+  if (!props.clickable) return
+
+  tooltipVisible.value = false
+  copied.value = false
+}
+
+function renderIcon () {
+  if (!canvas.value) return
+  renderIconRaw(options.value, canvas.value)
+}
+
+watchEffect(() => {
+  renderIcon()
+})
+
+const style = computed(() => ({
+  'border-radius': '50%',
+  'width': `${props.size}px`,
+  'height': `${props.size}px`,
+  ...props.styleProp
+}))
+
+const tooltipStyle = computed(() => {
+  if (props.tooltipLeft) {
+    return {
+      'right': '50px'
+    }
+  } else {
+    return {}
+  }
+})
+
 </script>
 
 <style scoped>
