@@ -34,7 +34,9 @@ const props = defineProps({
 
   styleProp: Object,
 
-  tooltipLeft: Boolean
+  tooltipLeft: Boolean,
+
+  backgroundColor: String
 })
 
 const canvas = ref()
@@ -44,6 +46,7 @@ const copied = ref()
 const options = computed(() => ({
   hash: props.agentKey,
   size: props.size,
+  backgroundColor: props.backgroundColor,
 }))
 
 
