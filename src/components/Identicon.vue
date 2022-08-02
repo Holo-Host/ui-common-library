@@ -1,6 +1,6 @@
 <template>
  <canvas ref="canvas" width="1" height="1" :class="['identicon-button', $attrs.class]"
-    :style="style"
+    :style="computedStyle"
     data-testid='identicon'
     @click="copyToClipboard"
     @mouseenter="showTooltip"
@@ -27,24 +27,24 @@ const props = defineProps({
     required: true
   },
 
-  size: {
+  size: { // in pixels
     type: String,
     required: true
   },
 
   styleProp: {
     type: Object,
-    default: {}
+    default: () => ({})
   },
 
   tooltipStyle: {
     type: Object,
-    default: {}
+    default: () => ({})
   },
 
   backgroundColor: {
-    type: String,
-    default: null
+    validator: prop => typeof prop === 'string' || prop === null,
+    default: null,
   }
 })
 
@@ -92,7 +92,7 @@ watchEffect(() => {
   renderIcon()
 })
 
-const style = computed(() => ({
+const computedStyle = computed(() => ({
   'border-radius': '50%',
   'width': `${props.size}px`,
   'height': `${props.size}px`,
