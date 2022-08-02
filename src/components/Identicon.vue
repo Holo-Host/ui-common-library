@@ -1,53 +1,129 @@
 <template>
-  <canvas ref='canvas' width="1" height="1" :style="style" />
+ <canvas ref="canvas" width="1" height="1" :class="['identicon-button', $attrs.class]"
+    :style="computedStyle"
+    data-testid='identicon'
+    @click="copyToClipboard"
+    @mouseenter="showTooltip"
+    @mouseleave="hideTooltip" />
+  <div v-if="isTooltipVisible" class='tooltip-wrapper' data-testid='identicon-tooltip'>
+    <div class='tooltip' :style="tooltipStyle"><span class='agentId'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
+  </div>
 </template>
 
-<script>
-import renderIcon from '../utils/identicon'
+<script setup>
+import renderIconRaw from '../utils/identicon'
+import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
+import { encodeAgentId } from '../utils/agent'
+import { computed, watchEffect, ref } from 'vue'
 
-export default {
-  name: 'Identicon',
-  props: {
-    holoHash: Uint8Array,
-    size: String,
-    backgroundColor: String,
-    styleProp: Object
+const props = defineProps({
+  isClickable: {
+    type: Boolean,
+    default: true
   },
-  methods: {
-    renderIcon () {
-      renderIcon(this.opts, this.$refs.canvas)
-    }
+
+  agentKey: {
+    type: Uint8Array,
+    required: true
   },
-  computed: {
-    opts () {
-      return {
-        hash: this.holoHash,
-        size: this.size,
-        backgroundColor: this.backgroundColor,
-        gridSize: 8
-      }
-    },
-    style () {
-      return {
-        'border-radius': '50%',
-        ...this.styleProp
-      }
-    }
+
+  size: { // in pixels
+    type: String,
+    required: true
   },
-  mounted () {
-    this.renderIcon()
+
+  styleProp: {
+    type: Object,
+    default: () => ({})
   },
-  watch: {
-    holoHash () {
-      this.renderIcon()
-    },
-    size () {
-      this.renderIcon()
-    },
-    backgroundColor () {
-      this.renderIcon()
-    }
-    // is there a better way?
+
+  tooltipStyle: {
+    type: Object,
+    default: () => ({})
+  },
+
+  backgroundColor: {
+    validator: prop => typeof prop === 'string' || prop === null,
+    default: null,
   }
+})
+
+const canvas = ref()
+const isTooltipVisible = ref(false)
+const isCopied = ref(false)
+
+const options = computed(() => ({
+  hash: props.agentKey,
+  size: props.size,
+  backgroundColor: props.backgroundColor,
+}))
+
+
+const encodedKey = computed(() => encodeAgentId(props.agentKey))
+
+function copyToClipboard () {
+  if (!props.isClickable) return
+
+  copyToClipboardRaw(encodedKey.value)
+  isCopied.value = true
 }
+
+function showTooltip () {
+  if (!props.isClickable) return
+
+  isTooltipVisible.value = true
+  isCopied.value = false
+}
+
+function hideTooltip () {
+  if (!props.isClickable) return
+
+  isTooltipVisible.value = false
+  isCopied.value = false
+}
+
+function renderIcon () {
+  if (!canvas.value) return
+  renderIconRaw(options.value, canvas.value)
+}
+
+// render on mount and when options change
+watchEffect(() => {
+  renderIcon()
+})
+
+const computedStyle = computed(() => ({
+  'border-radius': '50%',
+  'width': `${props.size}px`,
+  'height': `${props.size}px`,
+  ...props.styleProp
+}))
+
 </script>
+
+<style scoped>
+.identicon-button {
+  cursor: pointer;
+}
+.tooltip-wrapper {
+  position: relative;
+}
+.tooltip {
+  position: absolute;
+
+  background: #EDF1FF;
+  border: 1px solid #ECEEF1;
+  box-shadow: 0px 4px 10px #E5E5E5;
+  border-radius: 2px;
+
+  padding: 8px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 15px;
+  color: #606C8B;
+}
+.agentId {
+  white-space: nowrap
+}
+</style>

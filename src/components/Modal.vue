@@ -1,7 +1,7 @@
 <template>
   <div class='overlay' @click="handleOverlayClick">
     <div :class="['modal', modalClass]">
-      <button @click="handleClose" class="close-button"><ExIcon v-if="showEx" class="ex-icon" size='16' data-testid='close-modal-button'/></button>
+      <button @click="handleClose" class="close-button"><ExIcon v-if="showEx" class="ex-icon" :size="16" data-testid='close-modal-button'/></button>
       <slot></slot>
     </div>
   </div>
