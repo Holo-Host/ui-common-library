@@ -13,7 +13,7 @@ export default {
   },
 
   argTypes: {
-    clickable: true,
+    isClickable: true,
     agentKey,
     size: '100',
     backgroundColor: String,
@@ -33,7 +33,7 @@ const kTemplate = (args) => ({
 
 export const Default = kTemplate.bind({})
 Default.args = {
-  clickable: true,
+  isClickable: true,
   agentKey,
   size: '100',
 }

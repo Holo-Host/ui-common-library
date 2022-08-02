@@ -5,8 +5,8 @@
     @click="copyToClipboard"
     @mouseenter="showTooltip"
     @mouseleave="hideTooltip" />
-  <div v-if="tooltipVisible" class='tooltip-wrapper' data-testid='identicon-tooltip'>
-    <div class='tooltip' :style="tooltipStyle"><span class='agentId'>{{ encodedKey }}</span> <br />- {{ copied ? 'Copied' : 'Click to copy' }} </div>
+  <div v-if="isTooltipVisible" class='tooltip-wrapper' data-testid='identicon-tooltip'>
+    <div class='tooltip' :style="tooltipStyle"><span class='agentId'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import { encodeAgentId } from '../utils/agent'
 import { computed, watchEffect, ref } from 'vue'
 
 const props = defineProps({
-  clickable: {
+  isClickable: {
     type: Boolean,
     default: true
   },
@@ -32,16 +32,25 @@ const props = defineProps({
     required: true
   },
 
-  styleProp: Object,
+  styleProp: {
+    type: Object,
+    default: {}
+  },
 
-  tooltipLeft: Boolean,
+  tooltipStyle: {
+    type: Object,
+    default: {}
+  },
 
-  backgroundColor: String
+  backgroundColor: {
+    type: String,
+    default: null
+  }
 })
 
 const canvas = ref()
-const tooltipVisible = ref()
-const copied = ref()
+const isTooltipVisible = ref(false)
+const isCopied = ref(false)
 
 const options = computed(() => ({
   hash: props.agentKey,
@@ -53,24 +62,24 @@ const options = computed(() => ({
 const encodedKey = computed(() => encodeAgentId(props.agentKey))
 
 function copyToClipboard () {
-  if (!props.clickable) return
+  if (!props.isClickable) return
 
   copyToClipboardRaw(encodedKey.value)
-  copied.value = true
+  isCopied.value = true
 }
 
 function showTooltip () {
-  if (!props.clickable) return
+  if (!props.isClickable) return
 
-  tooltipVisible.value = true
-  copied.value = false
+  isTooltipVisible.value = true
+  isCopied.value = false
 }
 
 function hideTooltip () {
-  if (!props.clickable) return
+  if (!props.isClickable) return
 
-  tooltipVisible.value = false
-  copied.value = false
+  isTooltipVisible.value = false
+  isCopied.value = false
 }
 
 function renderIcon () {
@@ -78,6 +87,7 @@ function renderIcon () {
   renderIconRaw(options.value, canvas.value)
 }
 
+// render on mount and when options change
 watchEffect(() => {
   renderIcon()
 })
@@ -88,16 +98,6 @@ const style = computed(() => ({
   'height': `${props.size}px`,
   ...props.styleProp
 }))
-
-const tooltipStyle = computed(() => {
-  if (props.tooltipLeft) {
-    return {
-      'right': '50px'
-    }
-  } else {
-    return {}
-  }
-})
 
 </script>
 
