@@ -2,8 +2,6 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-
-
 ## [Unreleased]
 
 ### Changed
@@ -11,5 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Removed
 - Identicon2 component [(#15)]
+- Removed X icon in top left of identity modal [(#16)]
 
 [(#15)]: https://github.com/Holo-Host/ui-common-library/pull/15
+[(#16)]: https://github.com/Holo-Host/ui-common-library/pull/16
