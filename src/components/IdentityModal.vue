@@ -1,5 +1,5 @@
 <template>
-  <Modal :handleClose="handleClose" modalClass='identity-modal'>
+  <Modal :handleClose="handleClose" modalClass='identity-modal' :shouldCloseOnAwayClick="false" :showEx="false">
     <div class='modal-content'>
       <p class="modal-title">Your Address & Identity</p>
       <p>
