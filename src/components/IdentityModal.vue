@@ -14,7 +14,7 @@
     </div>
     <div class='footer'>
       <div class='buttons'>
-        <Button class='save-button' :color="'primary-enabled'" @click="onIUnderstandClick">I understand</Button>
+        <Button class='save-button' :color="'primary-enabled'" @click="onIUnderstandClick" data-testid='i-understand-button'>I understand</Button>
       </div>
     </div>
   </Modal>
