@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { encodeAgentId } from '../utils/agent'
-import { inspect } from 'util'
 
 const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('client', {
   state: () => ({
@@ -31,28 +30,18 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       return useInterfaceStore().loadAppInfo()
     },
 
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {            
-      const zomePath = `${zomeName}.${fnName}`
-      console.log(`calling ${zomePath} with ${inspect(payload)}`)
-
+    async callZome ({ roleId, zomeName, fnName, payload = null }) {  
       if (!this.isReady) {
         throw new Error('Tried to make zome call while client is not ready')
       }
 			
       const result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
-
-
-      console.log(`${zomePath} returned with ${inspect(result)}`)
-
 			return result
     },
     
     setAgentKeyFromAppInfo (appInfo) {
       const {
-        cell_data: [
-          {
-            cell_id: [_dnaHash, agentKey]
-          }
+        cell_data: [{cell_id: [_dnaHash, agentKey]}
         ]
       } = appInfo
 
@@ -60,6 +49,6 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       console.log(`setting agentKey = ${encodeAgentId(agentKey)}`)
     },
   },
-})
+});
 
 export default makeUseClientStore

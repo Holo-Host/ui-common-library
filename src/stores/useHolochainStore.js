@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { inspect } from 'util'
 import { AppWebsocket } from "@holochain/client"
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
@@ -28,7 +27,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         holochainClient.client.socket.onclose = function (e) {
           console.log(
             `Socket to Holochain App Interface has closed.`,
-            inspect(e)
+            e
           )
           this.client = null
           this.isReady = false
@@ -51,7 +50,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 
         return appInfo
 			} catch (error) {
-				console.error('appInfo() returned error.', inspect(error))
+				console.error('appInfo() returned error.', error)
 			}
     },
     
