@@ -22,10 +22,11 @@
   },
   "dependencies": {
     "@holo-host/identicon": "^0.1.0",
-    "@holo-host/web-sdk": "^0.6.6-prerelease",
+    "@holo-host/web-sdk": "^0.6.7-prerelease",
     "@testing-library/user-event": "^13.2.1",
     "add": "^2.0.6",
     "dotenv": "^8.2.0",
+    "js-base64": "^3.7.2",
     "lodash": "^4.17.20",
     "mitt": "^3.0.0",
     "moment": "^2.29.1",
