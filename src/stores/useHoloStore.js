@@ -51,6 +51,9 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
 
       // Set agent state in case `agent-state` event is never emitted. This is the case with Mock Web SDK because it never emits events
       this.agentState = client.agent
+      // isReady and isLoggedIn seem to fulfill the same purpose
+      this.isReady = this.isLoggedIn
+      return client
     },
 
     signIn () {
