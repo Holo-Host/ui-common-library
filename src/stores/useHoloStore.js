@@ -7,7 +7,7 @@ let client
 
 const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {
   state: () => ({
-    agentState: {},
+    agentState: {isAnonymous: true},
     happId: null,
     connectionError: null,
     isAuthFormOpen: false,
