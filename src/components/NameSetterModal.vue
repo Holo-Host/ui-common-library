@@ -7,7 +7,7 @@
       <p>
         {{ body }}
       </p>
-      <input type="text" id="publisher-name" v-model="name" class="modal-input" placeholder="Enter Account Display Name " >
+      <input type="text" id="publisher-name" v-model="name" class="modal-input" data-testid='name-setter-modal-input' placeholder="Enter Account Display Name " >
     </div>
     <div class='footer'>
       <div class='buttons'>      

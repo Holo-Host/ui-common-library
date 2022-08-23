@@ -5,7 +5,7 @@
       <p>
         {{ body }}
       </p>
-      <p><b>{{name}}</b></p>
+      <p class="nickname" data-testid="identity-modal-nickname">{{name}}</p>
       <div class="identicon">
         <Identicon v-if="agentKey" size="60" :agentKey="agentKey" role='img' aria-label="Agent Identity Icon"/>
       </div>
@@ -97,8 +97,9 @@ export default {
     padding: 0 74px;
     margin-top: 20px;
 }
-
-
+.nickname {
+  font-weight: bold;
+}
 .footer {
     margin-top: 50px;
 }
