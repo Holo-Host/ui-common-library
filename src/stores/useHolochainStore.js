@@ -20,7 +20,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
           app_ws_url,
           HC_APP_TIMEOUT,
           signal => useSignalStore().handleSignal(presentHcSignal(signal))
-        )
+          )
         
         this.client = holochainClient
 
@@ -34,6 +34,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         }
 
         this.loadAppInfo()
+        return holochainClient
       } catch (e) {
         console.error('Holochain connection error ', e)
         this.isReady = false
