@@ -9,7 +9,7 @@
       <div class="identicon">
         <Identicon v-if="agentKey" size="60" :agentKey="agentKey" role='img' aria-label="Agent Identity Icon"/>
       </div>
-      <p><b>{{agentId}}</b></p>
+      <p><b data-testid='agent-key'>{{agentId}}</b></p>
       <p><b>TIP:</b> Clicking on an identicon will copy the associated address for easy transacting in HoloFuel. </p>
     </div>
     <div class='footer'>
