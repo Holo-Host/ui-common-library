@@ -4,7 +4,10 @@
       <slot></slot>
     </div>
     <div class="panel-text">
-      {{panelText}}
+        {{panelText}}
+      <div v-if="showBadge" class="panel-badge">
+        {{badgeText}}
+    </div>
     </div>
     <div class="right-chevron-icon">
       <RightChevronIcon class="right-chevron-icon" color='#313C59' :disabled="disabled"/>
@@ -21,9 +24,11 @@ export default {
     RightChevronIcon
   },
   props: {
+    badgeText: String,
     disabled: {type: Boolean, default: false },
+    panelText: String,
+    showBadge: {type: Boolean, default: false },
     uri: String,
-    panelText: String
   },
   methods: {
     handlePanelClick (e) {
@@ -67,15 +72,27 @@ export default {
   margin-left: 20px;
   margin-top: 10px;
   width: 40px;
-  height: 100%;
 }
 
 .panel-text {
+  display: flex;
+  align-items: center;
   width: 100%;
   margin-left: 10px;
   margin-right: auto;
   font-size: 16px;
   font-weight: 700;
+}
+
+.panel-badge {
+  height: 12px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 12px;
+  padding: 4px;
+  margin-left: 8px;
 }
 
 .right-chevron-icon {
