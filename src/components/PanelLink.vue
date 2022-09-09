@@ -1,5 +1,5 @@
 <template>
-  <div class='panel' :class="computedPanelStyle" @click="handlePanelClick">
+  <div class='panel' :class="computedPanelStyle">
     <div class="panel-icon">
       <slot></slot>
     </div>
@@ -28,12 +28,6 @@ export default {
     disabled: {type: Boolean, default: false },
     panelText: String,
     showBadge: {type: Boolean, default: false },
-    uri: String,
-  },
-  methods: {
-    handlePanelClick (e) {
-      console.log("handlePanelClick", e)
-    }
   },
   computed: {
     computedPanelStyle () {
