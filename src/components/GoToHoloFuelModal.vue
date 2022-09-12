@@ -11,7 +11,7 @@
       />
 
       <p class="go-to-holofuel-modal__description">
-        {{ $t('holofuel_modal.description', { appName: 'Host Console' }) }}
+        {{ $t('holofuel_modal.description', { appName }) }}
       </p>
     </div>
 
@@ -57,6 +57,11 @@ const props = defineProps({
     type: Boolean,
     required: true
   },
+
+	appName: {
+		type: String,
+		required: true
+	},
 
   dontShowModalAgainLocalStorageKey: {
     type: String,
