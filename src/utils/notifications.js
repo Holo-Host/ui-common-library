@@ -8,6 +8,11 @@ export const ENotification = {
   hideBanner: 'hideBanner'
 }
 
+export const EProjectNotification = {
+  showGoToHolofuelModal: 'showGoToHolofuelModal',
+  hideGoToHolofuelModal: 'hideGoToHolofuelModal'
+}
+
 export const EOverlayType = {
   loading: 0,
   message: 1
