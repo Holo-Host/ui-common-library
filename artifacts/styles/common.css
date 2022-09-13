@@ -6,6 +6,7 @@
     --btn-primary-enabled-bg-color: #735CFE;
     --btn-primary-enabled-color: #FFFFFF;
     --content-color: #313C59;
+    --disabled-content-color: rgba(49, 60, 89, 0.18);
 
     /* Required to be present in the project using the components */
     --white-color: #FFFFFF;
