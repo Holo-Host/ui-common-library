@@ -3,7 +3,10 @@
     class="card"
     :class="{ 'two-columns': isMultiColumn }"
   >
-    <h2 class="title">
+    <h2
+			v-if="title"
+			class="title"
+		>
       {{ title }}
       <h3
         v-if="subtitle"
@@ -13,46 +16,79 @@
       </h3>
     </h2>
 
-    <div
-      v-if="isMultiColumn"
-      class="inner-row"
-    >
-      <div class="inner-column">
-        <slot name="left" />
-      </div>
+		<div class="card-content">
+			<div
+				v-if="isLoading || isError"
+				class="card-overlay"
+			>
+				<CircleSpinner v-if="isLoading" class="card-spinner" />
+				<div
+					v-else
+					class="error-message"
+				>
+					<p>Sorry, we couldn’t fetch this data.</p>
+					<BaseButton
+						:type="EButtonType.gray"
+						title="Try again"
+						@click="emit('try-again-clicked')"
+					/>
+				</div>
+			</div>
 
-      <div class="inner-column">
-        <slot name="right" />
-      </div>
-    </div>
+			<div
+				v-if="isMultiColumn"
+				class="inner-row"
+			>
+				<div class="inner-column">
+					<slot name="left" />
+				</div>
 
-    <div
-      v-else
-      class="body"
-    >
-      <slot />
-    </div>
+				<div class="inner-column">
+					<slot name="right" />
+				</div>
+			</div>
 
-    <span
-      v-if="withMoreButton"
-      class="more"
-      @click="emit('more-clicked')"
-    >
+			<div
+				v-else
+				class="body"
+			>
+				<slot />
+			</div>
+
+			<span
+				v-if="withMoreButton"
+				class="more"
+				@click="emit('more-clicked')"
+			>
       More <RightArrowIcon class="right-arrow-icon" />
     </span>
+		</div>
   </div>
 </template>
 
 <script setup>
-import RightArrowIcon from './icons/RightArrowIcon.vue'
+import BaseButton from './BaseButton'
+import CircleSpinner from './CircleSpinner'
+import RightArrowIcon from './icons/RightArrowIcon'
 import { computed, useSlots } from 'vue'
+import { EButtonType } from '../types/ui'
 
 const slots = useSlots()
 
 defineProps({
+	isLoading: {
+		type: Boolean,
+		default: false
+	},
+
+	isError: {
+		type: Boolean,
+		default: false
+	},
+
   title: {
     type: String,
-    required: true
+		default: ''
   },
 
   subtitle: {
@@ -66,7 +102,7 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['more-clicked'])
+const emit = defineEmits(['more-clicked', 'try-again-clicked'])
 
 const isMultiColumn = computed(() => slots.right && slots.left)
 </script>
@@ -94,6 +130,14 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 
 .card:last-child {
   margin-right: 14px;
+}
+
+.card-content {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
 }
 
 .two-columns {
@@ -153,6 +197,31 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 .right-arrow-icon {
 	margin-left: 4px;
 	color: var(--primary-color);
+}
+
+.card-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background-color: var(--white-color);
+	z-index: 10;
+}
+
+.card-spinner {
+	position: absolute;
+}
+
+.error-message {
+	padding: 5px 20px;
+	text-align: center;
+	color: var(--grey-color);
 }
 
 @media screen and (max-width: 1050px) {
