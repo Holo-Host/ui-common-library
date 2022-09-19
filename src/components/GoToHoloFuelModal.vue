@@ -78,7 +78,7 @@ const dontShowGoToHoloFuelModalAgain = ref(
   localStorage.getItem(props.dontShowModalAgainLocalStorageKey)
 )
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'login'])
 
 function handleHolofuelLogin() {
   postNotification(EProjectNotification.hideGoToHolofuelModal)
@@ -87,7 +87,9 @@ function handleHolofuelLogin() {
     localStorage.setItem(props.dontShowModalAgainLocalStorageKey, 'true')
   }
 
-	window.open(props.holoFuelUrl, '_blank').focus();
+  emit('login', dontShowGoToHoloFuelModalAgain.value)
+  const tabName = `${props.appName}-hf`
+	window.open(props.holoFuelUrl, tabName).focus();
 }
 
 function setDontShowGoToHoloFuelModalAgain(value) {
