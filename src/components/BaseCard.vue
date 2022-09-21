@@ -18,12 +18,13 @@
 
 		<div class="card-content">
 			<div
-				v-if="isLoading || isError"
+				v-if="isLoading || isError || isDisabled"
 				class="card-overlay"
+				:class="{ 'is-disabled': isDisabled }"
 			>
 				<CircleSpinner v-if="isLoading" class="card-spinner" />
 				<div
-					v-else
+					v-else-if="isError"
 					class="error-message"
 				>
 					<p>Sorry, we couldn’t fetch this data.</p>
@@ -76,6 +77,11 @@ import { EButtonType } from '../types/ui'
 const slots = useSlots()
 
 defineProps({
+	isDisabled: {
+		type: Boolean,
+		default: false
+	},
+
 	isLoading: {
 		type: Boolean,
 		default: false
@@ -121,15 +127,15 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 .card {
   display: flex;
   flex-direction: column;
-  margin-right: 30px;
   flex-basis: 33%;
   background-color: white;
   box-shadow: 0 4px 20px #eceef1;
   border-radius: 12px;
 }
 
-.card:last-child {
-  margin-right: 14px;
+.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .card-content {
@@ -208,6 +214,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border-radius: 12px;
 	width: 100%;
 	height: 100%;
 	background-color: var(--white-color);
@@ -227,10 +234,6 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 @media screen and (max-width: 1050px) {
   .card {
     margin-bottom: 28px;
-    margin-right: 0;
-  }
-
-  .card:last-child {
     margin-right: 0;
   }
 
