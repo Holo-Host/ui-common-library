@@ -89,7 +89,7 @@ function handleHolofuelLogin() {
 
   emit('login', dontShowGoToHoloFuelModalAgain.value)
   const tabName = `${props.appName}-hf`
-	window.open(props.holoFuelUrl, tabName).focus();
+  window.open(props.holoFuelUrl, tabName).focus();
 }
 
 function setDontShowGoToHoloFuelModalAgain(value) {
