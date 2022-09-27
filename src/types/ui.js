@@ -28,3 +28,8 @@ export const EInputType = {
   number: 'number',
   tel: 'tel'
 }
+
+export const ESortDirections = {
+  asc: 'asc',
+  desc: 'desc'
+}
