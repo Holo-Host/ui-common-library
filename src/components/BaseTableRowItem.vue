@@ -17,10 +17,10 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   value: {
     type: String,
-    required: true
+    default: ''
   },
 
 	isVisibleOnMobile: {
@@ -49,7 +49,7 @@ const props = defineProps({
 	line-height: 19px;
 	color: var(--grey-color);
 	font-weight: 600;
-	padding: 10px 0 10px 20px;
+	padding: 8px 0 8px 26px;
 
 	&__content {
 		display: flex;

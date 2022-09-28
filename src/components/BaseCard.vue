@@ -52,6 +52,7 @@
 			<div
 				v-else
 				class="body"
+				:class="`body--margin-${margin}`"
 			>
 				<slot />
 			</div>
@@ -105,7 +106,12 @@ defineProps({
   withMoreButton: {
     type: Boolean,
     default: false
-  }
+  },
+
+	margin: {
+		type: String,
+		default: 'md'
+	}
 })
 
 const emit = defineEmits(['more-clicked', 'try-again-clicked'])
@@ -123,7 +129,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .card {
   display: flex;
   flex-direction: column;
@@ -174,10 +180,17 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 
 .body {
-  margin: 26px 26px 13px 26px;
   display: flex;
   flex-direction: column;
   flex-basis: 68%;
+
+	&--margin-md {
+		margin: 26px 26px 13px 26px;
+	}
+
+	&--margin-sm {
+		margin: 20px 10px 0 10px;
+	}
 }
 
 .inner-row {

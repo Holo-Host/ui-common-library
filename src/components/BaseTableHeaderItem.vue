@@ -3,6 +3,7 @@
     :key="header.key"
     :class="[
       { 'header-row-item--is-selected': isSelected },
+      { 'header-row-item--is-sortable': header.isSortable },
       { 'header-row-item__mobile-header': header.isVisibleOnMobile },
     ]"
     :title="header.label"
@@ -26,7 +27,7 @@
 import { ESortDirections } from '../types/ui'
 import ShortUpArrowIcon from './icons/ShortUpArrowIcon.vue'
 
-const props = defineProps({
+defineProps({
   header: {
     type: Object,
     required: true
@@ -50,10 +51,13 @@ const props = defineProps({
 <style lang="scss" scoped>
 .header-row-item {
   text-align: start;
-  padding: 0 0 28px 10px;
+  padding: 0 0 28px 26px;
   font-weight: 600;
   user-select: none;
-  cursor: pointer;
+
+	&--is-sortable {
+		cursor: pointer;
+	}
 
   &--is-selected {
     font-weight: 700;

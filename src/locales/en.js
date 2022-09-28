@@ -42,6 +42,7 @@ const translations = {
     logout: 'Logout',
     network: 'Network',
     page_not_found: "Hmm... We're unable to find that page.",
+    rows_per_page: 'Rows per page',
     storage: 'Storage',
     tip: 'TIP:',
     try_again: 'Try again',

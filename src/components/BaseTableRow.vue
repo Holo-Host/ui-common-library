@@ -10,7 +10,7 @@
 		<RightChevronIcon
 			:class="[isExpanded ? 'up-chevron' : 'down-chevron']"
 			color="#00CAD9"
-			@click="isExpanded = !isExpanded"
+			@click="toggleExpanded"
 		/>
 	</tr>
 
@@ -28,6 +28,10 @@ import { ref } from 'vue'
 import RightChevronIcon from 'components/icons/RightChevronIcon';
 
 const isExpanded = ref(false);
+
+function toggleExpanded() {
+	isExpanded.value = !isExpanded.value;
+}
 </script>
 
 <style lang="scss" scoped>

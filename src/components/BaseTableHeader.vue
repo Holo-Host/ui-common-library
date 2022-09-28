@@ -6,7 +6,7 @@
       :header="header"
       :is-selected="sortBy === header.key"
       :sort-direction="sortDirection"
-      @click="onHeaderClicked(header.key)"
+      @click="onHeaderClicked(header)"
     />
 	</tr>
 </template>
@@ -32,16 +32,22 @@ const emit = defineEmits(['sortByChanged'])
 
 const sortDirection = ref(ESortDirections.desc)
 
-function onHeaderClicked(key) {
-  const { asc, desc } = ESortDirections
+function onHeaderClicked(header) {
+	if (header.isSortable) {
 
-  if (key === props.sortBy) {
-    sortDirection.value = sortDirection.value === asc ? desc : asc
-  } else {
-    sortDirection.value = asc
-  }
+	const {asc, desc} = ESortDirections
 
-  emit('sortByChanged', { key, direction: sortDirection.value })
+	if (header.key === props.sortBy) {
+		sortDirection.value = sortDirection.value === asc ? desc : asc
+	} else {
+		sortDirection.value = asc
+	}
+
+	emit('sortByChanged', {
+		key: header.key,
+		direction: sortDirection.value
+	})
+}
 }
 </script>
 
