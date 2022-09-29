@@ -23,8 +23,8 @@
 </template>
 
 <script setup>
-import BaseCard from '@uicommon/components/BaseCard'
-import BaseTableHeader from '@uicommon/components/BaseTableHeader'
+import BaseCard from './BaseCard'
+import BaseTableHeader from './BaseTableHeader'
 import BaseTablePagination from './BaseTablePagination'
 import { computed, ref, watch } from 'vue'
 import { ESortDirections } from '../types/ui'
