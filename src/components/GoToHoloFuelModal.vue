@@ -53,59 +53,59 @@ import { addObserver, EProjectNotification, removeObserver } from '../utils/noti
 import { onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({
-	appName: {
-		type: String,
-		required: true
-	},
+  appName: {
+    type: String,
+    required: true
+  },
 
-	dontShowModalAgainLocalStorageKey: {
-		type: String,
-		required: true
-	},
+  dontShowModalAgainLocalStorageKey: {
+    type: String,
+    required: true
+  },
 
-	holoFuelUrl: {
-		type: String,
-		required: true
-	}
+  holoFuelUrl: {
+    type: String,
+    required: true
+  }
 })
 
 const isVisible = ref(false)
 
 const dontShowAgain = ref(
-	localStorage.getItem(props.dontShowModalAgainLocalStorageKey)
+  localStorage.getItem(props.dontShowModalAgainLocalStorageKey)
 )
 
 onMounted(async () => {
-	addObserver(EProjectNotification.showGoToHolofuelModal, showModal)
-	addObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
+  addObserver(EProjectNotification.showGoToHolofuelModal, showModal)
+  addObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
 })
 
 onUnmounted(() => {
-	removeObserver(EProjectNotification.showGoToHolofuelModal, showModal)
-	removeObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
+  removeObserver(EProjectNotification.showGoToHolofuelModal, showModal)
+  removeObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
 })
 
 function showModal() {
-	isVisible.value = true
+  isVisible.value = true
 }
 
 function hideModal() {
-	isVisible.value = false
+  isVisible.value = false
 }
 
 function setDontShowAgain(value) {
-	dontShowAgain.value = value
+  dontShowAgain.value = value
 }
 
 function handleHolofuelLogin() {
-	hideModal()
+  hideModal()
 
-	if (dontShowAgain.value) {
-		localStorage.setItem(props.dontShowModalAgainLocalStorageKey, 'true')
-	}
+  if (dontShowAgain.value) {
+    localStorage.setItem(props.dontShowModalAgainLocalStorageKey, 'true')
+  }
 
-	const tabName = `${props.appName}-hf`
-	window.open(props.holoFuelUrl, tabName).focus();
+  const tabName = `${props.appName}-hf`
+  window.open(props.holoFuelUrl, tabName).focus();
 }
 </script>
 
