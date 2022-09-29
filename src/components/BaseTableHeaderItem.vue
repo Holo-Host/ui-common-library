@@ -41,9 +41,9 @@ defineProps({
   sortDirection: {
     type: String,
     required: true,
-		validator(value) {
-			return [ESortDirections.asc, ESortDirections.desc].includes(value)
-		}
+    validator(value) {
+      return [ESortDirections.asc, ESortDirections.desc].includes(value)
+    }
   }
 })
 </script>

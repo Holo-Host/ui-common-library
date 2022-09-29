@@ -30,7 +30,7 @@ import RightChevronIcon from 'components/icons/RightChevronIcon';
 const isExpanded = ref(false);
 
 function toggleExpanded() {
-	isExpanded.value = !isExpanded.value;
+  isExpanded.value = !isExpanded.value;
 }
 </script>
 

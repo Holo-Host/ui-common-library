@@ -36,20 +36,20 @@ import RightChevronIcon from './icons/RightChevronIcon'
 import { computed } from 'vue'
 
 const props = defineProps({
-	pageSize: {
-		type: Number,
-		default: 10
-	},
+  pageSize: {
+    type: Number,
+    default: 10
+  },
 
-	itemsCount: {
-		type: Number,
-		default: 0
-	},
+  itemsCount: {
+    type: Number,
+    default: 0
+  },
 
-	currentPage: {
-		type: Number,
-		default: 0
-	},
+  currentPage: {
+    type: Number,
+    default: 0
+  },
 })
 
 const emit = defineEmits(['pageChanged', 'pageSizeChanged'])
@@ -57,33 +57,33 @@ const emit = defineEmits(['pageChanged', 'pageSizeChanged'])
 const kPageSizeOptions = [5, 10, 20, 30, 50]
 
 const paginationLegend = computed(() => {
-	const first = props.currentPage * props.pageSize + 1
-	let last = first + props.pageSize - 1
+  const first = props.currentPage * props.pageSize + 1
+  let last = first + props.pageSize - 1
 
-	if (last > props.itemsCount) {
-		last = props.itemsCount
-	}
+  if (last > props.itemsCount) {
+    last = props.itemsCount
+  }
 
-	return `${first}-${last} of ${props.itemsCount} items`
+  return `${first}-${last} of ${props.itemsCount} items`
 })
 
 const hasPrevPage = computed(() => props.currentPage > 0)
 const hasNextPage = computed(() => (props.currentPage + 1) * props.pageSize <= props.itemsCount)
 
 function onPageSizeChanged({ target: { value }}) {
-	emit('pageSizeChanged', Number(value))
+  emit('pageSizeChanged', Number(value))
 }
 
 function goToPrevPage() {
-	if (hasPrevPage.value) {
-		emit('pageChanged', props.currentPage - 1)
-	}
+  if (hasPrevPage.value) {
+    emit('pageChanged', props.currentPage - 1)
+  }
 }
 
 function goToNextPage() {
-	if (hasNextPage.value) {
-		emit('pageChanged', props.currentPage + 1)
-	}
+  if (hasNextPage.value) {
+    emit('pageChanged', props.currentPage + 1)
+  }
 }
 </script>
 

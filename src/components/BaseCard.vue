@@ -78,24 +78,24 @@ import { EButtonType } from '../types/ui'
 const slots = useSlots()
 
 defineProps({
-	isDisabled: {
-		type: Boolean,
-		default: false
-	},
+  isDisabled: {
+    type: Boolean,
+    default: false
+  },
 
-	isLoading: {
-		type: Boolean,
-		default: false
-	},
+  isLoading: {
+    type: Boolean,
+    default: false
+  },
 
-	isError: {
-		type: Boolean,
-		default: false
-	},
+  isError: {
+    type: Boolean,
+    default: false
+  },
 
   title: {
     type: String,
-		default: ''
+    default: ''
   },
 
   subtitle: {
@@ -108,10 +108,10 @@ defineProps({
     default: false
   },
 
-	margin: {
-		type: String,
-		default: 'md'
-	}
+  margin: {
+    type: String,
+    default: 'md'
+  }
 })
 
 const emit = defineEmits(['more-clicked', 'try-again-clicked'])

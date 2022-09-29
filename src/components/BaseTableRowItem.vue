@@ -23,23 +23,23 @@ defineProps({
     default: ''
   },
 
-	isVisibleOnMobile: {
-		type: Boolean,
-		default: false
-	},
+  isVisibleOnMobile: {
+    type: Boolean,
+    default: false
+  },
 
-	isBold: {
-		type: Boolean,
-		default: false
-	},
+  isBold: {
+    type: Boolean,
+    default: false
+  },
 
-	align: {
-		type: String,
-		default: 'start',
-		validator(value) {
-			return ['start', 'end', 'center'].includes(value)
-		}
-	}
+  align: {
+    type: String,
+    default: 'start',
+    validator(value) {
+      return ['start', 'end', 'center'].includes(value)
+    }
+  }
 })
 </script>
 

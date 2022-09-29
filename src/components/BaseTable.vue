@@ -23,38 +23,39 @@
 </template>
 
 <script setup>
-import BaseCard from './BaseCard'
-import BaseTableHeader from './BaseTableHeader'
+import BaseCard from '@uicommon/components/BaseCard'
+import BaseTableHeader from '@uicommon/components/BaseTableHeader'
 import BaseTablePagination from './BaseTablePagination'
 import { computed, ref, watch } from 'vue'
+import { ESortDirections } from '../types/ui'
 
 const props = defineProps({
-	headers: {
-		type: Object,
-		required: true
-	},
+  headers: {
+    type: Object,
+    required: true
+  },
 
-	initialSortBy: {
-		type: String,
-		default: ''
-	},
+  initialSortBy: {
+    type: String,
+    default: ''
+  },
 
-	items: {
-		type: Array,
-		required: true
-	}
+  items: {
+    type: Array,
+    required: true
+  }
 })
 
 const pageSize = ref(10)
 const currentPage = ref(0)
 
 const sortBy = ref(props.initialSortBy)
-const sortDesc = ref(true)
+const sortDirection = ref(ESortDirections.desc)
 
 const pagedData = computed(() => {
-	const startIndex = currentPage.value * pageSize.value
-	const endIndex = (currentPage.value + 1) * pageSize.value
-	return sortedItems.value.slice(startIndex, endIndex)
+  const startIndex = currentPage.value * pageSize.value
+  const endIndex = (currentPage.value + 1) * pageSize.value
+  return sortedItems.value.slice(startIndex, endIndex)
 })
 
 const itemsCount = computed(() => sortedItems.value.length)
@@ -62,43 +63,34 @@ const itemsCount = computed(() => sortedItems.value.length)
 watch(pageSize, () => (currentPage.value = 0))
 
 const sortedItems = computed(() => {
-	const sortKey = sortBy.value
-	const sortDescValue = sortDesc.value
+  const sortKey = sortBy.value
 
-	const itemsCopy = [...props.items]
+  const itemsCopy = [...props.items]
 
-	return itemsCopy.sort((a, b) => {
-		if (a[sortKey] === b[sortKey]) {
-			return 0
-		}
+  return itemsCopy.sort((a, b) => {
+    if (a[sortKey] === b[sortKey]) {
+      return 0
+    }
 
-		if (sortDescValue) {
-			if (typeof a[sortKey] === 'number') {
-				return b[sortKey] - a[sortKey]
-			} else {
-				return a[sortKey] > b[sortKey] ? -1 : 1
-			}
-		} else {
-			if (typeof a[sortKey] === 'number') {
-				return a[sortKey] - b[sortKey]
-			} else {
-				return a[sortKey] < b[sortKey] ? -1 : 1
-			}
-		}
-	})
+    if (sortDirection.value === ESortDirections.desc) {
+      return a[sortKey] > b[sortKey] ? -1 : 1
+    } else {
+      return a[sortKey] < b[sortKey] ? -1 : 1
+    }
+  })
 })
 
 function onSortByChanged({ key, direction }) {
-	sortBy.value = key
-	sortDesc.value = direction === 'desc'
+  sortBy.value = key
+  sortDirection.value = direction
 }
 
 function onPageChanged(page) {
-	currentPage.value = page
+  currentPage.value = page
 }
 
 function onPageSizeChanged(size) {
-	pageSize.value = size
+  pageSize.value = size
 }
 </script>
 

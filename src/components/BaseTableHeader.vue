@@ -33,21 +33,20 @@ const emit = defineEmits(['sortByChanged'])
 const sortDirection = ref(ESortDirections.desc)
 
 function onHeaderClicked(header) {
-	if (header.isSortable) {
+  if (header.isSortable) {
+    const {asc, desc} = ESortDirections
 
-	const {asc, desc} = ESortDirections
+    if (header.key === props.sortBy) {
+      sortDirection.value = sortDirection.value === asc ? desc : asc
+    } else {
+      sortDirection.value = asc
+    }
 
-	if (header.key === props.sortBy) {
-		sortDirection.value = sortDirection.value === asc ? desc : asc
-	} else {
-		sortDirection.value = asc
-	}
-
-	emit('sortByChanged', {
-		key: header.key,
-		direction: sortDirection.value
-	})
-}
+    emit('sortByChanged', {
+      key: header.key,
+      direction: sortDirection.value
+    })
+  }
 }
 </script>
 
