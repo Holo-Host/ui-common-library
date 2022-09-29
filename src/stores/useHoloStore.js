@@ -35,7 +35,11 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
         throw e
       }
 
-      client.on('agent-state', agentState => {
+      const onAgentState = agentState => {
+        if (agentState.unrecoverableError) {
+          console.error('unrecoverable agent state', agentState.unrecoverableError)
+        }
+
         // This is a temporary addition, until chaperone is updated to include app info as part of agent state
         client.appInfo().then((appInfo) => {
           this.appInfo = appInfo
@@ -44,13 +48,15 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
         this.agentState = agentState
 
         this.isReady = this.isLoggedIn
-      })
+      }
+
+      client.on('agent-state', onAgentState)
       client.on('signal', payload => useSignalStore().handleSignal(payload))
 
       this.happId = client.happId
 
       // Set agent state in case `agent-state` event is never emitted. This is the case with Mock Web SDK because it never emits events
-      this.agentState = client.agent
+      onAgentState(client.agent)
     },
 
     signIn () {
@@ -93,14 +99,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
-    
-    setAgentState (agentState) {
-      this.agentState = agentState
-      console.log("Setting agent state: ", agentState);
-      if (agentState.unrecoverableError) {
-        console.error('unrecoverable agent state', agentState.unrecoverableError)
-      }
-    },
+  
   }
 })
 
