@@ -1,7 +1,7 @@
 <template>
 	<BaseModal
 		:is-visible="isVisible"
-		@close="hideGoToHolofuelModal"
+		@close="hideModal"
 	>
 		<div class="go-to-holofuel-modal">
 			<img
@@ -37,7 +37,7 @@
 					label-size="small"
 					custom-color="#21BE98"
 					class="go-to-holofuel-modal__checkbox"
-					@update:checked="setDontShowGoToHoloFuelModalAgain"
+					@update:checked="setDontShowAgain"
 				/>
 			</div>
 		</template>
@@ -71,36 +71,36 @@ const props = defineProps({
 
 const isVisible = ref(false)
 
-const dontShowGoToHoloFuelModalAgain = ref(
+const dontShowAgain = ref(
 	localStorage.getItem(props.dontShowModalAgainLocalStorageKey)
 )
 
 onMounted(async () => {
-	addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-	addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+	addObserver(EProjectNotification.showGoToHolofuelModal, showModal)
+	addObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
 })
 
 onUnmounted(() => {
-	removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-	removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+	removeObserver(EProjectNotification.showGoToHolofuelModal, showModal)
+	removeObserver(EProjectNotification.hideGoToHolofuelModal, hideModal)
 })
 
-function showGoToHolofuelModal() {
+function showModal() {
 	isVisible.value = true
 }
 
-function hideGoToHolofuelModal() {
+function hideModal() {
 	isVisible.value = false
 }
 
-function setDontShowGoToHoloFuelModalAgain(value) {
-	dontShowGoToHoloFuelModalAgain.value = value
+function setDontShowAgain(value) {
+	dontShowAgain.value = value
 }
 
 function handleHolofuelLogin() {
-	hideGoToHolofuelModal()
+	hideModal()
 
-	if (dontShowGoToHoloFuelModalAgain.value) {
+	if (dontShowAgain.value) {
 		localStorage.setItem(props.dontShowModalAgainLocalStorageKey, 'true')
 	}
 
