@@ -1,47 +1,47 @@
 <template>
-	<BaseModal
-		:is-visible="isVisible"
-		@close="hideModal"
-	>
-		<div class="go-to-holofuel-modal">
-			<img
-				src="../../artifacts/images/holofuel-logo.svg"
-				class="holofuel-logo"
-				alt="holofuel-logo"
-			/>
+  <BaseModal
+    :is-visible="isVisible"
+    @close="hideModal"
+  >
+    <div class="go-to-holofuel-modal">
+      <img
+        src="../../artifacts/images/holofuel-logo.svg"
+        class="holofuel-logo"
+        alt="holofuel-logo"
+      />
 
-			<p class="go-to-holofuel-modal__description">
-				{{ $t('holofuel_modal.description', { appName }) }}
-			</p>
-		</div>
+      <p class="go-to-holofuel-modal__description">
+        {{ $t('holofuel_modal.description', { appName }) }}
+      </p>
+    </div>
 
-		<template #buttons>
-			<div class="go-to-holofuel-modal__buttons">
-				<BaseButton
-					:type="EButtonType.custom"
-					:custom-theme="{
+    <template #buttons>
+      <div class="go-to-holofuel-modal__buttons">
+        <BaseButton
+          :type="EButtonType.custom"
+          :custom-theme="{
             fontColor: 'white',
             backgroundColor: '#21BE98',
             spinnerColor: 'white'
           }"
-					class="go-to-holofuel-modal__button"
-					@click="handleHolofuelLogin"
-				>
-					{{ $t('$.go_to_holofuel') }}
-				</BaseButton>
+          class="go-to-holofuel-modal__button"
+          @click="handleHolofuelLogin"
+        >
+          {{ $t('$.go_to_holofuel') }}
+        </BaseButton>
 
-				<BaseCheckbox
-					id="go-to-holofuel-modal-checkbox"
-					:checked="false"
-					:label="$t('$.dont_show_this_message_again')"
-					label-size="small"
-					custom-color="#21BE98"
-					class="go-to-holofuel-modal__checkbox"
-					@update:checked="setDontShowAgain"
-				/>
-			</div>
-		</template>
-	</BaseModal>
+        <BaseCheckbox
+          id="go-to-holofuel-modal-checkbox"
+          :checked="false"
+          :label="$t('$.dont_show_this_message_again')"
+          label-size="small"
+          custom-color="#21BE98"
+          class="go-to-holofuel-modal__checkbox"
+          @update:checked="setDontShowAgain"
+        />
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
@@ -111,22 +111,22 @@ function handleHolofuelLogin() {
 
 <style scoped lang="scss">
 .go-to-holofuel-modal {
-	&__description {
-		margin-top: 24px;
-		padding: 0 46px;
-	}
+  &__description {
+    margin-top: 24px;
+    padding: 0 46px;
+  }
 
-	&__buttons {
-		display: flex;
-		flex-direction: column;
-	}
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+  }
 
-	&__button {
-		margin-top: 18px;
-	}
+  &__button {
+    margin-top: 18px;
+  }
 
-	&__checkbox {
-		margin-top: 32px;
-	}
+  &__checkbox {
+    margin-top: 32px;
+  }
 }
 </style>
