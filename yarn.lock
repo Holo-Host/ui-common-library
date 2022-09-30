@@ -11803,11 +11803,6 @@ mock-xmlhttprequest@^7.0.3:
   resolved "https://registry.yarnpkg.com/mock-xmlhttprequest/-/mock-xmlhttprequest-7.0.4.tgz#5e188da009cf46900e522f690cbea8d26274a872"
   integrity sha512-hA0fIHy/74p5DE0rdmrpU0sV1U+gnWTcgShWequGRLy0L1eT+zY0ozFukawpLaxMwIA+orRcqFRElYwT+5p81A==
 
-moment@^2.29.1:
-  version "2.29.1"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
-  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
-
 moo-color@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/moo-color/-/moo-color-1.0.3.tgz#d56435f8359c8284d83ac58016df7427febece74"
