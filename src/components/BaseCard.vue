@@ -52,6 +52,7 @@
 			<div
 				v-else
 				class="body"
+				:class="`body--margin-${margin}`"
 			>
 				<slot />
 			</div>
@@ -77,24 +78,24 @@ import { EButtonType } from '../types/ui'
 const slots = useSlots()
 
 defineProps({
-	isDisabled: {
-		type: Boolean,
-		default: false
-	},
+  isDisabled: {
+    type: Boolean,
+    default: false
+  },
 
-	isLoading: {
-		type: Boolean,
-		default: false
-	},
+  isLoading: {
+    type: Boolean,
+    default: false
+  },
 
-	isError: {
-		type: Boolean,
-		default: false
-	},
+  isError: {
+    type: Boolean,
+    default: false
+  },
 
   title: {
     type: String,
-		default: ''
+    default: ''
   },
 
   subtitle: {
@@ -105,6 +106,11 @@ defineProps({
   withMoreButton: {
     type: Boolean,
     default: false
+  },
+
+  margin: {
+    type: String,
+    default: 'md'
   }
 })
 
@@ -123,7 +129,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .card {
   display: flex;
   flex-direction: column;
@@ -174,10 +180,17 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 
 .body {
-  margin: 26px 26px 13px 26px;
   display: flex;
   flex-direction: column;
   flex-basis: 68%;
+
+	&--margin-md {
+		margin: 26px 26px 13px 26px;
+	}
+
+	&--margin-sm {
+		margin: 20px 10px 0 10px;
+	}
 }
 
 .inner-row {
