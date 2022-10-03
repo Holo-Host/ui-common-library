@@ -13,7 +13,9 @@ export default {
   argTypes: {
     headers: [...headersMap.values()],
     initialSortBy: 'completed_date',
-    items: mockPaidInvoicesData
+    items: mockPaidInvoicesData,
+    isLoading: false,
+    isError: false
   }
 }
 
@@ -44,5 +46,34 @@ export const Default = kTemplate.bind({})
 Default.args = {
   headers: [...headersMap.values()],
   initialSortBy: 'completed_date',
-  items: mockPaidInvoicesData
+  items: mockPaidInvoicesData,
+  isLoading: false,
+  isError: false
+}
+
+export const EmptyTable = kTemplate.bind({})
+EmptyTable.args = {
+  headers: [...headersMap.values()],
+  initialSortBy: 'completed_date',
+  items: [],
+  isLoading: false,
+  isError: false
+}
+
+export const LoadingState = kTemplate.bind({})
+LoadingState.args = {
+  headers: [...headersMap.values()],
+  initialSortBy: 'completed_date',
+  items: [],
+  isLoading: true,
+  isError: false
+}
+
+export const ErrorState = kTemplate.bind({})
+ErrorState.args = {
+  headers: [...headersMap.values()],
+  initialSortBy: 'completed_date',
+  items: [],
+  isLoading: false,
+  isError: true
 }

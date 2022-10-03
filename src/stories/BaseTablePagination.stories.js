@@ -14,7 +14,8 @@ export default {
       }
     },
     itemsCount: 38,
-    currentPage: 0
+    currentPage: 0,
+    isDisabled: false
   }
 }
 
@@ -31,5 +32,14 @@ export const Default = kTemplate.bind({})
 Default.args = {
   pageSize: 10,
   itemsCount: 38,
-  currentPage: 0
+  currentPage: 0,
+  isDisabled: false
+}
+
+export const Disabled = kTemplate.bind({})
+Disabled.args = {
+  pageSize: 10,
+  itemsCount: 38,
+  currentPage: 0,
+  isDisabled: true
 }

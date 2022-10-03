@@ -2,6 +2,7 @@
   <div
     v-if="scale !== ESpinnerSize.none"
     class="loader"
+    :class="{ 'loader--delayed': isDelayed }"
 		:style="computedScale"
     data-test-circle-spinner-wrapper
   >
@@ -19,19 +20,24 @@ import { ESpinnerSize } from '../types/ui'
 import { EOverlayTheme } from '../utils/notifications'
 
 const props = defineProps({
-	scale: {
-		type: Number,
-		default: ESpinnerSize.small
-	},
+  scale: {
+    type: Number,
+    default: ESpinnerSize.small
+  },
 
   theme: {
     type: Number,
     default: EOverlayTheme.light
+  },
+
+  isDelayed: {
+    type: Boolean,
+    default: false
   }
 })
 
 const computedScale = computed(() => ({
-	transform: `scale(${props.scale})`
+  transform: `scale(${props.scale})`
 }))
 </script>
 
@@ -41,6 +47,15 @@ const computedScale = computed(() => ({
   left: 0;
   width: 100%;
   height: 100%;
+
+	&--delayed {
+		opacity: 0;
+		animation-name: fadeIn;
+		animation-duration: 300ms;
+		animation-timing-function: ease;
+		animation-fill-mode: forwards;
+		animation-delay: 500ms;
+	}
 
   .dot-spin {
     position: relative;
@@ -116,6 +131,15 @@ const computedScale = computed(() => ({
 
 .color-primary {
   color: var(--primary-color);
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 </style>
 
