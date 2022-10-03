@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="{ 'base-table-pagination--disabled': isDisabled  }">
 		{{ $t('$.rows_per_page') }}:&nbsp;&nbsp;
 		<select
 			:value="pageSize"
@@ -16,7 +16,10 @@
 		</select>
 	</div>
 
-	<div class="base-table-pagination__page">
+	<div
+		class="base-table-pagination__page"
+		:class="{ 'base-table-pagination--disabled': isDisabled  }"
+	>
 		{{ paginationLegend }}
 		<RightChevronIcon
 			class="base-table-pagination__page-arrow-left"
@@ -50,6 +53,11 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const emit = defineEmits(['pageChanged', 'pageSizeChanged'])
@@ -57,14 +65,24 @@ const emit = defineEmits(['pageChanged', 'pageSizeChanged'])
 const kPageSizeOptions = [5, 10, 20, 30, 50]
 
 const paginationLegend = computed(() => {
-  const first = props.currentPage * props.pageSize + 1
-  let last = first + props.pageSize - 1
+  const firstOnPage = props.currentPage * props.pageSize + 1
+  let lastOnPage = firstOnPage + props.pageSize - 1
 
-  if (last > props.itemsCount) {
-    last = props.itemsCount
+  if (lastOnPage > props.itemsCount) {
+    lastOnPage = props.itemsCount
   }
 
-  return `${first}-${last} of ${props.itemsCount} items`
+  // When no items on the list
+  if (lastOnPage === 0) {
+    return `${props.itemsCount} items`
+  }
+
+  // If only one page is available
+  if (lastOnPage === 1) {
+    return `${lastOnPage} of ${props.itemsCount} item`
+  }
+
+  return `${firstOnPage}-${lastOnPage} of ${props.itemsCount} items`
 })
 
 const hasPrevPage = computed(() => props.currentPage > 0)
@@ -117,6 +135,11 @@ function goToNextPage() {
 		margin-left: 42px;
 		transform: scale(1.4) rotate(180deg);
 		cursor: pointer;
+	}
+
+	&--disabled {
+		opacity: 0.5;
+		pointer-events: none;
 	}
 }
 </style>

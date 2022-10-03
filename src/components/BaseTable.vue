@@ -7,7 +7,19 @@
 				@sort-by-changed="onSortByChanged"
 			/>
 
-			<slot :items="pagedData" />
+			<slot
+				v-if="!isEmpty"
+				:items="pagedData"
+			/>
+
+			<BaseTableEmptyContent
+				v-else
+				:is-loading="isLoading"
+				:is-error="isError"
+				:empty-message-translation-key="emptyMessageTranslationKey"
+				class="base-table__empty-content"
+				@try-again-clicked="emit('try-again-clicked')"
+			/>
 		</table>
 	</BaseCard>
 
@@ -16,6 +28,7 @@
 			:page-size="pageSize"
 			:current-page="currentPage"
 			:items-count="itemsCount"
+			:is-disabled="isLoading || isError || !items.length"
 			@page-size-changed="onPageSizeChanged"
 			@page-changed="onPageChanged"
 		/>
@@ -28,6 +41,9 @@ import BaseTableHeader from './BaseTableHeader'
 import BaseTablePagination from './BaseTablePagination'
 import { computed, ref, watch } from 'vue'
 import { ESortDirections } from '../types/ui'
+import BaseTableEmptyContent from './BaseTableEmptyContent'
+
+const emit = defineEmits(['try-again-clicked'])
 
 const props = defineProps({
   headers: {
@@ -43,6 +59,21 @@ const props = defineProps({
   items: {
     type: Array,
     required: true
+  },
+
+  isLoading: {
+    type: Boolean,
+    default: false
+  },
+
+  isError: {
+    type: Boolean,
+    default: false
+  },
+
+  emptyMessageTranslationKey: {
+    type: String,
+    default: '$.errors.no_data'
   }
 })
 
@@ -51,6 +82,8 @@ const currentPage = ref(0)
 
 const sortBy = ref(props.initialSortBy)
 const sortDirection = ref(ESortDirections.desc)
+
+const isEmpty = computed(() => props.isLoading || !props.items.length || props.isError)
 
 const pagedData = computed(() => {
   const startIndex = currentPage.value * pageSize.value
@@ -97,6 +130,10 @@ function onPageSizeChanged(size) {
 <style lang="scss" scoped>
 .base-table {
 	border-collapse: collapse;
+
+	&__empty-content {
+		height: 435px;
+	}
 
 	&__footer {
 		display: flex;

@@ -13,13 +13,14 @@ const translations = {
       email: 'Please enter a valid email.',
       email_does_not_exist:
         'The email you provided does not exist in our database. Please register first.',
-      generic_header: 'Oops, looks like we can’t fetch this data right now.',
+      generic_header: 'Sorry, we couldn’t fetch this data.',
       invalid_email: 'You have entered an invalid e-mail address. Please try again.',
       login_failed:
         'There was a problem logging you in. Please check your credentials and try again.',
       password: 'Password must have at least 6 characters.',
       try_refreshing: 'Try refreshing the page.',
-      unexpected: 'An unexpected error occurred{error}'
+      unexpected: 'An unexpected error occurred{error}',
+      no_data: 'No data available'
     },
     go: 'Go',
     go_to_holofuel: 'Go to HoloFuel',
