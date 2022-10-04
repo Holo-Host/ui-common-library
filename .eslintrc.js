@@ -8,7 +8,6 @@ const kBaseRules = {
       checkForEach: true
     }
   ],
-  camelcase: 'off',
   'consistent-return': 'error',
   'no-array-constructor': 'error',
   'no-await-in-loop': 'error',
@@ -28,6 +27,7 @@ const kBaseRules = {
   'require-await': 'error',
 
   // style-consistency / readability
+  camelcase: 'off',
   'comma-spacing': [
     'error',
     {
@@ -80,13 +80,13 @@ const kBaseRules = {
       avoidEscape: true
     }
   ],
-  // good-practice
-  'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   'vue/html-indent': [
     'error',
     kIndent
-  ]
+  ],
+  // good-practice
+  'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+  'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
 }
 
 module.exports = {
