@@ -7,13 +7,13 @@ export const useIsLoadingStore = defineStore('isLoading', {
     currentlyLoadingCalls: {}
   }),
   actions: {
-    callIsLoading (callSpec) {
+    callIsLoading(callSpec) {
       this.currentlyLoadingCalls[getZomePath(callSpec)] = true
     },
-    callIsNotLoading (callSpec) {
+    callIsNotLoading(callSpec) {
       this.currentlyLoadingCalls[getZomePath(callSpec)] = false
     },
-    isLoading (callSpec) {
+    isLoading(callSpec) {
       return this.currentlyLoadingCalls[getZomePath(callSpec)]
     }
   }

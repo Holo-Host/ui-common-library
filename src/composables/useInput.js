@@ -6,7 +6,7 @@ export function useInput({ props, emit }) {
   const inputRef = ref()
   const isPasswordVisible = ref(false)
 
-  onMounted(async () => {
+  onMounted(async() => {
     await nextTick(() => {
       if (props.autofocus) {
         inputRef.value?.focus()

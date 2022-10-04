@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
 import { inspect } from 'util'
-import { AppWebsocket } from "@holochain/client"
+import { AppWebsocket } from '@holochain/client'
+import { defineStore } from 'pinia'
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
@@ -15,7 +15,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
     isReady: false
   }),
   actions: {
-    async initialize () {
+    async initialize() {
       try {
         const holochainClient = await AppWebsocket.connect(
           app_ws_url,
@@ -25,9 +25,9 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 
         this.client = holochainClient
 
-        holochainClient.client.socket.onclose = function (e) {
+        holochainClient.client.socket.onclose = function(e) {
           console.log(
-            `Socket to Holochain App Interface has closed.`,
+            'Socket to Holochain App Interface has closed.',
             inspect(e)
           )
           this.client = null
@@ -41,8 +41,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
     },
 
-    async loadAppInfo () {
-    	try {
+    async loadAppInfo() {
+      try {
         const appInfo = await this.client.appInfo({
           installed_app_id
         })
@@ -55,7 +55,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
     },
 
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {
+    async callZome({ roleId, zomeName, fnName, payload = null }) {
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
       }
@@ -63,7 +63,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       const cellDatum = this.appInfo.cell_data.find(c => c.role_id === roleId)
 
       if (!cellDatum) {
-        throw new Error (`Couldn't find cell with role_id ${roleId}`)
+        throw new Error(`Couldn't find cell with role_id ${roleId}`)
       }
 
       const { cell_id } = cellDatum
@@ -77,8 +77,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
             cell_id,
             zome_name: zomeName,
             fn_name: fnName,
-            payload: payload,
-            provenance: cell_id[1],
+            payload,
+            provenance: cell_id[1]
           },
           HC_APP_TIMEOUT
         )
@@ -94,7 +94,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       } finally {
         useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
-    },
+    }
   }
 })
 

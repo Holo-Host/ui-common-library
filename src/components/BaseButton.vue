@@ -40,8 +40,8 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import FlatSpinner from './FlatSpinner.vue'
 import { EButtonType, ESpinnerSize } from '../types/ui'
+import FlatSpinner from './FlatSpinner.vue'
 
 const props = defineProps({
   type: {
@@ -108,7 +108,7 @@ const kSpinnerColor = {
   [EButtonType.gray]: {
     enabled: 'white',
     disabled: 'secondary'
-  },
+  }
 }
 
 const spinnerColor = computed(() => {

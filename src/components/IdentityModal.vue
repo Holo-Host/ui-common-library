@@ -21,16 +21,16 @@
 </template>
 
 <script>
-import Modal from './Modal'
 import Button from './Button'
 import Identicon from './Identicon.vue'
+import Modal from './Modal'
 
 export default {
   name: 'IdentityModal',
   components: {
     Modal,
     Button,
-    Identicon,
+    Identicon
   },
   props: {
     handleClose: {
@@ -42,7 +42,7 @@ export default {
       required: true
     },
     name: {
-      type: String,
+      type: String
     },
     agentId: {
       type: String,
@@ -54,8 +54,8 @@ export default {
     }
   },
   methods: {
-    onIUnderstandClick () {
-      this.handleClose();
+    onIUnderstandClick() {
+      this.handleClose()
     }
   }
 }

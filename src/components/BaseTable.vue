@@ -36,12 +36,14 @@
 </template>
 
 <script setup>
-import BaseCard from './BaseCard'
-import BaseTableHeader from './BaseTableHeader'
-import BaseTablePagination from './BaseTablePagination'
 import { computed, ref, watch } from 'vue'
 import { ESortDirections } from '../types/ui'
-import BaseTableEmptyContent from './BaseTableEmptyContent'
+import BaseCard from './BaseCard.vue'
+import BaseTableEmptyContent from './BaseTableEmptyContent.vue'
+import BaseTableHeader from './BaseTableHeader.vue'
+import BaseTablePagination from './BaseTablePagination.vue'
+
+const kDefaultPageSize = 10
 
 const emit = defineEmits(['try-again-clicked'])
 
@@ -77,7 +79,7 @@ const props = defineProps({
   }
 })
 
-const pageSize = ref(10)
+const pageSize = ref(kDefaultPageSize)
 const currentPage = ref(0)
 
 const sortBy = ref(props.initialSortBy)

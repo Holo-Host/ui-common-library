@@ -32,12 +32,12 @@
 
 <script setup>
 import { EButtonType } from '../types/ui'
-import CircleSpinner from './CircleSpinner'
-import BaseButton from './BaseButton'
+import BaseButton from './BaseButton.vue'
+import CircleSpinner from './CircleSpinner.vue'
 
 const emit = defineEmits(['try-again-clicked'])
 
-const props = defineProps({
+defineProps({
   isLoading: {
     type: Boolean,
     default: false

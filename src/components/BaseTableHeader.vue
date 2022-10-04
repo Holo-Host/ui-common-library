@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import { ESortDirections } from '../types/ui'
 import { ref } from 'vue'
+import { ESortDirections } from '../types/ui'
 import BaseTableHeaderItem from './BaseTableHeaderItem.vue'
 
 const props = defineProps({
@@ -34,7 +34,7 @@ const sortDirection = ref(ESortDirections.desc)
 
 function onHeaderClicked(header) {
   if (header.isSortable) {
-    const {asc, desc} = ESortDirections
+    const { asc, desc } = ESortDirections
 
     if (header.key === props.sortBy) {
       sortDirection.value = sortDirection.value === asc ? desc : asc

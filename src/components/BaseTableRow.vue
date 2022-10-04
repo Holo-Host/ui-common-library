@@ -25,12 +25,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import RightChevronIcon from 'components/icons/RightChevronIcon';
+import RightChevronIcon from './icons/RightChevronIcon.vue'
 
-const isExpanded = ref(false);
+const isExpanded = ref(false)
 
 function toggleExpanded() {
-  isExpanded.value = !isExpanded.value;
+  isExpanded.value = !isExpanded.value
 }
 </script>
 

@@ -16,15 +16,15 @@
     data-testid='identicon-tooltip'
   >
     <div class='tooltip' :style="tooltipStyle">
-      <span class='agentId'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
+      <span class='agent-id'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
   </div>
 </template>
 
 <script setup>
-import renderIconRaw from '../utils/identicon'
-import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
-import { encodeAgentId } from '../utils/agent'
 import { computed, watchEffect, ref } from 'vue'
+import { encodeAgentId } from '../utils/agent'
+import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
+import renderIconRaw from '../utils/identicon'
 
 const props = defineProps({
   isClickable: {
@@ -54,7 +54,7 @@ const props = defineProps({
 
   backgroundColor: {
     validator: prop => typeof prop === 'string' || prop === null,
-    default: null,
+    default: null
   }
 })
 
@@ -65,34 +65,33 @@ const isCopied = ref(false)
 const options = computed(() => ({
   hash: props.agentKey,
   size: props.size,
-  backgroundColor: props.backgroundColor,
+  backgroundColor: props.backgroundColor
 }))
-
 
 const encodedKey = computed(() => encodeAgentId(props.agentKey))
 
-function copyToClipboard () {
+function copyToClipboard() {
   if (!props.isClickable) return
 
   copyToClipboardRaw(encodedKey.value)
   isCopied.value = true
 }
 
-function showTooltip () {
+function showTooltip() {
   if (!props.isClickable) return
 
   isTooltipVisible.value = true
   isCopied.value = false
 }
 
-function hideTooltip () {
+function hideTooltip() {
   if (!props.isClickable) return
 
   isTooltipVisible.value = false
   isCopied.value = false
 }
 
-function renderIcon () {
+function renderIcon() {
   if (!canvas.value) return
   renderIconRaw(options.value, canvas.value)
 }
@@ -104,8 +103,8 @@ watchEffect(() => {
 
 const computedStyle = computed(() => ({
   'border-radius': '50%',
-  'width': `${props.size}px`,
-  'height': `${props.size}px`,
+  width: `${props.size}px`,
+  height: `${props.size}px`,
   ...props.styleProp
 }))
 
@@ -134,7 +133,7 @@ const computedStyle = computed(() => ({
   color: #606c8b;
 }
 
-.agentId {
+.agent-id {
   white-space: nowrap;
 }
 </style>

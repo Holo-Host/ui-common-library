@@ -69,11 +69,11 @@
 </template>
 
 <script setup>
-import BaseButton from './BaseButton'
-import CircleSpinner from './CircleSpinner'
-import RightArrowIcon from './icons/RightArrowIcon'
 import { computed, useSlots } from 'vue'
 import { EButtonType } from '../types/ui'
+import BaseButton from './BaseButton.vue'
+import CircleSpinner from './CircleSpinner.vue'
+import RightArrowIcon from './icons/RightArrowIcon.vue'
 
 const slots = useSlots()
 

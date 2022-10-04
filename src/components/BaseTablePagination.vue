@@ -35,8 +35,8 @@
 </template>
 
 <script setup>
-import RightChevronIcon from './icons/RightChevronIcon'
 import { computed } from 'vue'
+import RightChevronIcon from './icons/RightChevronIcon.vue'
 
 const props = defineProps({
   pageSize: {
@@ -62,6 +62,7 @@ const props = defineProps({
 
 const emit = defineEmits(['pageChanged', 'pageSizeChanged'])
 
+// eslint-disable-next-line no-magic-numbers
 const kPageSizeOptions = [5, 10, 20, 30, 50]
 
 const paginationLegend = computed(() => {
@@ -88,7 +89,7 @@ const paginationLegend = computed(() => {
 const hasPrevPage = computed(() => props.currentPage > 0)
 const hasNextPage = computed(() => (props.currentPage + 1) * props.pageSize <= props.itemsCount)
 
-function onPageSizeChanged({ target: { value }}) {
+function onPageSizeChanged({ target: { value } }) {
   emit('pageSizeChanged', Number(value))
 }
 
@@ -115,7 +116,7 @@ function goToNextPage() {
     font-weight: 600;
     color: var(--grey-dark-color);
     padding: 1px 16px 0 6px;
-    background-image: url(../../artifacts/images/chevron.svg);
+    background-image: url("../../artifacts/images/chevron.svg");
     background-repeat: no-repeat;
     background-position: right;
     cursor: pointer;

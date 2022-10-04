@@ -23,14 +23,14 @@ export default {
     }
   },
   computed: {
-    style () {
-      var style = getComputedStyle(document.body)
+    style() {
+      const style = getComputedStyle(document.body)
 
       switch (this.color) {
       case 'primary':
         return {
           backgroundColor: '#735CFE',
-          color: '#FFFFFF',
+          color: '#FFFFFF'
         }
       case 'secondary':
         return {
@@ -62,7 +62,7 @@ export default {
       case 'none':
         return {}
       default:
-        throw new Error (`Unknown color option ${this.color} for button`)
+        throw new Error(`Unknown color option ${this.color} for button`)
       }
     }
   }

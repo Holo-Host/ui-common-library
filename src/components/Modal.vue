@@ -31,7 +31,7 @@ export default {
     modalClass: String
   },
   methods: {
-    handleOverlayClick (e) {
+    handleOverlayClick(e) {
       if (this.shouldCloseOnAwayClick && e.target.classList.contains('overlay')) {
         this.handleClose()
       }

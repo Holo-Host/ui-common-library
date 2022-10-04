@@ -18,14 +18,14 @@
 </template>
 
 <script>
-import Modal from './Modal'
 import Button from './Button'
+import Modal from './Modal'
 
 export default {
   name: 'NameSetterModal',
   components: {
     Modal,
-    Button,
+    Button
   },
   props: {
     handleClose: {
@@ -49,22 +49,22 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       name: '',
       isBusy: false
     }
   },
   computed: {
-    confirmDisabled () {
+    confirmDisabled() {
       return this.name.trim().length === 0
     },
-    confirmButtonColor () {
+    confirmButtonColor() {
       return this.confirmDisabled ? 'primary-disabled' : 'primary-enabled'
     }
   },
   methods: {
-    async onSaveName () {
+    async onSaveName() {
       this.isBusy = true
 
       await this.updateMyName(this.name.trim())

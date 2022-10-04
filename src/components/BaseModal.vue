@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import ExIcon from './icons/ExIcon'
+import ExIcon from './icons/ExIcon.vue'
 
 defineProps({
   hasCloseButton: {

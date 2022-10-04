@@ -19,13 +19,13 @@ export default {
     }
   },
   computed: {
-    dims () {
+    dims() {
       return {
         width: `calc(61px * ${this.scale})`,
         height: `calc(13px * ${this.scale})`
       }
     },
-    transformScale () {
+    transformScale() {
       return {
         transform: `scale(${this.scale})`
       }

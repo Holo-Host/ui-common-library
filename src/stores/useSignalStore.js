@@ -5,10 +5,10 @@ export const useSignalStore = defineStore('signals', {
     callbacks: []
   }),
   actions: {
-    addCallback (callback) {
+    addCallback(callback) {
       this.callbacks.push(callback)
     },
-    handleSignal (signal) {
+    handleSignal(signal) {
       this.callbacks.forEach(callback => callback(signal))
     }
   }

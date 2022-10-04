@@ -1,17 +1,17 @@
+import { inspect } from 'util'
 import { defineStore } from 'pinia'
 import { encodeAgentId } from '../utils/agent'
-import { inspect } from 'util'
 
 const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
-    isReady: false,
+    isReady: false
   }),
   getters: {
-    agentId: state => state.agentKey && encodeAgentId(state.agentKey),
+    agentId: state => state.agentKey && encodeAgentId(state.agentKey)
   },
   actions: {
-    async initialize () {
+    async initialize() {
       // onInit is a hack, see stores/index.js for details
       onInit?.()
 
@@ -27,11 +27,11 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       useInterfaceStore().initialize()
     },
 
-    async appInfo () {
+    async appInfo() {
       return useInterfaceStore().loadAppInfo()
     },
 
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {
+    async callZome({ roleId, zomeName, fnName, payload = null }) {
       const zomePath = `${zomeName}.${fnName}`
       console.log(`calling ${zomePath} with ${inspect(payload)}`)
 
@@ -41,13 +41,12 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       const result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
 
-
       console.log(`${zomePath} returned with ${inspect(result)}`)
 
       return result
     },
 
-    setAgentKeyFromAppInfo (appInfo) {
+    setAgentKeyFromAppInfo(appInfo) {
       const {
         cell_data: [
           {
@@ -58,8 +57,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       this.agentKey = agentKey
       console.log(`setting agentKey = ${encodeAgentId(agentKey)}`)
-    },
-  },
+    }
+  }
 })
 
 export default makeUseClientStore

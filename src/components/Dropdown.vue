@@ -11,14 +11,14 @@
 
 <script>
 export default {
-  name: "DropDown",
+  name: 'DropDown',
   emits: ['optionChanged'],
   props: {
     label: String,
     options: Array,
-    selectedOption: String,
+    selectedOption: String
   }
-};
+}
 </script>
 
 <style scoped>

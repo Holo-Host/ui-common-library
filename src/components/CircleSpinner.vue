@@ -50,7 +50,7 @@ const computedScale = computed(() => ({
 
   &--delayed {
     opacity: 0;
-    animation-name: fadeIn;
+    animation-name: fade-in;
     animation-duration: 300ms;
     animation-timing-function: ease;
     animation-fill-mode: forwards;
@@ -74,10 +74,10 @@ const computedScale = computed(() => ({
       -12.72984px 12.72984px 0 0 rgb(152 128 255 / 0%),
       -18px 0 0 0 rgb(152 128 255 / 0%),
       -12.72984px -12.72984px 0 0 rgb(152 128 255 / 0%);
-    animation: dotSpin 1.5s infinite linear;
+    animation: dot-spin 1.5s infinite linear;
   }
 
-  @keyframes dotSpin {
+  @keyframes dot-spin {
     0%,
     100% {
       box-shadow:
@@ -185,7 +185,7 @@ const computedScale = computed(() => ({
   color: var(--primary-color);
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   0% {
     opacity: 0;
   }
@@ -195,4 +195,3 @@ const computedScale = computed(() => ({
   }
 }
 </style>
-
