@@ -1,37 +1,37 @@
 <template>
-	<div :class="{ 'base-table-pagination--disabled': isDisabled  }">
-		{{ $t('$.rows_per_page') }}:&nbsp;&nbsp;
-		<select
-			:value="pageSize"
-			class="base-table-pagination__dropdown"
-			@change="onPageSizeChanged"
-		>
-			<option
-				v-for="option in kPageSizeOptions"
-				:key="option"
-				:value="option"
-			>
-				{{ option }}
-			</option>
-		</select>
-	</div>
+  <div :class="{ 'base-table-pagination--disabled': isDisabled  }">
+    {{ $t('$.rows_per_page') }}:&nbsp;&nbsp;
+    <select
+      :value="pageSize"
+      class="base-table-pagination__dropdown"
+      @change="onPageSizeChanged"
+    >
+      <option
+        v-for="option in kPageSizeOptions"
+        :key="option"
+        :value="option"
+      >
+        {{ option }}
+      </option>
+    </select>
+  </div>
 
-	<div
-		class="base-table-pagination__page"
-		:class="{ 'base-table-pagination--disabled': isDisabled  }"
-	>
-		{{ paginationLegend }}
-		<RightChevronIcon
-			class="base-table-pagination__page-arrow-left"
-			:color="hasPrevPage ? '#00CAD9' : '#606C8B'"
-			@click="hasPrevPage && goToPrevPage()"
-		/>
-		<RightChevronIcon
-			class="base-table-pagination__page-arrow-right"
-			:color="hasNextPage ? '#00CAD9' : '#606C8B'"
-			@click="hasNextPage && goToNextPage()"
-		/>
-	</div>
+  <div
+    class="base-table-pagination__page"
+    :class="{ 'base-table-pagination--disabled': isDisabled  }"
+  >
+    {{ paginationLegend }}
+    <RightChevronIcon
+      class="base-table-pagination__page-arrow-left"
+      :color="hasPrevPage ? '#00CAD9' : '#606C8B'"
+      @click="hasPrevPage && goToPrevPage()"
+    />
+    <RightChevronIcon
+      class="base-table-pagination__page-arrow-right"
+      :color="hasNextPage ? '#00CAD9' : '#606C8B'"
+      @click="hasNextPage && goToNextPage()"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -107,39 +107,39 @@ function goToNextPage() {
 
 <style lang="scss" scoped>
 .base-table-pagination {
-	&__dropdown {
-		appearance: none;
-		border: none;
-		background-color: transparent;
-		font-size: 12px;
-		font-weight: 600;
-		color: var(--grey-dark-color);
-		padding: 1px 16px 0 6px;
-		background-image: url(../../artifacts/images/chevron.svg);
-		background-repeat: no-repeat;
-		background-position: right;
-		cursor: pointer;
-	}
+  &__dropdown {
+    appearance: none;
+    border: none;
+    background-color: transparent;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--grey-dark-color);
+    padding: 1px 16px 0 6px;
+    background-image: url(../../artifacts/images/chevron.svg);
+    background-repeat: no-repeat;
+    background-position: right;
+    cursor: pointer;
+  }
 
-	&__pagination {
-		margin-left: auto;
-	}
+  &__pagination {
+    margin-left: auto;
+  }
 
-	&__page-arrow-right {
-		margin-left: 42px;
-		transform: scale(1.4);
-		cursor: pointer;
-	}
+  &__page-arrow-right {
+    margin-left: 42px;
+    transform: scale(1.4);
+    cursor: pointer;
+  }
 
-	&__page-arrow-left {
-		margin-left: 42px;
-		transform: scale(1.4) rotate(180deg);
-		cursor: pointer;
-	}
+  &__page-arrow-left {
+    margin-left: 42px;
+    transform: scale(1.4) rotate(180deg);
+    cursor: pointer;
+  }
 
-	&--disabled {
-		opacity: 0.5;
-		pointer-events: none;
-	}
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 }
 </style>

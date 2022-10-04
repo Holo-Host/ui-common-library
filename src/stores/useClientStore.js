@@ -31,22 +31,22 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       return useInterfaceStore().loadAppInfo()
     },
 
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {            
+    async callZome ({ roleId, zomeName, fnName, payload = null }) {
       const zomePath = `${zomeName}.${fnName}`
       console.log(`calling ${zomePath} with ${inspect(payload)}`)
 
       if (!this.isReady) {
         throw new Error('Tried to make zome call while client is not ready')
       }
-			
+
       const result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
 
 
       console.log(`${zomePath} returned with ${inspect(result)}`)
 
-			return result
+      return result
     },
-    
+
     setAgentKeyFromAppInfo (appInfo) {
       const {
         cell_data: [

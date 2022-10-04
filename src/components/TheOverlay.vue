@@ -16,7 +16,7 @@
         <CircleSpinner
           v-if="type === EOverlayType.loading"
           :theme="theme"
-					:scale="ESpinnerSize.medium"
+          :scale="ESpinnerSize.medium"
         />
         <img
           v-if="type !== EOverlayType.loading && icon"
@@ -113,11 +113,11 @@ defineExpose({
 }
 
 .light-theme {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgb(255 255 255 / 95%);
 }
 
 .dark-theme {
-  background-color: rgba(15, 23, 42, 0.3);
+  background-color: rgb(15 23 42 / 30%);
 }
 
 .overlay-content {

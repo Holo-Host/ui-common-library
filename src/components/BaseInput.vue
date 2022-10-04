@@ -4,20 +4,20 @@
     :class="{ 'base-input--disabled' : isDisabled, 'base-input--is-horizontal': isHorizontal }"
     data-test-base-input-wrapper
   >
-		<slot
-			v-if="label"
-			name="label"
-			:input-id="inputId"
-		>
-			<label
-				:for="inputId"
-				class="base-input__label"
-				:class="{ 'base-input__label--is-horizontal': isHorizontal }"
-				data-test-base-input-label
-			>
-				{{ label }}
-			</label>
-		</slot>
+    <slot
+      v-if="label"
+      name="label"
+      :input-id="inputId"
+    >
+      <label
+        :for="inputId"
+        class="base-input__label"
+        :class="{ 'base-input__label--is-horizontal': isHorizontal }"
+        data-test-base-input-label
+      >
+        {{ label }}
+      </label>
+    </slot>
 
     <div class="base-input__content">
       <input
@@ -83,10 +83,10 @@ const props = defineProps({
     default: true
   },
 
-	isHorizontal: {
-		type: Boolean,
-		default: false
-	},
+  isHorizontal: {
+    type: Boolean,
+    default: false
+  },
 
   inputType: {
     type: String,
@@ -123,10 +123,10 @@ const props = defineProps({
     default: ''
   },
 
-	label: {
-		type: String,
-		default: ''
-	},
+  label: {
+    type: String,
+    default: ''
+  },
 
   hasErrors: {
     type: Boolean,
@@ -157,10 +157,10 @@ const {
 .base-input {
   position: relative;
 
-	&--is-horizontal {
-		display: flex;
-		align-items: center;
-	}
+  &--is-horizontal {
+    display: flex;
+    align-items: center;
+  }
 
   &--disabled {
     opacity: 0.6;
@@ -168,31 +168,31 @@ const {
     cursor: not-allowed;
   }
 
-	&__label {
-		display: block;
-		font-size: 14px;
-		font-weight: 700;
-		line-height: 19px;
-		margin-bottom: 8px;
-		color: var(--dark-grey-color);
+  &__label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 19px;
+    margin-bottom: 8px;
+    color: var(--dark-grey-color);
 
-		&--is-horizontal {
-			margin-right: 10px;
-			margin-bottom: 0;
-			color: var(--grey-color);
-		}
-	}
+    &--is-horizontal {
+      margin-right: 10px;
+      margin-bottom: 0;
+      color: var(--grey-color);
+    }
+  }
 
-	&__content {
-		position: relative;
-		width: 100%;
-	}
+  &__content {
+    position: relative;
+    width: 100%;
+  }
 
   &__input {
     display: block;
     width: 100%;
     margin-top: 0;
-		color: var(--dark-grey-color);
+    color: var(--dark-grey-color);
     border: 1px solid var(--grey-color);
     border-radius: 5px;
     padding: 9px 14px;

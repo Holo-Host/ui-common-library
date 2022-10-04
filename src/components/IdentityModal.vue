@@ -73,34 +73,36 @@ export default {
 
 <style scoped>
 .modal-title {
-    font-weight: 600;
-    font-size: 1.375rem;
-    text-align: center;
-    line-height: 1.875rem;
+  font-weight: 600;
+  font-size: 1.375rem;
+  text-align: center;
+  line-height: 1.875rem;
 }
 
 .modal-input {
-    width: 28rem;
-    height: 2.3rem;
-    border-radius: 5px;
-    border: 1px solid #606C8B;
-    margin: 30px 0
+  width: 28rem;
+  height: 2.3rem;
+  border-radius: 5px;
+  border: 1px solid #606c8b;
+  margin: 30px 0;
 }
 
 .modal-content {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 0.875rem;
-    line-height: 1.1875rem;
-    text-align: center;
-    color: var(--content-color);
-    padding: 0 74px;
-    margin-top: 20px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.1875rem;
+  text-align: center;
+  color: var(--content-color);
+  padding: 0 74px;
+  margin-top: 20px;
 }
+
 .nickname {
   font-weight: bold;
 }
+
 .footer {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 </style>

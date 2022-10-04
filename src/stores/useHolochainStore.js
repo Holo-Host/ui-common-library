@@ -22,7 +22,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
           HC_APP_TIMEOUT,
           signal => useSignalStore().handleSignal(presentHcSignal(signal))
         )
-        
+
         this.client = holochainClient
 
         holochainClient.client.socket.onclose = function (e) {
@@ -43,18 +43,18 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 
     async loadAppInfo () {
     	try {
-				const appInfo = await this.client.appInfo({
-					installed_app_id
-				})
+        const appInfo = await this.client.appInfo({
+          installed_app_id
+        })
         this.appInfo = appInfo
         this.isReady = true
 
         return appInfo
-			} catch (error) {
-				console.error('appInfo() returned error.', inspect(error))
-			}
+      } catch (error) {
+        console.error('appInfo() returned error.', inspect(error))
+      }
     },
-    
+
     async callZome ({ roleId, zomeName, fnName, payload = null }) {
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
@@ -82,13 +82,13 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
           },
           HC_APP_TIMEOUT
         )
-  
+
         // Wrap the result in an ok enum to match the structure returned from chaperone
         return {
           type: 'ok',
           data: result
         }
-      } catch (e) {        
+      } catch (e) {
         // unthrow the error from holochain, to match the chaperone pattern of just returning the error object
         return e
       } finally {

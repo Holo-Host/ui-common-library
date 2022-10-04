@@ -1,38 +1,38 @@
 <template>
-	<BaseCard margin="sm">
-		<table class="base-table">
-			<BaseTableHeader
-				:headers="headers"
-				:sort-by="sortBy"
-				@sort-by-changed="onSortByChanged"
-			/>
+  <BaseCard margin="sm">
+    <table class="base-table">
+      <BaseTableHeader
+        :headers="headers"
+        :sort-by="sortBy"
+        @sort-by-changed="onSortByChanged"
+      />
 
-			<slot
-				v-if="!isEmpty"
-				:items="pagedData"
-			/>
+      <slot
+        v-if="!isEmpty"
+        :items="pagedData"
+      />
 
-			<BaseTableEmptyContent
-				v-else
-				:is-loading="isLoading"
-				:is-error="isError"
-				:empty-message-translation-key="emptyMessageTranslationKey"
-				class="base-table__empty-content"
-				@try-again-clicked="emit('try-again-clicked')"
-			/>
-		</table>
-	</BaseCard>
+      <BaseTableEmptyContent
+        v-else
+        :is-loading="isLoading"
+        :is-error="isError"
+        :empty-message-translation-key="emptyMessageTranslationKey"
+        class="base-table__empty-content"
+        @try-again-clicked="emit('try-again-clicked')"
+      />
+    </table>
+  </BaseCard>
 
-	<div class="base-table__footer">
-		<BaseTablePagination
-			:page-size="pageSize"
-			:current-page="currentPage"
-			:items-count="itemsCount"
-			:is-disabled="isLoading || isError || !items.length"
-			@page-size-changed="onPageSizeChanged"
-			@page-changed="onPageChanged"
-		/>
-	</div>
+  <div class="base-table__footer">
+    <BaseTablePagination
+      :page-size="pageSize"
+      :current-page="currentPage"
+      :items-count="itemsCount"
+      :is-disabled="isLoading || isError || !items.length"
+      @page-size-changed="onPageSizeChanged"
+      @page-changed="onPageChanged"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -129,22 +129,22 @@ function onPageSizeChanged(size) {
 
 <style lang="scss" scoped>
 .base-table {
-	border-collapse: collapse;
+  border-collapse: collapse;
 
-	&__empty-content {
-		height: 435px;
-	}
+  &__empty-content {
+    height: 435px;
+  }
 
-	&__footer {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-		font-weight: 600;
-		font-size: 12px;
-		line-height: 16px;
-		color: var(--grey-dark-color);
-		margin-top: 17px;
-		margin-bottom: 20px;
-	}
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--grey-dark-color);
+    margin-top: 17px;
+    margin-bottom: 20px;
+  }
 }
 </style>

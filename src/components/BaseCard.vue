@@ -4,9 +4,9 @@
     :class="{ 'two-columns': isMultiColumn }"
   >
     <h2
-			v-if="title"
-			class="title"
-		>
+      v-if="title"
+      class="title"
+    >
       {{ title }}
       <h3
         v-if="subtitle"
@@ -16,55 +16,55 @@
       </h3>
     </h2>
 
-		<div class="card-content">
-			<div
-				v-if="isLoading || isError || isDisabled"
-				class="card-overlay"
-				:class="{ 'is-disabled': isDisabled }"
-			>
-				<CircleSpinner v-if="isLoading" class="card-spinner" />
-				<div
-					v-else-if="isError"
-					class="error-message"
-				>
-					<p>Sorry, we couldn’t fetch this data.</p>
-					<BaseButton
-						:type="EButtonType.gray"
-						title="Try again"
-						@click="emit('try-again-clicked')"
-					/>
-				</div>
-			</div>
+    <div class="card-content">
+      <div
+        v-if="isLoading || isError || isDisabled"
+        class="card-overlay"
+        :class="{ 'is-disabled': isDisabled }"
+      >
+        <CircleSpinner v-if="isLoading" class="card-spinner" />
+        <div
+          v-else-if="isError"
+          class="error-message"
+        >
+          <p>Sorry, we couldn’t fetch this data.</p>
+          <BaseButton
+            :type="EButtonType.gray"
+            title="Try again"
+            @click="emit('try-again-clicked')"
+          />
+        </div>
+      </div>
 
-			<div
-				v-if="isMultiColumn"
-				class="inner-row"
-			>
-				<div class="inner-column">
-					<slot name="left" />
-				</div>
+      <div
+        v-if="isMultiColumn"
+        class="inner-row"
+      >
+        <div class="inner-column">
+          <slot name="left" />
+        </div>
 
-				<div class="inner-column">
-					<slot name="right" />
-				</div>
-			</div>
+        <div class="inner-column">
+          <slot name="right" />
+        </div>
+      </div>
 
-			<div
-				v-else
-				class="body"
-				:class="`body--margin-${margin}`"
-			>
-				<slot />
-			</div>
+      <div
+        v-else
+        class="body"
+        :class="`body--margin-${margin}`"
+      >
+        <slot />
+      </div>
 
-			<span
-				v-if="withMoreButton"
-				class="more"
-				@click="emit('more-clicked')"
-			>
-      More <RightArrowIcon class="right-arrow-icon" />
-    </span>
-		</div>
+      <span
+        v-if="withMoreButton"
+        class="more"
+        @click="emit('more-clicked')"
+      >
+        More <RightArrowIcon class="right-arrow-icon" />
+      </span>
+    </div>
   </div>
 </template>
 
@@ -145,11 +145,11 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 
 .card-content {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .two-columns {
@@ -184,13 +184,13 @@ const isMultiColumn = computed(() => slots.right && slots.left)
   flex-direction: column;
   flex-basis: 68%;
 
-	&--margin-md {
-		margin: 26px 26px 13px 26px;
-	}
+  &--margin-md {
+    margin: 26px 26px 13px;
+  }
 
-	&--margin-sm {
-		margin: 20px 10px 0 10px;
-	}
+  &--margin-sm {
+    margin: 20px 10px 0;
+  }
 }
 
 .inner-row {
@@ -214,34 +214,34 @@ const isMultiColumn = computed(() => slots.right && slots.left)
 }
 
 .right-arrow-icon {
-	margin-left: 4px;
-	color: var(--primary-color);
+  margin-left: 4px;
+  color: var(--primary-color);
 }
 
 .card-overlay {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 12px;
-	width: 100%;
-	height: 100%;
-	background-color: var(--white-color);
-	z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--white-color);
+  z-index: 10;
 }
 
 .card-spinner {
-	position: absolute;
+  position: absolute;
 }
 
 .error-message {
-	padding: 5px 20px;
-	text-align: center;
-	color: var(--grey-color);
+  padding: 5px 20px;
+  text-align: center;
+  color: var(--grey-color);
 }
 
 @media screen and (max-width: 1050px) {

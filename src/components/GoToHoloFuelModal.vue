@@ -58,10 +58,10 @@ const props = defineProps({
     required: true
   },
 
-	appName: {
-		type: String,
-		required: true
-	},
+  appName: {
+    type: String,
+    required: true
+  },
 
   dontShowModalAgainLocalStorageKey: {
     type: String,

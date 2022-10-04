@@ -8,7 +8,7 @@
       :sort-direction="sortDirection"
       @click="onHeaderClicked(header)"
     />
-	</tr>
+  </tr>
 </template>
 
 <script setup>
