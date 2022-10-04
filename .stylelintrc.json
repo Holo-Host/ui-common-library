@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "extends": ["stylelint-config-standard", "stylelint-config-html/vue", "stylelint-config-recommended-vue/scss"],
+  "rules": {
+    "indentation": [2]
+  }
+}

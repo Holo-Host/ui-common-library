@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "lint": "vue-cli-service lint",
+    "lint:css": "stylelint '**/*.vue'",
     "storybook": "start-storybook -p 6006",
     "deploy-storybook": "yarn build-storybook && gh-pages -d storybook-static -u 'github-actions-bot <support+actions@github.com>'",
     "build-storybook": "build-storybook",
@@ -59,9 +60,15 @@
     "gh-pages": "^4.0.0",
     "jest": "^26.5.3",
     "jest-canvas-mock": "^2.4.0",
+    "postcss": "8",
+    "postcss-html": "^1.5.0",
     "storybook-addon-mock": "^2.4.0",
     "storybook-i18n": "^1.0.11",
     "storybook-vue3-router": "^2.2.1",
+    "stylelint": "^14.13.0",
+    "stylelint-config-recommended-scss": "^7.0.0",
+    "stylelint-config-recommended-vue": "^1.4.0",
+    "stylelint-config-standard": "^28.0.0",
     "typescript": "^4.0.3",
     "vue-jest": "^5.0.0-alpha.1"
   },
@@ -78,7 +85,14 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "indent": ["error", 2]
+      "indent": [
+        "error",
+        2
+      ],
+      "vue/html-indent": [
+        "error",
+        2
+      ]
     }
   },
   "browserslist": [
