@@ -22,6 +22,7 @@ const translations = {
       unexpected: 'An unexpected error occurred{error}',
       no_data: 'No data available'
     },
+    filter_by: 'Filter by',
     go: 'Go',
     go_to_holofuel: 'Go to HoloFuel',
     happs: 'hApps',
