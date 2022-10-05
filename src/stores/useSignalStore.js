@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useSignalStore = defineStore('signals', {
+const useSignalStore = defineStore('signals', {
   state: () => ({
     callbacks: []
   }),

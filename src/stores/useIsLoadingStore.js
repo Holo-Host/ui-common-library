@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const getZomePath = ({ zomeName, fnName }) => `${zomeName}.${fnName}`
 
-export const useIsLoadingStore = defineStore('isLoading', {
+const useIsLoadingStore = defineStore('isLoading', {
   state: () => ({
     currentlyLoadingCalls: {}
   }),
