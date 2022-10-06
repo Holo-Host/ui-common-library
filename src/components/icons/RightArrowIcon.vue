@@ -15,6 +15,6 @@ import Icon from './Icon.vue'
 }
 
 .icon-path {
-	stroke: var(--primary-color);
+  stroke: var(--primary-color);
 }
 </style>

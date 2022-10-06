@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
 import WebSdk from '@holo-host/web-sdk'
+import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 
@@ -21,7 +21,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isLoggedIn: state => state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
     error: state => !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.cell_data?.[0].cell_id[1],
-    agentId: state => state.agentState.id,
+    agentId: state => state.agentState.id
   },
   actions: {
     async initialize() {
@@ -44,7 +44,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
         client.appInfo().then((appInfo) => {
           this.appInfo = appInfo
         })
-        
+
         this.agentState = agentState
 
         this.isReady = this.isLoggedIn
@@ -59,21 +59,21 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       onAgentState(client.agent)
     },
 
-    signIn () {
+    signIn() {
       this.isAuthFormOpen = true
       return client.signIn({ cancellable: false })
     },
 
-    signUp () {
+    signUp() {
       this.isAuthFormOpen = true
       client.signUp({ cancellable: false })
     },
 
-    signOut () {
+    signOut() {
       client.signOut()
     },
 
-    async callZome (args) {
+    async callZome(args) {
       const { roleId, zomeName, fnName, payload } = args
 
       useIsLoadingStore().callIsLoading({ zomeName, fnName })
@@ -86,7 +86,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
           zomeName,
           fnName,
           payload
-        })  
+        })
       } finally {
         useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
@@ -95,11 +95,11 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return result
     },
 
-    async loadAppInfo () {
+    async loadAppInfo() {
       this.appInfo = await client.appInfo()
       return this.appInfo
-    },
-  
+    }
+
   }
 })
 

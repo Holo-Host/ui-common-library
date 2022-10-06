@@ -3,8 +3,8 @@
     :disabled="isDisabled"
     class="base-button"
     :class="[{ 'disabled' : isDisabled }, kButtonTypeClass[type] ]"
-		:style="computedCustomStyle"
-		data-test-base-button-wrapper
+    :style="computedCustomStyle"
+    data-test-base-button-wrapper
     @click="onClick"
   >
     <!-- loading spinner -->
@@ -40,8 +40,8 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import FlatSpinner from './FlatSpinner.vue'
 import { EButtonType, ESpinnerSize } from '../types/ui'
+import FlatSpinner from './FlatSpinner.vue'
 
 const props = defineProps({
   type: {
@@ -93,22 +93,22 @@ const kButtonTypeClass = {
 }
 
 const kSpinnerColor = {
-	[EButtonType.primary]: {
-		enabled: 'white',
-		disabled: 'white'
-	},
-	[EButtonType.secondary]: {
-		enabled: 'secondary',
-		disabled: 'secondary'
-	},
-	[EButtonType.tertiary]: {
-		enabled: 'primary',
-		disabled: 'primary'
-	},
-	[EButtonType.gray]: {
-		enabled: 'white',
-		disabled: 'secondary'
-	},
+  [EButtonType.primary]: {
+    enabled: 'white',
+    disabled: 'white'
+  },
+  [EButtonType.secondary]: {
+    enabled: 'secondary',
+    disabled: 'secondary'
+  },
+  [EButtonType.tertiary]: {
+    enabled: 'primary',
+    disabled: 'primary'
+  },
+  [EButtonType.gray]: {
+    enabled: 'white',
+    disabled: 'secondary'
+  }
 }
 
 const spinnerColor = computed(() => {
@@ -116,9 +116,9 @@ const spinnerColor = computed(() => {
     return props.customTheme.spinnerColor
   }
 
-	const spinnerColor = kSpinnerColor[props.type]
+  const spinnerColor = kSpinnerColor[props.type]
 
-	return props.isDisabled ? spinnerColor.disabled : spinnerColor.enabled
+  return props.isDisabled ? spinnerColor.disabled : spinnerColor.enabled
 })
 
 const computedCustomStyle = computed(() => {
@@ -167,7 +167,7 @@ function onClick() {
     color: white;
     border: solid 1px var(--primary-color);
     background-color: var(--primary-color);
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 
     &:focus {
       outline: none;
@@ -179,11 +179,11 @@ function onClick() {
     }
   }
 
-	&.secondary {
+  &.secondary {
     color: var(--grey-dark-color);
     border: solid 1px var(--primary-light-color);
     background-color: var(--primary-light-color);
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 
     &:focus {
       outline: none;
@@ -195,11 +195,11 @@ function onClick() {
     }
   }
 
-	&.tertiary {
+  &.tertiary {
     color: var(--primary-color);
     border: solid 1px var(--primary-color);
     background-color: white;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 
     &:focus {
       outline: none;
@@ -215,7 +215,7 @@ function onClick() {
     color: white;
     border: solid 1px var(--grey-color);
     background-color: var(--grey-color);
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 
     &:focus {
       outline: none;

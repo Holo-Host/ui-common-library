@@ -9,17 +9,17 @@
     :title="header.label"
     class="header-row-item"
   >
-		<div
-			class="header-row-item__content"
-			:class="[header.align ? `header-row-item__content--align-${header.align}` : '']"
-		>
-			{{ header.label }}
-			<ShortUpArrowIcon
-				:color="isSelected ? '#000' : '#FFF'"
-				:class="{ 'header-row-item__arrow--rotate-180': sortDirection === ESortDirections.desc }"
-				class="header-row-item__arrow"
-			/>
-		</div>
+    <div
+      class="header-row-item__content"
+      :class="[header.align ? `header-row-item__content--align-${header.align}` : '']"
+    >
+      {{ header.label }}
+      <ShortUpArrowIcon
+        :color="isSelected ? '#000' : '#FFF'"
+        :class="{ 'header-row-item__arrow--rotate-180': sortDirection === ESortDirections.desc }"
+        class="header-row-item__arrow"
+      />
+    </div>
   </th>
 </template>
 
@@ -55,9 +55,9 @@ defineProps({
   font-weight: 600;
   user-select: none;
 
-	&--is-sortable {
-		cursor: pointer;
-	}
+  &--is-sortable {
+    cursor: pointer;
+  }
 
   &--is-selected {
     font-weight: 700;
@@ -74,22 +74,22 @@ defineProps({
     visibility: hidden;
   }
 
-	&__content {
-		display: flex;
-		align-items: center;
+  &__content {
+    display: flex;
+    align-items: center;
 
-		&--align-start {
-			justify-content: flex-start;
-		}
+    &--align-start {
+      justify-content: flex-start;
+    }
 
-		&--align-end {
-			justify-content: flex-end;
-		}
+    &--align-end {
+      justify-content: flex-end;
+    }
 
-		&--align-center {
-			justify-content: center;
-		}
-	}
+    &--align-center {
+      justify-content: center;
+    }
+  }
 
   &__arrow {
     top: 4px;

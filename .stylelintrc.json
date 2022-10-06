@@ -4,6 +4,7 @@
   ],
   "extends": ["stylelint-config-standard", "stylelint-config-html/vue", "stylelint-config-recommended-vue/scss"],
   "rules": {
-    "indentation": [2]
+    "indentation": [2],
+    "number-max-precision": null
   }
 }

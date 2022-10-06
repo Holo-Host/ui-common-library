@@ -45,12 +45,12 @@
 </template>
 
 <script setup>
-import BaseButton from './BaseButton.vue'
-import BaseModal from './BaseModal.vue'
-import BaseCheckbox from './BaseCheckbox.vue'
+import { ref } from 'vue'
 import { EButtonType } from '../types/ui'
 import { EProjectNotification, postNotification } from '../utils/notifications'
-import { ref } from 'vue'
+import BaseButton from './BaseButton.vue'
+import BaseCheckbox from './BaseCheckbox.vue'
+import BaseModal from './BaseModal.vue'
 
 const props = defineProps({
   isVisible: {
@@ -58,10 +58,10 @@ const props = defineProps({
     required: true
   },
 
-	appName: {
-		type: String,
-		required: true
-	},
+  appName: {
+    type: String,
+    required: true
+  },
 
   dontShowModalAgainLocalStorageKey: {
     type: String,
@@ -89,7 +89,7 @@ function handleHolofuelLogin() {
 
   emit('login', dontShowGoToHoloFuelModalAgain.value)
   const tabName = `${props.appName}-hf`
-  window.open(props.holoFuelUrl, tabName).focus();
+  window.open(props.holoFuelUrl, tabName).focus()
 }
 
 function setDontShowGoToHoloFuelModalAgain(value) {

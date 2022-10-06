@@ -3,7 +3,7 @@
     v-if="scale !== ESpinnerSize.none"
     class="loader"
     :class="{ 'loader--delayed': isDelayed }"
-		:style="computedScale"
+    :style="computedScale"
     data-test-circle-spinner-wrapper
   >
     <div
@@ -48,14 +48,14 @@ const computedScale = computed(() => ({
   width: 100%;
   height: 100%;
 
-	&--delayed {
-		opacity: 0;
-		animation-name: fadeIn;
-		animation-duration: 300ms;
-		animation-timing-function: ease;
-		animation-fill-mode: forwards;
-		animation-delay: 500ms;
-	}
+  &--delayed {
+    opacity: 0;
+    animation-name: fade-in;
+    animation-duration: 300ms;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    animation-delay: 500ms;
+  }
 
   .dot-spin {
     position: relative;
@@ -65,61 +65,113 @@ const computedScale = computed(() => ({
     height: 10px;
     border-radius: 5px;
     background-color: transparent;
-    box-shadow: 0 -18px 0 0, 12.72984px -12.72984px 0 0, 18px 0 0 0,
-      12.72984px 12.72984px 0 0 rgba(152, 128, 255, 0), 0 18px 0 0 rgba(152, 128, 255, 0),
-      -12.72984px 12.72984px 0 0 rgba(152, 128, 255, 0), -18px 0 0 0 rgba(152, 128, 255, 0),
-      -12.72984px -12.72984px 0 0 rgba(152, 128, 255, 0);
-    animation: dotSpin 1.5s infinite linear;
+    box-shadow:
+      0 -18px 0 0,
+      12.72984px -12.72984px 0 0,
+      18px 0 0 0,
+      12.72984px 12.72984px 0 0 rgb(152 128 255 / 0%),
+      0 18px 0 0 rgb(152 128 255 / 0%),
+      -12.72984px 12.72984px 0 0 rgb(152 128 255 / 0%),
+      -18px 0 0 0 rgb(152 128 255 / 0%),
+      -12.72984px -12.72984px 0 0 rgb(152 128 255 / 0%);
+    animation: dot-spin 1.5s infinite linear;
   }
 
-  @keyframes dotSpin {
+  @keyframes dot-spin {
     0%,
     100% {
-      box-shadow: 0 -18px 0 0, 12.72984px -12.72984px 0 0, 18px 0 0 0,
-        12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0);
+      box-shadow:
+        0 -18px 0 0,
+        12.72984px -12.72984px 0 0,
+        18px 0 0 0,
+        12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        0 18px 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        -18px 0 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%);
     }
+
     12.5% {
-      box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0), 12.72984px -12.72984px 0 0, 18px 0 0 0,
-        12.72984px 12.72984px 0 0, 0 18px 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0);
+      box-shadow:
+        0 -18px 0 -5px rgb(152 128 255 / 0%),
+        12.72984px -12.72984px 0 0,
+        18px 0 0 0,
+        12.72984px 12.72984px 0 0,
+        0 18px 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        -18px 0 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%);
     }
+
     25% {
-      box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0),
-        12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 0, 12.72984px 12.72984px 0 0,
-        0 18px 0 0, -12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0),
-        -18px 0 0 -5px rgba(152, 128, 255, 0), -12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0);
+      box-shadow:
+        0 -18px 0 -5px rgb(152 128 255 / 0%),
+        12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%),
+        18px 0 0 0,
+        12.72984px 12.72984px 0 0,
+        0 18px 0 0,
+        -12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        -18px 0 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%);
     }
+
     37.5% {
-      box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0),
-        12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0),
-        12.72984px 12.72984px 0 0, 0 18px 0 0, -12.72984px 12.72984px 0 0,
-        -18px 0 0 -5px rgba(152, 128, 255, 0), -12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0);
+      box-shadow:
+        0 -18px 0 -5px rgb(152 128 255 / 0%),
+        12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%),
+        18px 0 0 -5px rgb(152 128 255 / 0%),
+        12.72984px 12.72984px 0 0,
+        0 18px 0 0,
+        -12.72984px 12.72984px 0 0,
+        -18px 0 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%);
     }
+
     50% {
-      box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0),
-        12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0),
-        12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 0, -12.72984px 12.72984px 0 0,
-        -18px 0 0 0, -12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0);
+      box-shadow:
+        0 -18px 0 -5px rgb(152 128 255 / 0%),
+        12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%),
+        18px 0 0 -5px rgb(152 128 255 / 0%),
+        12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        0 18px 0 0,
+        -12.72984px 12.72984px 0 0,
+        -18px 0 0 0,
+        -12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%);
     }
+
     62.5% {
-      box-shadow: 0 -18px 0 -5px rgba(152, 128, 255, 0),
-        12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0), 18px 0 0 -5px rgba(152, 128, 255, 0),
-        12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px 12.72984px 0 0, -18px 0 0 0, -12.72984px -12.72984px 0 0;
+      box-shadow:
+        0 -18px 0 -5px rgb(152 128 255 / 0%),
+        12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%),
+        18px 0 0 -5px rgb(152 128 255 / 0%),
+        12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        0 18px 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px 12.72984px 0 0,
+        -18px 0 0 0,
+        -12.72984px -12.72984px 0 0;
     }
+
     75% {
-      box-shadow: 0 -18px 0 0, 12.72984px -12.72984px 0 -5px rgba(152, 128, 255, 0),
-        18px 0 0 -5px rgba(152, 128, 255, 0), 12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0),
-        0 18px 0 -5px rgba(152, 128, 255, 0), -12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0),
-        -18px 0 0 0, -12.72984px -12.72984px 0 0;
+      box-shadow:
+        0 -18px 0 0,
+        12.72984px -12.72984px 0 -5px rgb(152 128 255 / 0%),
+        18px 0 0 -5px rgb(152 128 255 / 0%),
+        12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        0 18px 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        -18px 0 0 0,
+        -12.72984px -12.72984px 0 0;
     }
+
     87.5% {
-      box-shadow: 0 -18px 0 0, 12.72984px -12.72984px 0 0, 18px 0 0 -5px rgba(152, 128, 255, 0),
-        12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), 0 18px 0 -5px rgba(152, 128, 255, 0),
-        -12.72984px 12.72984px 0 -5px rgba(152, 128, 255, 0), -18px 0 0 -5px rgba(152, 128, 255, 0),
+      box-shadow:
+        0 -18px 0 0,
+        12.72984px -12.72984px 0 0,
+        18px 0 0 -5px rgb(152 128 255 / 0%),
+        12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        0 18px 0 -5px rgb(152 128 255 / 0%),
+        -12.72984px 12.72984px 0 -5px rgb(152 128 255 / 0%),
+        -18px 0 0 -5px rgb(152 128 255 / 0%),
         -12.72984px -12.72984px 0 0;
     }
   }
@@ -133,13 +185,13 @@ const computedScale = computed(() => ({
   color: var(--primary-color);
 }
 
-@keyframes fadeIn {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>
-

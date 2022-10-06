@@ -23,46 +23,46 @@ export default {
     }
   },
   computed: {
-    style () {
-      var style = getComputedStyle(document.body)
+    style() {
+      const style = getComputedStyle(document.body)
 
       switch (this.color) {
-        case 'primary':
-          return {
-            backgroundColor: '#735CFE',
-            color: '#FFFFFF',
-          }
-        case 'secondary':
-          return {
-            backgroundColor: '#C7D3FF',
-            color: '#313C59'
-          }
-        case 'disabled':
-          return {
-            backgroundColor: '#FFFFFF',
-            color: '#735CFE',
-            border: '1px solid #735CFE',
-            opacity: 0.25
-          }
-        case 'grayed-out':
-          return {
-            backgroundColor: '#E5E5E5',
-            color: '#FFFFFF'
-          }
-        case 'primary-disabled':
-          return {
-            backgroundColor: 'var(--btn-primary-disabled-bg-color)',
-            color: 'var(--btn-primary-disabled-color)'
-          }
-        case 'primary-enabled':
-          return {
-            backgroundColor: 'var(--btn-primary-enabled-bg-color)',
-            color: 'var(--btn-primary-enabled-color)'
-          }          
-        case 'none':
-          return {}
-        default:
-          throw new Error (`Unknown color option ${this.color} for button`)
+      case 'primary':
+        return {
+          backgroundColor: '#735CFE',
+          color: '#FFFFFF'
+        }
+      case 'secondary':
+        return {
+          backgroundColor: '#C7D3FF',
+          color: '#313C59'
+        }
+      case 'disabled':
+        return {
+          backgroundColor: '#FFFFFF',
+          color: '#735CFE',
+          border: '1px solid #735CFE',
+          opacity: 0.25
+        }
+      case 'grayed-out':
+        return {
+          backgroundColor: '#E5E5E5',
+          color: '#FFFFFF'
+        }
+      case 'primary-disabled':
+        return {
+          backgroundColor: 'var(--btn-primary-disabled-bg-color)',
+          color: 'var(--btn-primary-disabled-color)'
+        }
+      case 'primary-enabled':
+        return {
+          backgroundColor: 'var(--btn-primary-enabled-bg-color)',
+          color: 'var(--btn-primary-enabled-color)'
+        }
+      case 'none':
+        return {}
+      default:
+        throw new Error(`Unknown color option ${this.color} for button`)
       }
     }
   }
@@ -86,22 +86,22 @@ button {
 }
 
 .stage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    padding: 2rem 0;
-    margin: 0 -5%;
-    overflow: hidden;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 2rem 0;
+  margin: 0 -5%;
+  overflow: hidden;
+}
 
-  .snippet {
-    width: 2rem;
-  }
+.snippet {
+  width: 2rem;
+}
 
 /**
  * ==============================================
- * Dot Pulse - 'borrowed' CSS from here: https://codepen.io/nzbin/pen/GGrXbp under mit license 
+ * Dot Pulse - 'borrowed' CSS from here: https://codepen.io/nzbin/pen/GGrXbp under mit license
  * ==============================================
  */
 .dot-pulse {
@@ -114,11 +114,12 @@ button {
   color: var(--btn-busy-color);
   box-shadow: 9999px 0 0 -5px var(--btn-busy-color);
   animation: dotPulse 1.5s infinite linear;
-  animation-delay: .25s;
+  animation-delay: 0.25s;
 }
 
-.dot-pulse::before, .dot-pulse::after {
-  content: '';
+.dot-pulse::before,
+.dot-pulse::after {
+  content: "";
   display: inline-block;
   position: absolute;
   top: 0;
@@ -138,16 +139,18 @@ button {
 .dot-pulse::after {
   box-shadow: 10014px 0 0 -5px var(--btn-busy-color);
   animation: dotPulseAfter 1.5s infinite linear;
-  animation-delay: .5s;
+  animation-delay: 0.5s;
 }
 
 @keyframes dotPulseBefore {
   0% {
     box-shadow: 9984px 0 0 -5px var(--btn-busy-color);
   }
+
   30% {
     box-shadow: 9984px 0 0 2px var(--btn-busy-color);
   }
+
   60%,
   100% {
     box-shadow: 9984px 0 0 -5px var(--btn-busy-color);
@@ -158,9 +161,11 @@ button {
   0% {
     box-shadow: 9999px 0 0 -5px var(--btn-busy-color);
   }
+
   30% {
     box-shadow: 9999px 0 0 2px var(--btn-busy-color);
   }
+
   60%,
   100% {
     box-shadow: 9999px 0 0 -5px var(--btn-busy-color);
@@ -171,9 +176,11 @@ button {
   0% {
     box-shadow: 10014px 0 0 -5px var(--btn-busy-color);
   }
+
   30% {
     box-shadow: 10014px 0 0 2px var(--btn-busy-color);
   }
+
   60%,
   100% {
     box-shadow: 10014px 0 0 -5px var(--btn-busy-color);

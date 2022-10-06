@@ -11,14 +11,14 @@
 
 <script>
 export default {
-  name: "DropDown",
+  name: 'DropDown',
   emits: ['optionChanged'],
   props: {
     label: String,
     options: Array,
-    selectedOption: String,
+    selectedOption: String
   }
-};
+}
 </script>
 
 <style scoped>
@@ -28,6 +28,7 @@ export default {
   flex-shrink: 0;
   flex-basis: 100px;
 }
+
 .drop-down {
   flex-shrink: 0;
   flex-basis: 200px;

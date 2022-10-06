@@ -10,22 +10,22 @@
       <input type="text" id="publisher-name" v-model="name" class="modal-input" data-testid='name-setter-modal-input' placeholder="Enter Account Display Name " >
     </div>
     <div class='footer'>
-      <div class='buttons'>      
+      <div class='buttons'>
         <Button class='save-button' :color="confirmButtonColor" :disabled="confirmDisabled" :isBusy="isBusy" @click="onSaveName">Save</Button>
       </div>
-    </div>  
-  </Modal>  
+    </div>
+  </Modal>
 </template>
 
 <script>
-import Modal from './Modal'
 import Button from './Button'
+import Modal from './Modal'
 
 export default {
   name: 'NameSetterModal',
   components: {
     Modal,
-    Button,
+    Button
   },
   props: {
     handleClose: {
@@ -49,29 +49,29 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       name: '',
       isBusy: false
     }
   },
   computed: {
-    confirmDisabled () {
-        return this.name.trim().length === 0
-    },    
-    confirmButtonColor () {
+    confirmDisabled() {
+      return this.name.trim().length === 0
+    },
+    confirmButtonColor() {
       return this.confirmDisabled ? 'primary-disabled' : 'primary-enabled'
     }
   },
   methods: {
-    async onSaveName () {
-        this.isBusy = true
+    async onSaveName() {
+      this.isBusy = true
 
-        await this.updateMyName(this.name.trim())
-        this.handleClose()
+      await this.updateMyName(this.name.trim())
+      this.handleClose()
 
-        this.openIdentityModal()
-        this.isBusy = false
+      this.openIdentityModal()
+      this.isBusy = false
     }
   }
 }
@@ -89,32 +89,32 @@ export default {
 
 <style scoped>
 .modal-title {
-    font-weight: 600;
-    font-size: 1.375rem;
-    text-align: center;
-    line-height: 1.875rem;
+  font-weight: 600;
+  font-size: 1.375rem;
+  text-align: center;
+  line-height: 1.875rem;
 }
 
 .modal-input {
-    width: 28rem;
-    height: 2.3rem;
-    border-radius: 5px;
-    border: 1px solid #606C8B;
-    margin: 30px 0
+  width: 28rem;
+  height: 2.3rem;
+  border-radius: 5px;
+  border: 1px solid #606c8b;
+  margin: 30px 0;
 }
 
 .modal-content {
-    font-family: var(--font-family);
-    font-weight: 400;
-    font-size: 0.875rem;
-    line-height: 1.1875rem;
-    text-align: center;
-    color: var(--content-color);
-    padding: 0 74px;
-    margin-top: 20px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.1875rem;
+  text-align: center;
+  color: var(--content-color);
+  padding: 0 74px;
+  margin-top: 20px;
 }
 
 .footer {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 </style>

@@ -1,20 +1,30 @@
 <template>
- <canvas ref="canvas" width="1" height="1" :class="['identicon-button', $attrs.class]"
+  <canvas
+    ref="canvas"
+    width="1"
+    height="1"
+    :class="['identicon-button', $attrs.class]"
     :style="computedStyle"
     data-testid='identicon'
     @click="copyToClipboard"
     @mouseenter="showTooltip"
-    @mouseleave="hideTooltip" />
-  <div v-if="isTooltipVisible" class='tooltip-wrapper' data-testid='identicon-tooltip'>
-    <div class='tooltip' :style="tooltipStyle"><span class='agentId'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
+    @mouseleave="hideTooltip"
+  />
+  <div
+    v-if="isTooltipVisible"
+    class='tooltip-wrapper'
+    data-testid='identicon-tooltip'
+  >
+    <div class='tooltip' :style="tooltipStyle">
+      <span class='agent-id'>{{ encodedKey }}</span> <br />- {{ isCopied ? 'Copied' : 'Click to copy' }} </div>
   </div>
 </template>
 
 <script setup>
-import renderIconRaw from '../utils/identicon'
-import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
-import { encodeAgentId } from '../utils/agent'
 import { computed, watchEffect, ref } from 'vue'
+import { encodeAgentId } from '../utils/agent'
+import { copyToClipboard as copyToClipboardRaw } from '../utils/clipboardUtils'
+import renderIconRaw from '../utils/identicon'
 
 const props = defineProps({
   isClickable: {
@@ -44,7 +54,7 @@ const props = defineProps({
 
   backgroundColor: {
     validator: prop => typeof prop === 'string' || prop === null,
-    default: null,
+    default: null
   }
 })
 
@@ -55,34 +65,33 @@ const isCopied = ref(false)
 const options = computed(() => ({
   hash: props.agentKey,
   size: props.size,
-  backgroundColor: props.backgroundColor,
+  backgroundColor: props.backgroundColor
 }))
-
 
 const encodedKey = computed(() => encodeAgentId(props.agentKey))
 
-function copyToClipboard () {
+function copyToClipboard() {
   if (!props.isClickable) return
 
   copyToClipboardRaw(encodedKey.value)
   isCopied.value = true
 }
 
-function showTooltip () {
+function showTooltip() {
   if (!props.isClickable) return
 
   isTooltipVisible.value = true
   isCopied.value = false
 }
 
-function hideTooltip () {
+function hideTooltip() {
   if (!props.isClickable) return
 
   isTooltipVisible.value = false
   isCopied.value = false
 }
 
-function renderIcon () {
+function renderIcon() {
   if (!canvas.value) return
   renderIconRaw(options.value, canvas.value)
 }
@@ -94,8 +103,8 @@ watchEffect(() => {
 
 const computedStyle = computed(() => ({
   'border-radius': '50%',
-  'width': `${props.size}px`,
-  'height': `${props.size}px`,
+  width: `${props.size}px`,
+  height: `${props.size}px`,
   ...props.styleProp
 }))
 
@@ -105,25 +114,26 @@ const computedStyle = computed(() => ({
 .identicon-button {
   cursor: pointer;
 }
+
 .tooltip-wrapper {
   position: relative;
 }
+
 .tooltip {
   position: absolute;
-
-  background: #EDF1FF;
-  border: 1px solid #ECEEF1;
-  box-shadow: 0px 4px 10px #E5E5E5;
+  background: #edf1ff;
+  border: 1px solid #eceef1;
+  box-shadow: 0 4px 10px #e5e5e5;
   border-radius: 2px;
-
   padding: 8px;
   font-style: normal;
   font-weight: normal;
   font-size: 11px;
   line-height: 15px;
-  color: #606C8B;
+  color: #606c8b;
 }
-.agentId {
-  white-space: nowrap
+
+.agent-id {
+  white-space: nowrap;
 }
 </style>

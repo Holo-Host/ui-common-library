@@ -12,15 +12,17 @@ export default {
 </script>
 
 <style>
-@import '../artifacts/styles/common.css';
+@import "../artifacts/styles/common.css";
 
 html {
   overflow-y: scroll;
 }
+
 body,
 html {
   height: 100%;
 }
+
 #app {
   font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;

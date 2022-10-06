@@ -31,7 +31,7 @@ export default {
     modalClass: String
   },
   methods: {
-    handleOverlayClick (e) {
+    handleOverlayClick(e) {
       if (this.shouldCloseOnAwayClick && e.target.classList.contains('overlay')) {
         this.handleClose()
       }
@@ -47,20 +47,22 @@ export default {
   top: 0;
   left: 0;
   z-index: 200;
-  background-color: rgba(49, 60, 89, 0.67);
+  background-color: rgb(49 60 89 / 67%);
   width: 100vw;
   height: 100vh;
 }
+
 .modal {
   position: relative;
   margin: auto;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0px 2px 20px rgba(32, 39, 57, 0.5);
+  box-shadow: 0 2px 20px rgb(32 39 57 / 50%);
   z-index: 20;
   padding: 26px;
   opacity: 1;
 }
+
 .close-button {
   position: absolute;
   top: 10px;

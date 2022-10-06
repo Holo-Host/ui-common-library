@@ -23,6 +23,7 @@
     "dayjs": "^1.11.5",
     "dotenv": "^8.2.0",
     "mitt": "^3.0.0",
+    "pinia": "^2.0.22",
     "sass": "^1.51.0",
     "sass-loader": "^10",
     "snapshot-diff": "^0.9.0",
@@ -35,6 +36,7 @@
     "waait": "^1.0.5"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.5.4",
     "@holo-host/chaperone": "^9.0.0",
     "@storybook/addon-a11y": "^6.5.6",
     "@storybook/addon-actions": "^6.5.6",
@@ -54,9 +56,13 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/test-utils": "^2.0.0-alpha.8",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
+    "eslint": "8.15.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^8.7.1",
     "gh-pages": "^4.0.0",
     "jest": "^26.5.3",
     "jest-canvas-mock": "^2.4.0",
@@ -71,29 +77,6 @@
     "stylelint-config-standard": "^28.0.0",
     "typescript": "^4.0.3",
     "vue-jest": "^5.0.0-alpha.1"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {
-      "indent": [
-        "error",
-        2
-      ],
-      "vue/html-indent": [
-        "error",
-        2
-      ]
-    }
   },
   "browserslist": [
     "> 1%",
