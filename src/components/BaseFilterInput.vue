@@ -15,11 +15,20 @@
         class="base-filter__filter-input"
         @input="onInput"
       />
+
+			<ExIcon
+				v-if="value"
+				size="12"
+				class="base-filter__ex-icon"
+				@click="clear"
+			/>
     </div>
   </div>
 </template>
 
 <script setup>
+import ExIcon from 'components/icons/ExIcon.vue'
+
 defineProps({
   value: {
     type: String,
@@ -32,10 +41,14 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['on-change'])
+const emit = defineEmits(['update:value'])
 
 const onInput = (e) => {
-  emit('on-change', e.target.value)
+  emit('update:value', e.target.value)
+}
+
+const clear = (e) => {
+  emit('update:value', '')
 }
 </script>
 
@@ -71,6 +84,14 @@ const onInput = (e) => {
       color: var(--grey-light-color);
     }
   }
+
+	&__ex-icon {
+		position: absolute;
+		top: 5px;
+		right: 6px;
+		cursor: pointer;
+		color: var(--grey-light-color);
+	}
 
   &--disabled {
     opacity: 0.5;
