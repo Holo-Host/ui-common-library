@@ -87,16 +87,6 @@ const sortDirection = ref(ESortDirections.desc)
 
 const isEmpty = computed(() => props.isLoading || !props.items.length || props.isError)
 
-const pagedData = computed(() => {
-  const startIndex = currentPage.value * pageSize.value
-  const endIndex = (currentPage.value + 1) * pageSize.value
-  return sortedItems.value.slice(startIndex, endIndex)
-})
-
-const itemsCount = computed(() => sortedItems.value.length)
-
-watch(pageSize, () => (currentPage.value = 0))
-
 const sortedItems = computed(() => {
   const sortKey = sortBy.value
 
@@ -114,6 +104,17 @@ const sortedItems = computed(() => {
     }
   })
 })
+
+const pagedData = computed(() => {
+  const startIndex = currentPage.value * pageSize.value
+  const endIndex = (currentPage.value + 1) * pageSize.value
+  return sortedItems.value.slice(startIndex, endIndex)
+})
+
+const itemsCount = computed(() => sortedItems.value.length)
+
+watch(pageSize, () => (currentPage.value = 0))
+
 
 function onSortByChanged({ key, direction }) {
   sortBy.value = key

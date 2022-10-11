@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import ExIcon from 'components/icons/ExIcon.vue'
+import ExIcon from './icons/ExIcon.vue'
 
 defineProps({
   value: {
