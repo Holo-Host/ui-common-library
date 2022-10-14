@@ -4,7 +4,7 @@
       class="base-filter__label"
       :class="{ 'base-filter--disabled': isDisabled }"
     >
-      {{ $t('$.filter_by') }}:&nbsp;
+      {{ $t('$.search') }}:&nbsp;
     </div>
     <div
       class="base-filter__filter"
@@ -16,12 +16,12 @@
         @input="onInput"
       />
 
-			<ExIcon
-				v-if="value"
-				size="12"
-				class="base-filter__ex-icon"
-				@click="clear"
-			/>
+      <ExIcon
+        v-if="value"
+        :size="12"
+        class="base-filter__ex-icon"
+        @click="clear"
+      />
     </div>
   </div>
 </template>
@@ -43,11 +43,11 @@ defineProps({
 
 const emit = defineEmits(['update:value'])
 
-const onInput = (e) => {
-  emit('update:value', e.target.value)
+const onInput = (event) => {
+  emit('update:value', event.target.value)
 }
 
-const clear = (e) => {
+const clear = () => {
   emit('update:value', '')
 }
 </script>
@@ -85,13 +85,13 @@ const clear = (e) => {
     }
   }
 
-	&__ex-icon {
-		position: absolute;
-		top: 5px;
-		right: 6px;
-		cursor: pointer;
-		color: var(--grey-light-color);
-	}
+  &__ex-icon {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    cursor: pointer;
+    color: var(--grey-light-color);
+  }
 
   &--disabled {
     opacity: 0.5;

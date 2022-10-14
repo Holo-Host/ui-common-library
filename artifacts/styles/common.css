@@ -18,7 +18,9 @@
 
     --violet-color: #E339FF;
     --red-color: #ff5f5f;
+    --red-light-color: rgba(255, 203, 203, 0.47);
     --green-color: #21BE98;
+    --green-light-color: #CBFFE3;
     --yellow-light-color: #ffe871;
 
     /* Project specific theme colors */
