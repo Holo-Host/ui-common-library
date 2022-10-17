@@ -4,7 +4,7 @@
       class="base-filter__label"
       :class="{ 'base-filter--disabled': isDisabled }"
     >
-      {{ $t('$.search') }}:&nbsp;
+      {{ $t(labelTranslationKey) }}:&nbsp;
     </div>
     <div
       class="base-filter__filter"
@@ -38,6 +38,11 @@ defineProps({
   isDisabled: {
     type: Boolean,
     default: false
+  },
+
+  labelTranslationKey: {
+    type: String,
+    default: '$.search'
   }
 })
 
