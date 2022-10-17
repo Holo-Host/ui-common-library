@@ -27,9 +27,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import ExIcon from './icons/ExIcon.vue'
 
-defineProps({
+const props = defineProps({
   value: {
     type: String,
     required: true
@@ -43,13 +44,37 @@ defineProps({
   labelTranslationKey: {
     type: String,
     default: '$.search'
+  },
+
+  debounce: {
+    type: Number,
+    default: 500
+  },
+
+  minLength: {
+    type: Number,
+    default: 3
   }
 })
 
 const emit = defineEmits(['update:value'])
 
+const debounceTimeout = ref(null)
+
 const onInput = (event) => {
-  emit('update:value', event.target.value)
+  if (event.target.value.length >= props.minLength) {
+    if (debounceTimeout.value) {
+      clearTimeout(debounceTimeout.value)
+    }
+
+    debounceTimeout.value = setTimeout(() => {
+      emit('update:value', event.target.value)
+      clearTimeout(debounceTimeout.value)
+    }, props.debounce)
+  } else {
+    // Return false when the value length is less than the minimum length
+    emit('update:value', false)
+  }
 }
 
 const clear = () => {
