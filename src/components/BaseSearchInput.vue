@@ -57,7 +57,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update'])
 
 const debounceTimeout = ref(null)
 
@@ -68,17 +68,17 @@ const onInput = (event) => {
     }
 
     debounceTimeout.value = setTimeout(() => {
-      emit('update:value', event.target.value)
+      emit('update', { value: event.target.value, isActive: true })
       clearTimeout(debounceTimeout.value)
     }, props.debounce)
   } else {
-    // Return false when the value length is less than the minimum length
-    emit('update:value', false)
+    // Return isActive = false when the value length is less than the minimum length
+    emit('update', { value: event.target.value, isActive: false })
   }
 }
 
 const clear = () => {
-  emit('update:value', '')
+  emit('update', { value: '', isActive: true })
 }
 </script>
 
