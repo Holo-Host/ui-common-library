@@ -84,8 +84,6 @@ const earnings = computed(() =>
 
 <style lang="scss" scoped>
 .happ-card {
-  max-width: 546px;
-
   &__content {
     display: flex;
     background-color: var(--white-color);
