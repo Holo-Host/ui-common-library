@@ -246,5 +246,18 @@ export const mockPaidInvoicesData = [
   }
 ]
 
-/* eslint-enable no-magic-numbers */
+export const hAppMock = {
+  id: 'uhCkkfNK_V3PNPqR2EUpxL_YhMux1BFwQ5SxxE4ZG3LjazkK2hlfx',
+  name: 'Test-Happ',
+  special_installed_app_id: null,
+  bundleUrl: 'https://github.com/Holo-Host/dummy-dna/releases/download/v0.5.4/test.happ',
+  hostedUrls: ['test.holo.host'],
+  logoUrl: null,
+  isPaused: false,
+  enabled: true,
+  sourceChains: 0,
+  usage: { bandwidth: 0, cpu: 0 },
+  storage: 0
+}
 
+/* eslint-enable no-magic-numbers */

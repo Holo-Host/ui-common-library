@@ -1,8 +1,8 @@
-import BaseFilterInput from '../components/BaseFilterInput.vue'
+import BaseSearchInput from '../components/BaseSearchInput.vue'
 
 export default {
-  title: 'BaseFilterInput',
-  component: BaseFilterInput,
+  title: 'BaseSearchInput',
+  component: BaseSearchInput,
 
   argTypes: {
     isDisabled: false,
@@ -11,12 +11,12 @@ export default {
 }
 
 const kTemplate = (args) => ({
-  components: { BaseFilterInput },
+  components: { BaseSearchInput },
   setup() {
     return { args }
   },
   // And then the `args` are bound to your component with `v-bind="args"`
-  template: '<BaseFilterInput v-bind="args" />'
+  template: '<BaseSearchInput v-bind="args" />'
 })
 
 export const Default = kTemplate.bind({})

@@ -4,7 +4,7 @@
       class="base-filter__label"
       :class="{ 'base-filter--disabled': isDisabled }"
     >
-      {{ $t('$.filter_by') }}:&nbsp;
+      {{ $t(labelTranslationKey) }}:&nbsp;
     </div>
     <div
       class="base-filter__filter"
@@ -16,20 +16,21 @@
         @input="onInput"
       />
 
-			<ExIcon
-				v-if="value"
-				size="12"
-				class="base-filter__ex-icon"
-				@click="clear"
-			/>
+      <ExIcon
+        v-if="value"
+        :size="12"
+        class="base-filter__ex-icon"
+        @click="clear"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import ExIcon from './icons/ExIcon.vue'
 
-defineProps({
+const props = defineProps({
   value: {
     type: String,
     required: true
@@ -38,16 +39,45 @@ defineProps({
   isDisabled: {
     type: Boolean,
     default: false
+  },
+
+  labelTranslationKey: {
+    type: String,
+    default: '$.search'
+  },
+
+  debounce: {
+    type: Number,
+    default: 500
+  },
+
+  minLength: {
+    type: Number,
+    default: 3
   }
 })
 
 const emit = defineEmits(['update:value'])
 
-const onInput = (e) => {
-  emit('update:value', e.target.value)
+const debounceTimeout = ref(null)
+
+const onInput = (event) => {
+  if (event.target.value.length >= props.minLength) {
+    if (debounceTimeout.value) {
+      clearTimeout(debounceTimeout.value)
+    }
+
+    debounceTimeout.value = setTimeout(() => {
+      emit('update:value', event.target.value)
+      clearTimeout(debounceTimeout.value)
+    }, props.debounce)
+  } else {
+    // Return false when the value length is less than the minimum length
+    emit('update:value', false)
+  }
 }
 
-const clear = (e) => {
+const clear = () => {
   emit('update:value', '')
 }
 </script>
@@ -85,13 +115,13 @@ const clear = (e) => {
     }
   }
 
-	&__ex-icon {
-		position: absolute;
-		top: 5px;
-		right: 6px;
-		cursor: pointer;
-		color: var(--grey-light-color);
-	}
+  &__ex-icon {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    cursor: pointer;
+    color: var(--grey-light-color);
+  }
 
   &--disabled {
     opacity: 0.5;

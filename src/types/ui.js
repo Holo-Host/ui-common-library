@@ -33,3 +33,10 @@ export const ESortDirections = {
   asc: 'asc',
   desc: 'desc'
 }
+
+export const EChipType = {
+  info: 0,
+  danger: 1,
+  success: 2,
+  custom: 99
+}
