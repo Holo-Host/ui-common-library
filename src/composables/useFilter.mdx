@@ -1,0 +1,104 @@
+# useFilter composable
+
+## Usage:
+1. Import the useFilter composable in your component
+```
+import { useFilter, EFilterTypes } from '@uicommon/composables/useFilter'
+```
+
+2. Create criteria you want to use in the filter
+
+```
+EFilterTypes = {
+  string,
+  number
+}
+
+interface FilterCriterion {
+  key: string           // field name we want to filter by
+  type: EFilterTypes    // type of filter
+  minLength: number     // minimum length of the filter value we want this criterion to be apllied
+  exact: boolean        // if true, the filter value must be exactly the same as the field value
+}
+
+```
+
+```
+const kFilterCriteria: FilterCriterion[] = [
+  {
+    key: 'happ',
+    type: EFilterTypes.string,
+    minLength: 3,
+    exact: false
+  },
+  {
+    key: 'counterparty',
+    type: EFilterTypes.string,
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'id',
+    type: EFilterTypes.string,
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'amount',
+    type: EFilterTypes.number,
+    minLength: 3,
+    exact: false
+  }
+]
+```
+
+On the above example, the filter will be applied only if the filter value has at least 3 characters.
+If the filter value has less than 3 characters, the filter will not be applied.
+If the filter value has at least 15 characters, additional criteria will be applied (counterparty and id).
+
+3. Use the useFilter composable in your component passing the data set you want to filter and filter criteria as a parameters.
+
+useFilter returns the following properties:
+- filteredData: the result of filtering that can be used to display data in the table
+- filterValue: current filter value that can be used in the input field
+- onFilterChange: function to be called when the filter input value changes
+
+```
+const { filteredData, onFilterChange, filterValue } = useFilter({
+  data: invoices,
+  criteria: kFilterCriteria
+})
+```
+
+4. Example usage of filteredData in the table
+
+```
+<BaseTable
+  v-slot="{ items }"
+  :is-loading="isLoading"
+  :is-error="isError"
+  :headers="[...headersMap.values()]"
+  initial-sort-by="completed_date"
+  :items="filteredData"
+  :empty-message-translation-key="emptyMessageTranslationKey"
+  @try-again-clicked="getInvoices"
+>
+  <InvoicesTableRow
+    v-for="item in items"
+    :key="item.id"
+    is-paid
+    :invoice="item"
+  />
+</BaseTable>
+```
+
+5. Example usage of onFilterChange and filterValue in the input field
+
+```
+<BaseSearchInput
+  :value="filterValue"
+  :is-disabled="!isFilteringEnabled"
+  label-translation-key="$.filter_by"
+  @update="onFilterChange"
+/>
+```
