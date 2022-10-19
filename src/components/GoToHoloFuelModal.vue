@@ -1,7 +1,7 @@
 <template>
   <BaseModal
-    :is-visible="isVisible"
-    @close="emit('close')"
+    :is-visible="visibleModal === EModal.go_to_holofuel"
+    @close="hideModal"
   >
     <div class="go-to-holofuel-modal">
       <img
@@ -46,18 +46,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { EButtonType } from '../types/ui'
-import { EProjectNotification, postNotification } from '../utils/notifications'
+import { useModals } from '../composables/useModals'
+import { EButtonType, EModal } from '../types/ui'
 import BaseButton from './BaseButton.vue'
 import BaseCheckbox from './BaseCheckbox.vue'
 import BaseModal from './BaseModal.vue'
 
-const props = defineProps({
-  isVisible: {
-    type: Boolean,
-    required: true
-  },
+const { visibleModal, hideModal } = useModals()
 
+const props = defineProps({
   appName: {
     type: String,
     required: true
@@ -74,14 +71,14 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['login'])
+
 const dontShowGoToHoloFuelModalAgain = ref(
   localStorage.getItem(props.dontShowModalAgainLocalStorageKey)
 )
 
-const emit = defineEmits(['close', 'login'])
-
 function handleHolofuelLogin() {
-  postNotification(EProjectNotification.hideGoToHolofuelModal)
+  hideModal()
 
   if (dontShowGoToHoloFuelModalAgain.value) {
     localStorage.setItem(props.dontShowModalAgainLocalStorageKey, 'true')
