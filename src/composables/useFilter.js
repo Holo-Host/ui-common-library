@@ -9,7 +9,7 @@ export function useFilter({ data, criteria }) {
   const filterValue = ref('')
   const filterIsActive = ref(false)
 
-  function onFilterChange({ value, isActive }) {
+  function setFilter({ value, isActive }) {
     filterIsActive.value = isActive
     filterValue.value = value
   }
@@ -56,9 +56,8 @@ export function useFilter({ data, criteria }) {
   })
 
   return {
-    onFilterChange,
+    setFilter,
     filterValue,
-    filteredData,
-    EFilterTypes
+    filteredData
   }
 }
