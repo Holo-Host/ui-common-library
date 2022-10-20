@@ -1,85 +1,69 @@
-import { onMounted, shallowRef } from 'vue'
+import { onMounted } from 'vue'
 import TheOverlay from '../components/TheOverlay.vue'
-import { EOverlayTheme, EOverlayType } from '@/utils/notifications'
-import Docs from './markdown/TheOverlay.mdx'
+import { EOverlayTheme, EOverlayType, useOverlay } from '../composables/useOverlay'
+
+const { showOverlay, hideOverlay } = useOverlay()
 
 export default {
   title: 'TheOverlay',
   component: TheOverlay
 }
 
-const kTemplate = (args) => ({
+export const Loading = (args) => ({
   components: { TheOverlay },
 
-  argTypes: {
-    theme: EOverlayTheme.light,
-    type: EOverlayType.loading,
-    icon: '',
-    message: ''
-  },
-
   setup() {
-    const overlayRef = shallowRef()
-
     onMounted(() => {
-      overlayRef.value?.hide()
-      overlayRef.value?.show(args)
+      showOverlay()
 
       setTimeout(() => {
-        overlayRef.value?.hide()
+        hideOverlay()
       }, 5000)
     })
 
-    return { args, overlayRef }
+    return { args }
   },
 
-  template: '<div><TheOverlay ref="overlayRef" /></div>'
+  template: '<div><TheOverlay /></div>'
 })
 
-export const Readme = () => ({
-  setup() {
-    const overlayRef = shallowRef()
+export const WithContent = (args) => ({
+  components: { TheOverlay },
 
+  setup() {
     onMounted(() => {
-      overlayRef.value?.hide()
+      showOverlay({
+        type: EOverlayType.message,
+        message: 'Logging out...'
+      })
+
+      setTimeout(() => {
+        hideOverlay()
+      }, 5000)
     })
 
-    return { overlayRef }
+    return { args }
   },
 
-  template: '<div></div>'
+  template: '<div><TheOverlay /></div>'
 })
 
-Readme.parameters = {
-  docs: {
-    page: Docs
-  }
-}
+export const DarkTheme = (args) => ({
+  components: { TheOverlay },
 
-export const Default = kTemplate.bind({})
-Default.parameters = {
-  docs: {
-    page: null
-  }
-}
+  setup() {
+    onMounted(() => {
+      showOverlay({
+        theme: EOverlayTheme.dark
+      })
 
-export const DarkTheme = kTemplate.bind({})
-DarkTheme.args = {
-  theme: EOverlayTheme.dark
-}
-DarkTheme.parameters = {
-  docs: {
-    page: null
-  }
-}
+      setTimeout(() => {
+        hideOverlay()
+      }, 5000)
+    })
 
-export const WithContent = kTemplate.bind({})
-WithContent.args = {
-  type: EOverlayType.message,
-  message: 'Logging out...'
-}
-WithContent.parameters = {
-  docs: {
-    page: null
-  }
-}
+    return { args }
+  },
+
+  template: '<div><TheOverlay /></div>'
+})
