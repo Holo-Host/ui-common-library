@@ -1,0 +1,65 @@
+# useBanner composable - this composable is used to manage the global app banners.
+
+## Principles
+- By using this component as shown below we can avoid mounting multiple banners, we make sure we can have only one banner (no stacking banners one on top of another), we can use it from anywhere, we don't have to keep any extra props in Pinia store.
+
+## useBanner composable interface
+- `isVisible: ref<boolean>(false)` - true if the banner is visible
+- `message?: ref<string>('')` - optional message to show in the banner
+- `type?: ref<EBannerType>(EBannerType.error)` - type of the banner (error | warning | success)
+- `hasCloseButton?: ref<boolean>(false)` - optional close button
+- `contentComponent = shallowRef<DefineComponent>()` - optional content component
+- `showBanner: (ShowBannerParamsInterface) => void` - method to show the banner, by default it will show the error banner
+- `hideBanner: () => void` - method to hide the banner
+
+```
+ShowBannerParamsInterface = {
+  type?: EBannerType
+  message?: string
+  hasCloseButton?: boolean
+  contentComponent?: DefineComponent
+}
+```
+
+NOTE: As TypeScript is not used yet in the apps we can simulate the enums by defining a variable like below:
+```
+export const EBannerType = {
+  error: 'error',
+  warning: 'warning',
+  success: 'success'
+}
+```
+
+## Usage:
+1. Mount the component at the root of your App.
+```
+// App.vue
+<template>
+  <TheBanner />
+  <router-view />
+</template>
+```
+
+2. Use composable to show/hide the banner from anywhere in the app.
+```
+...
+<script setup>
+  ...
+  import { useBanner } from '@uicommon/composables/useBanner'
+  ...
+  const { showBanner, hideBanner } = useBanner()
+  ...
+  async function login() {
+    ...
+    try {
+      ...
+      await userStore.getUser()
+      await router.push({ name: kRoutes.dashboard.name })
+      ...
+    } catch (e) {
+      showBanner({ message: t('$.errors.login_failed') })
+    }
+  }
+  ...
+</script>
+```

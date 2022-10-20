@@ -77,7 +77,7 @@ defineEmits(['update:checked'])
 .base-checkbox {
   position: relative;
   display: flex;
-  align-items: start;
+  align-items: flex-start;
 
   &__wrapper {
     display: flex;

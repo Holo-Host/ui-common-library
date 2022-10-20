@@ -6,6 +6,11 @@ export const ESpinnerSize = {
   xl: 4
 }
 
+export const EOverlayTheme = {
+  light: 0,
+  dark: 1
+}
+
 export const EAlertType = {
   normal: 0,
   warning: 1,

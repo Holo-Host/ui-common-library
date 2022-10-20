@@ -16,8 +16,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { ESpinnerSize } from '../types/ui'
-import { EOverlayTheme } from '../utils/notifications'
+import { ESpinnerSize, EOverlayTheme } from '../types/ui'
 
 const props = defineProps({
   scale: {

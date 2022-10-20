@@ -1,6 +1,5 @@
 import CircleSpinner from 'components/CircleSpinner.vue'
-import { EOverlayTheme } from '../utils/notifications'
-import { ESpinnerSize } from '../types/ui'
+import { ESpinnerSize, EOverlayTheme } from '../types/ui'
 
 export default {
   title: 'CircleSpinner',
