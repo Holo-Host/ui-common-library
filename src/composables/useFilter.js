@@ -41,7 +41,7 @@ export function useFilter({ data, criteria }) {
                 return item[criterion.key] === filterValue.value
               } else {
                 // If not exact, check if the value includes the filter value
-                return item[criterion.key].toLowerCase().includes(filterValue.value.toLowerCase())
+                return item[criterion.key]?.toLowerCase().includes(filterValue.value.toLowerCase())
               }
             }
           })

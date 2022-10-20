@@ -40,3 +40,7 @@ export const EChipType = {
   success: 2,
   custom: 99
 }
+
+export const EModal = {
+  go_to_holofuel: 0
+}
