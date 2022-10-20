@@ -1,6 +1,6 @@
-import { onMounted, shallowRef } from 'vue'
+import { onMounted } from 'vue'
 import TheBanner from '../components/TheBanner.vue'
-import Docs from './markdown/TheBanner.mdx'
+import { useBanner } from '@/composables/useBanner'
 
 export default {
   title: 'TheBanner',
@@ -17,37 +17,17 @@ const kTemplate = (args) => ({
   },
 
   setup() {
-    const bannerRef = shallowRef()
+    const { showBanner } = useBanner()
 
     onMounted(() => {
-      bannerRef.value?.show(args)
+      showBanner(args)
     })
 
-    return { args, bannerRef }
+    return { args }
   },
 
   template: '<div><TheBanner ref="bannerRef" /></div>'
 })
-
-export const Readme = () => ({
-  setup() {
-    const bannerRef = shallowRef()
-
-    onMounted(() => {
-      bannerRef.value?.hide()
-    })
-
-    return { bannerRef }
-  },
-
-  template: '<div></div>'
-})
-
-Readme.parameters = {
-  docs: {
-    page: Docs
-  }
-}
 
 export const Default = kTemplate.bind({})
 Default.args = {
