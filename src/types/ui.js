@@ -43,6 +43,7 @@ export const EChipType = {
   info: 0,
   danger: 1,
   success: 2,
+  warning: 3,
   custom: 99
 }
 

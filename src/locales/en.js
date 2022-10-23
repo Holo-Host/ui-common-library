@@ -8,6 +8,7 @@ const translations = {
     close: 'Close',
     cpu: 'CPU',
     dont_show_this_message_again: "Don't show this message again",
+    draft: 'Draft',
     error: 'Error',
     errors: {
       email: 'Please enter a valid email.',
@@ -46,6 +47,7 @@ const translations = {
     network: 'Network',
     page_not_found: "Hmm... We're unable to find that page.",
     paused: 'Paused',
+    published: 'Published',
     rows_per_page: 'Rows per page',
     search: 'Search',
     sort_by: 'Sort by',

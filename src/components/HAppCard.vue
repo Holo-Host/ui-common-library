@@ -27,9 +27,21 @@
           {{ happ.name }}
 
           <BaseChip
-            v-if="happ.isPaused"
+            v-if="happ.is_draft || happ.isDraft"
+            :label="$t('$.draft')"
+            :type="EChipType.warning"
+          />
+
+          <BaseChip
+            v-else-if="happ.is_paused || happ.isPaused"
             :label="$t('$.paused')"
-            :type="EChipType.info"
+            :type="EChipType.danger"
+          />
+
+          <BaseChip
+            v-else
+            :label="$t('$.published')"
+            :type="EChipType.success"
           />
 
           <ArrowIcon class="happ-card__name-arrow-icon" />

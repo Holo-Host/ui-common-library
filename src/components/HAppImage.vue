@@ -1,7 +1,7 @@
 <template>
   <img
-    v-if="happ.logoUrl"
-    :src="happ.logoUrl"
+    v-if="happ.logoUrl || happ.logo_url"
+    :src="happ.logoUrl || happ.logo_url"
     alt="app-logo"
     :style="style"
     class="happ-image"
