@@ -44,7 +44,9 @@
             :type="EChipType.success"
           />
 
-          <ArrowIcon class="happ-card__name-arrow-icon" />
+          <slot name="link-icon">
+            <ArrowIcon class="happ-card__name-arrow-icon" />
+          </slot>
         </div>
 
         <div class="happ-card__earnings disabled">
