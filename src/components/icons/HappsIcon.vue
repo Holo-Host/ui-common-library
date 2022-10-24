@@ -1,9 +1,13 @@
 <template>
-  <Icon :fill="color" class='icon'>
-    <path :fill-opacity="fillOpacity" d="M17.3432 1H2.65684C1.74179 1 1 1.74179 1 2.65684V7.34316C1 8.25821 1.74179 9 2.65684 9H17.3432C18.2582 9 19 8.25821 19 7.34316V2.65684C19 1.74179 18.2582 1 17.3432 1Z"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path :fill-opacity="fillOpacity" d="M17.3432 9H2.65684C1.74179 9 1 9.74179 1 10.6568V15.3432C1 16.2582 1.74179 17 2.65684 17H17.3432C18.2582 17 19 16.2582 19 15.3432V10.6568C19 9.74179 18.2582 9 17.3432 9Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <Icon class='icon' :fill="white">
+    <path d="M19.3432 4H4.65684C3.74179 4 3 4.74179 3 5.65684V10.3432C3 11.2582 3.74179 12 4.65684 12H19.3432C20.2582 12 21 11.2582 21 10.3432V5.65684C21 4.74179 20.2582 4 19.3432 4Z" fill="none" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M19.3432 12H4.65684C3.74179 12 3 12.7418 3 13.6568V18.3432C3 19.2582 3.74179 20 4.65684 20H19.3432C20.2582 20 21 19.2582 21 18.3432V13.6568C21 12.7418 20.2582 12 19.3432 12Z" fill="none" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 8V8.01" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7 16V16.01" :stroke="color" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
   </Icon>
 </template>
+  
   
 <script>
 

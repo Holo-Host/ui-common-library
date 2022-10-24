@@ -27,21 +27,9 @@
           {{ happ.name }}
 
           <BaseChip
-            v-if="happ.is_draft || happ.isDraft"
-            :label="$t('$.draft')"
-            :type="EChipType.warning"
-          />
-
-          <BaseChip
-            v-else-if="happ.is_paused || happ.isPaused"
-            :label="$t('$.paused')"
-            :type="EChipType.danger"
-          />
-
-          <BaseChip
-            v-else-if="isPublished"
-            :label="$t('$.published')"
-            :type="EChipType.success"
+            v-if="isStateChipVisible"
+            :label="$t(stateChipProps.label)"
+            :type="stateChipProps.type"
           />
 
           <slot name="link-icon">
@@ -99,6 +87,40 @@ const earnings = computed(() =>
     ? formatCurrency(Number(props.happ.last7daysEarnings))
     : '--'
 )
+
+const isDraft = computed(() => props.happ.is_draft || props.happ.isDraft)
+
+const isStateChipVisible = computed(() => isDraft.value || props.happ?.is_paused || props.happ?.isPaused || props.isPublished)
+
+const stateChipProps = computed(() => {
+  if (isDraft.value) {
+    return {
+      label: '$.draft',
+      type: EChipType.warning
+    }
+  }
+
+  if (props.happ?.is_paused) { // The happ model from publisher portal uses is_paused and paused state is displayed as a red danger chip
+    return {
+      label: '$.paused',
+      type: EChipType.danger
+    }
+  }
+
+  if (props.happ?.isPaused) { // The happ model from host console uses isPaused and paused state is displayed as a blue info chip
+    return {
+      label: '$.paused',
+      type: EChipType.info
+    }
+  }
+
+  if (props.isPublished) {
+    return {
+      label: '$.published',
+      type: EChipType.success
+    }    
+  }
+})
 </script>
 
 <style lang="scss" scoped>
