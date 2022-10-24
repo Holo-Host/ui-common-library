@@ -39,7 +39,7 @@
           />
 
           <BaseChip
-            v-else
+            v-else-if="isPublished"
             :label="$t('$.published')"
             :type="EChipType.success"
           />
@@ -86,7 +86,12 @@ const props = defineProps({
   emptyCardLabel: {
     type: String,
     default: ''
-  }
+  },
+
+  isPublished: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const earnings = computed(() =>
