@@ -27,11 +27,6 @@
           {{ happ.name }}
 
           <slot name="status-chip">
-            <BaseChip
-              v-if="happ.isPaused"
-              :label="$t('$.paused')"
-              :type="EChipType.info"
-            />
           </slot>
 
           <slot name="link-icon">
@@ -54,10 +49,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import { EChipType } from '../types/ui'
 import { formatCurrency } from '../utils/numbers'
 import BaseCard from './BaseCard.vue'
-import BaseChip from './BaseChip.vue'
 import HAppCardUsage from './HAppCardUsage.vue'
 import HAppImage from './HAppImage.vue'
 import ArrowIcon from './icons/ArrowIcon.vue'
