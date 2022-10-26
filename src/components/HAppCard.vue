@@ -26,13 +26,12 @@
         <div class="happ-card__name">
           {{ happ.name }}
 
-          <BaseChip
-            v-if="happ.isPaused"
-            :label="$t('$.paused')"
-            :type="EChipType.info"
-          />
+          <slot name="status-chip">
+          </slot>
 
-          <ArrowIcon class="happ-card__name-arrow-icon" />
+          <slot name="link-icon">
+            <ArrowIcon class="happ-card__name-arrow-icon" />
+          </slot>
         </div>
 
         <div class="happ-card__earnings disabled">
@@ -50,10 +49,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import { EChipType } from '../types/ui'
 import { formatCurrency } from '../utils/numbers'
 import BaseCard from './BaseCard.vue'
-import BaseChip from './BaseChip.vue'
 import HAppCardUsage from './HAppCardUsage.vue'
 import HAppImage from './HAppImage.vue'
 import ArrowIcon from './icons/ArrowIcon.vue'
@@ -80,6 +77,7 @@ const earnings = computed(() =>
     ? formatCurrency(Number(props.happ.last7daysEarnings))
     : '--'
 )
+
 </script>
 
 <style lang="scss" scoped>

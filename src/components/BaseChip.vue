@@ -21,7 +21,7 @@ const props = defineProps({
     type: Number,
     default: EChipType.info,
     validator(value) {
-      return [EChipType.info, EChipType.danger, EChipType.success].includes(value)
+      return [EChipType.info, EChipType.danger, EChipType.success, EChipType.warning].includes(value)
     }
   },
 
@@ -37,6 +37,7 @@ const kChipTypeClass = {
   [EChipType.info]: `${kBaseClass}__info`,
   [EChipType.danger]: `${kBaseClass}__danger`,
   [EChipType.success]: `${kBaseClass}__success`,
+  [EChipType.warning]: `${kBaseClass}__warning`,
   [EChipType.custom]: `${kBaseClass}__custom`
 }
 
@@ -78,6 +79,11 @@ const computedCustomStyle = computed(() => {
   &__success {
     background-color: var(--green-light-color);
     color: var(--green-color);
+  }
+
+  &__warning {
+    background-color: var(--yellow-light-color);
+    color: var(--yellow-color);
   }
 }
 </style>
