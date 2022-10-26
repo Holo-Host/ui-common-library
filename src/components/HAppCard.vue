@@ -26,11 +26,13 @@
         <div class="happ-card__name">
           {{ happ.name }}
 
-          <BaseChip
-            v-if="isStateChipVisible"
-            :label="$t(stateChipProps.label)"
-            :type="stateChipProps.type"
-          />
+          <slot name="status-chip">
+            <BaseChip
+              v-if="happ.isPaused"
+              :label="$t('$.paused')"
+              :type="EChipType.info"
+            />
+          </slot>
 
           <slot name="link-icon">
             <ArrowIcon class="happ-card__name-arrow-icon" />
@@ -74,12 +76,7 @@ const props = defineProps({
   emptyCardLabel: {
     type: String,
     default: ''
-  },
-
-  isPublished: {
-    type: Boolean,
-    default: false
-  },
+  }
 })
 
 const earnings = computed(() =>
@@ -88,39 +85,6 @@ const earnings = computed(() =>
     : '--'
 )
 
-const isDraft = computed(() => props.happ.is_draft || props.happ.isDraft)
-
-const isStateChipVisible = computed(() => isDraft.value || props.happ?.is_paused || props.happ?.isPaused || props.isPublished)
-
-const stateChipProps = computed(() => {
-  if (isDraft.value) {
-    return {
-      label: '$.draft',
-      type: EChipType.warning
-    }
-  }
-
-  if (props.happ?.is_paused) { // The happ model from publisher portal uses is_paused and paused state is displayed as a red danger chip
-    return {
-      label: '$.paused',
-      type: EChipType.danger
-    }
-  }
-
-  if (props.happ?.isPaused) { // The happ model from host console uses isPaused and paused state is displayed as a blue info chip
-    return {
-      label: '$.paused',
-      type: EChipType.info
-    }
-  }
-
-  if (props.isPublished) {
-    return {
-      label: '$.published',
-      type: EChipType.success
-    }    
-  }
-})
 </script>
 
 <style lang="scss" scoped>
