@@ -82,15 +82,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
           },
           HC_APP_TIMEOUT
         )
-
-        // Wrap the result in an ok enum to match the structure returned from chaperone
-        return {
-          type: 'ok',
-          data: result
-        }
-      } catch (e) {
-        // unthrow the error from holochain, to match the chaperone pattern of just returning the error object
-        return e
+        
+        return result
       } finally {
         useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
