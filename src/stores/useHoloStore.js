@@ -81,17 +81,16 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       let result
 
       try {
-        result = await client.zomeCall({
+        result = await client.callZome({
           roleId,
           zomeName,
           fnName,
           payload
-        })
+        })        
       } finally {
         useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
       }
 
-      // result may be of form { type: 'ok', data: ... } or { type 'error', data: ... }, we're letting the caller deal with that
       return result
     },
 

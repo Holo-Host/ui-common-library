@@ -2174,10 +2174,10 @@
   resolved "https://registry.npmjs.org/@holo-host/wasm-key-manager/-/wasm-key-manager-1.0.0.tgz"
   integrity sha512-GTfeQ2iYvYYrIkuaF0QupWP/y8sdItwL6Tr1osyaU7eUsWtGfpZqDcTZny8KNDdnQAEEP2nDWZORA/Z3EMJa3w==
 
-"@holo-host/web-sdk@^0.6.6-prerelease":
-  version "0.6.6-prerelease"
-  resolved "https://registry.yarnpkg.com/@holo-host/web-sdk/-/web-sdk-0.6.6-prerelease.tgz#01fea6e2fc47f17957c98f302ba6a144f60d044b"
-  integrity sha512-ZuHGtEtevN2O9KAxBfKZOlaR/LhRA791Wo4Kv5sdU5caUBsYMkP3XH8FX20Eu2wDnMFHBNGDUPDgqlkAyIZsxA==
+"@holo-host/web-sdk@^0.6.8-prerelease":
+  version "0.6.8-prerelease"
+  resolved "https://registry.yarnpkg.com/@holo-host/web-sdk/-/web-sdk-0.6.8-prerelease.tgz#4a2b3911f7f81e9187d7cb9d1c0a23f0a9423f9e"
+  integrity sha512-mDfxf4LgX1Lk2oULmF70VD+BL8/wF9d/7yxH3qouebGSn30SkzrI/TNsqZfs19zeHVKp4Bm/FsjNfE++vcUhtg==
   dependencies:
     "@holo-host/comb" "^0.3.0"
 
@@ -2574,9 +2574,9 @@
   integrity sha512-ApwiSL2c9ObewdOE/sqt788P1C5lomBOHyO8nUBCr4ofErBCnYQ003NtJ8lS9OQZc11ximkbmgAZJjB8y6cCdA==
 
 "@msgpack/msgpack@^2.7.1":
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.7.2.tgz#f34b8aa0c49f0dd55eb7eba577081299cbf3f90b"
-  integrity sha512-rYEi46+gIzufyYUAoHDnRzkWGxajpD9vVXFQ3g1vbjrBm6P7MBmm+s/fqPa46sxa+8FOUdEuRQKaugo5a4JWpw==
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.8.0.tgz#4210deb771ee3912964f14a15ddfb5ff877e70b9"
+  integrity sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
