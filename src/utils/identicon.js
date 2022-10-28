@@ -100,7 +100,13 @@ export default function renderIcon (opts, canvas) {
 
   canvas.width = canvas.height = size
 
-  const cc = canvas.getContext('2d')
+  let cc
+  try {
+    cc = canvas.getContext('2d')
+  } catch (e) {
+    return // we're in a testing environment without a real canvas
+  }
+  
   if (!cc) return // we're in a testing environment without a real canvas
 
   cc.fillStyle = backgroundColor
