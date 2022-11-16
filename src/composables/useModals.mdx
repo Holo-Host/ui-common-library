@@ -1,0 +1,75 @@
+# useModals composable - this composable is used to manage the modals state and provide the modals show/hide logic.
+
+## Principles
+- Each modal component should be built using the `BaseModal` component from the `@ui-common-library` package.
+- Each Modal is responsible for detecting if it should be shown or not based on the `visibleModal` reactive value.
+- `visibleModal` is a reactive value that is provided by the `useModals` composable, that way we make sure there is always only one modal visible.
+- Any modal can be shown from anywhere in the app by calling the `showModal` method from the `useModals` composable and passing the modal name as a parameter.
+
+## useModals composable interface
+- `visibleModal: ref<EModal | null>(null)`: reactive value that holds the name of the currently visible modal
+- `showModal: () => void`: method that is used to show a modal by passing the modal name as a parameter
+- `hideModal: () => void`: method that is used to hide the currently visible modal
+
+`EModal` enum is defined per app and contains the names of all available modals that are used in the app.
+
+NOTE: As TypeScript is not used yet in the apps we can simulate the enum by defining a variable like below:
+```
+export const EModal = {
+  welcome: 0,
+  go_to_holofuel: 1
+}
+```
+
+## Usage:
+1. Build modal component
+
+```
+// eg. GoToHoloFuelModal.vue
+<template>
+  <BaseModal
+    :is-visible="visibleModal === EModal.go_to_holofuel"
+    @close="hideModal"
+  >
+    // Modal content
+  </BaseModal>
+</template>
+
+<script setup>
+...
+import { useModals } from '@uicommon/composables/useModals'
+import { EModal } from '@/constants/ui'
+...
+
+const { visibleModal, hideModal } = useModals()
+</script>
+```
+
+2. Mount the Modal component in the app.
+
+3. Use composable to show the modal from any component.
+```
+<script setup>
+  ...
+  import { useModals } from '@uicommon/composables/useModals'
+  import { EModal } from '@/constants/ui'
+  ...
+  const { showModal } = useModals()
+  ...
+  showModal(EModal.go_to_holofuel)
+  ...
+</script>
+```
+
+4. Use composable to hide the modal from any component.
+```
+<script setup>
+  ...
+  import { useModals } from '@uicommon/composables/useModals'
+  ...
+  const { hideModal } = useModals()
+  ...
+  hideModal()
+  ...
+</script>
+```

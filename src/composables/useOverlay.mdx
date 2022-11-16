@@ -1,0 +1,66 @@
+# useOverlay composable - this composable is used to manage the global app overlay.
+
+## Principles
+- The component uses Vue `teleport` that allows us to show it always at the `body`.
+- By using this component as shown below we can avoid mounting multiple overlays, we make sure we can have only one overlay (no stacking overlays one on top of another), we can use it from anywhere, we don't have to keep any extra props in Pinia store.
+
+## useOverlay composable interface
+- `isVisible: ref<boolean>(false)` - true if the overlay is visible
+- `message?: ref<string>('')` - optional message to show in the overlay
+- `type?: ref<EOverlayType>(EOverlayType.loading)` - type of the overlay (loading | message)
+- `icon?: ref<IconComponent>(null)` - optional icon to show in the overlay
+- `theme = ref<EOverlayTheme>(EOverlayTheme.light)` - optional theme of the overlay (light | dark)
+- `showOverlay: (ShowOverlayParamsInterface) => void` - method to show the overlay by default it will show the loading overlay
+- `hideOverlay: () => void` - method to hide the overlay
+- `showLoadingOverlay: () => void` - method to show the loading overlay, it simply calls `showOverlay` with the default params, but exist to be more explicit
+
+```
+ShowOverlayParamsInterface = {
+  type?: EOverlayType
+  message?: string
+  icon?: IconComponent
+  theme?: EOverlayTheme
+}
+```
+
+NOTE: As TypeScript is not used yet in the apps we can simulate the enums by defining a variable like below:
+```
+export const EOverlayType = {
+  loading: 0,
+  message: 1
+}
+
+export const EOverlayTheme = {
+  light: 0,
+  dark: 1
+}
+```
+
+## Usage:
+1. Mount the component at the root of your App.
+```
+// App.vue
+<template>
+  <TheOverlay />
+  <router-view />
+</template>
+```
+
+2. Use composable to show/hide the overlay from anywhere in the app.
+```
+...
+<script setup>
+  ...
+  import { useOverlay } from '@uicommon/composables/useOverlay'
+  ...
+  const { showLoadingOverlay, hideOverlay } = useOverlay()
+  ...
+  onMounted(async () => {
+    showLoadingOverlay()
+    await userStore.getUser()
+    hideOverlay()
+  })
+})
+  ...
+</script>
+```

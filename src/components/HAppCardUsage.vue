@@ -26,7 +26,7 @@ const props = defineProps({
 const items = computed(() => {
   return [
     {
-      value: presentMicroSeconds(props.happ.usage.cpu),
+      value: presentMicroSeconds(props.happ.usage?.cpu),
       unit: t('$.cpu'),
       isDisabled: true
     },
@@ -36,7 +36,7 @@ const items = computed(() => {
       isDisabled: true
     },
     {
-      value: presentBytes(props.happ.usage.bandwidth),
+      value: presentBytes(props.happ.usage?.bandwidth),
       unit: t('$.bandwidth'),
       isDisabled: false
     }

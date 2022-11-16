@@ -6,6 +6,11 @@ export const ESpinnerSize = {
   xl: 4
 }
 
+export const EOverlayTheme = {
+  light: 0,
+  dark: 1
+}
+
 export const EAlertType = {
   normal: 0,
   warning: 1,
@@ -38,5 +43,10 @@ export const EChipType = {
   info: 0,
   danger: 1,
   success: 2,
+  warning: 3,
   custom: 99
+}
+
+export const EModal = {
+  go_to_holofuel: 0
 }

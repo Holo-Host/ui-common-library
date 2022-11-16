@@ -9,10 +9,10 @@
       <button
         v-if="hasCloseButton"
         class="notification-banner__close-button"
-        @click="hide"
+        @click="hideBanner"
       >
         <ExIcon
-          :color="type === kTypes.warning ? '#313c59' : 'white'"
+          :color="type === EBannerType.warning ? '#313c59' : 'white'"
           :size="16"
         />
       </button>
@@ -29,46 +29,17 @@
 </template>
 
 <script setup>
-import { ref, shallowRef } from 'vue'
+import { useBanner, EBannerType } from '../composables/useBanner'
 import ExIcon from './icons/ExIcon.vue'
 
-const kTypes = {
-  error: 'error',
-  warning: 'warning',
-  success: 'success'
-}
-
-let timeout = 0
-const kHideTime = 5000
-
-const isVisible = ref(false)
-const message = ref('')
-const type = ref(kTypes.error)
-const hasCloseButton = ref(false)
-const contentComponent = shallowRef()
-
-function show(props) {
-  clearTimeout(timeout)
-  type.value = props?.type ?? kTypes.error
-  message.value = props?.message ?? ''
-  hasCloseButton.value = props?.hasCloseButton ?? false
-  contentComponent.value = props?.contentComponent ?? ''
-  isVisible.value = true
-
-  timeout = window.setTimeout(() => {
-    isVisible.value = false
-  }, kHideTime)
-}
-
-function hide() {
-  clearTimeout(timeout)
-  isVisible.value = false
-}
-
-defineExpose({
-  show,
-  hide
-})
+const {
+  isVisible,
+  message,
+  type,
+  hasCloseButton,
+  contentComponent,
+  hideBanner
+} = useBanner()
 </script>
 
 <style lang="scss" scoped>

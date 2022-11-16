@@ -1,8 +1,11 @@
 const kCurrencyDecimals = 2
 
-export function formatCurrency(value) {
-  return value.toFixed(kCurrencyDecimals).replace(/\d(?=(\d{3})+\.)/gu, '$&,')
+export function formatCurrency(value, decimals = kCurrencyDecimals) {
+  return decimals
+    ? value.toFixed(decimals).replace(/\d(?=(\d{3})+\.)/gu, '$&,')
+    : value.toLocaleString()
 }
+
 export const presentBytes = (bytes) => {
   if (isNaN(bytes)) {
     return '-- GB'
