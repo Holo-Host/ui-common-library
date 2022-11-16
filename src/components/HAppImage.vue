@@ -1,20 +1,29 @@
 <template>
-  <img
-    v-if="happ.logoUrl"
-    :src="happ.logoUrl"
-    alt="app-logo"
-    :style="style"
-    class="happ-image"
-  >
   <div
-    v-else
-    class="happ-image happ-image--empty"
-    :style="style"
-  />
+    class="happ-image"
+    :style="wrapperStyle"
+  >
+    <img
+      v-if="happ.logoUrl || happ.logo_url"
+      :src="happ.logoUrl || happ.logo_url"
+      ref="image"
+      alt="app-logo"
+      :style="style"
+      class="happ-image__image"
+    >
+    <div
+      v-else
+      class="happ-image--empty"
+      :style="style"
+    />
+  </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+
+const image = ref()
+const style = ref()
 
 const props = defineProps({
   happ: {
@@ -28,12 +37,29 @@ const props = defineProps({
   }
 })
 
-const style = computed(() => ({
+function resizeImage() {
+  const imageWidth = image.value.clientWidth
+  const imageHeight = image.value.clientHeight
+
+  // Resize based on higher value (width/height),
+  // this way we always keep the original image ratio.
+  style.value = imageWidth > imageHeight
+    ? { width: props.size }
+    : { height: props.size }
+}
+
+const wrapperStyle = computed(() => ({
   width: props.size,
   height: props.size,
   'font-size': props.size,
   'line-height': props.size
 }))
+
+onMounted(() => {
+  if (image.value) {
+    image.value.addEventListener('load', resizeImage)
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +73,7 @@ const style = computed(() => ({
   font-weight: bold;
   color: rgb(96 108 139 / 46%);
   margin-right: 10px;
+  overflow: hidden;
 
   &--empty {
     &::before,
