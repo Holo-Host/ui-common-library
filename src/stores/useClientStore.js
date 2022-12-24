@@ -31,12 +31,12 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       return useInterfaceStore().loadAppInfo()
     },
 
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {  
+    async callZome ({ roleName, zomeName, fnName, payload = null }) {  
       if (!this.isReady) {
         throw new Error('Tried to make zome call while client is not ready')
       }
 			
-      const result = await useInterfaceStore().callZome({ roleId, zomeName, fnName, payload })
+      const result = await useInterfaceStore().callZome({ roleName, zomeName, fnName, payload })
 			return result
     },
     

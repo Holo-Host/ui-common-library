@@ -55,15 +55,15 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 			}
     },
     
-    async callZome ({ roleId, zomeName, fnName, payload = null }) {
+    async callZome ({ roleName, zomeName, fnName, payload = null }) {
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
       }
 
-      const cellDatum = this.appInfo.cell_data.find(c => c.role_id === roleId)
+      const cellDatum = this.appInfo.cell_data.find(c => c.role_name === roleName)
 
       if (!cellDatum) {
-        throw new Error (`Couldn't find cell with role_id ${roleId}`)
+        throw new Error (`Couldn't find cell with role_name ${roleName}`)
       }
 
       const { cell_id } = cellDatum
