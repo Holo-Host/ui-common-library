@@ -1,33 +1,29 @@
 <template>
-  <tr class="base-table-empty-content">
-    <td colspan="100%">
-      <div>
-        <div
-          v-if="isLoading || isError"
-          class="base-table-empty-content__overlay"
-        >
-          <CircleSpinner
-            v-if="isLoading"
-            is-delayed
-          />
-          <div
-            v-else-if="isError"
-            class="base-table-empty-content__error-message"
-          >
-            <p>{{ $t('$.errors.generic_header') }}</p>
-            <BaseButton
-              :type="EButtonType.gray"
-              title="Try again"
-              @click="emit('try-again-clicked')"
-            />
-          </div>
-        </div>
-        <div v-else class="base-table-empty-content__empty-message">
-          {{ $t(emptyMessageTranslationKey) }}
-        </div>
+  <div>
+    <div
+      v-if="isLoading || isError"
+      class="base-table-empty-content__overlay"
+    >
+      <CircleSpinner
+        v-if="isLoading"
+        is-delayed
+      />
+      <div
+        v-else-if="isError"
+        class="base-table-empty-content__error-message"
+      >
+        <p>{{ $t('$.errors.generic_header') }}</p>
+        <BaseButton
+          :type="EButtonType.gray"
+          title="Try again"
+          @click="emit('try-again-clicked')"
+        />
       </div>
-    </td>
-  </tr>
+    </div>
+    <div v-else class="base-table-empty-content__empty-message">
+      {{ $t(emptyMessageTranslationKey) }}
+    </div>
+  </div>
 </template>
 
 <script setup>

@@ -13,6 +13,7 @@
         :for="inputId"
         class="base-input__label"
         :class="{ 'base-input__label--is-horizontal': isHorizontal }"
+        :style="labelStyles"
         data-test-base-input-label
       >
         {{ label }}
@@ -32,6 +33,7 @@
         :placeholder="placeholder"
         class="base-input__input"
         :class="{ 'disabled' : isDisabled, 'invalid' : !isValid }"
+        :style="styles"
         data-test-base-input-input
         @input="onInput($event)"
         @blur="$emit('blur')"
@@ -63,6 +65,16 @@ import InvisibleEyeIcon from './icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from './icons/VisibleEyeIcon.vue'
 
 const props = defineProps({
+  styles: {
+    type: String,
+    default: ''
+  },
+
+  labelStyles: {
+    type: String,
+    default: ''
+  },
+
   autocomplete: {
     type: String,
     default: ''
