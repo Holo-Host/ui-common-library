@@ -19,8 +19,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
 
-        if (state.appInfo?.cell_data) {
-          this.setAgentKeyFromAppInfo(state.appInfo)
+        if (state.appInfo?.agent_pub_key) {
+          this.agentKey = state.appInfo.agent_pub_key
         }
       })
 
@@ -45,19 +45,6 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       return result
     },
-
-    setAgentKeyFromAppInfo(appInfo) {
-      const {
-        cell_data: [
-          {
-            cell_id: [_dnaHash, agentKey]
-          }
-        ]
-      } = appInfo
-
-      this.agentKey = agentKey
-      console.log(`setting agentKey = ${encodeAgentId(agentKey)}`)
-    }
   }
 })
 
