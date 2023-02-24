@@ -20,7 +20,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isAvailable: state => state.agentState.isAvailable,
     isLoggedIn: state => state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
     error: state => !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
-    agentKey: (state) => state.appInfo?.cell_data?.[0].cell_id[1],
+    agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState.id
   },
   actions: {
