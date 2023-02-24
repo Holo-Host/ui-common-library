@@ -2,6 +2,8 @@
 
 A collection of components, stores and other javascript code for use in holo happ uis.
 
+This library includes a package.json that is only used for testing. You do NOT need to install any additional libraries to use the components in this project.
+
 ### Run tests
 ```
 npm run test

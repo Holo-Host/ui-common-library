@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@holo-host/identicon": "^0.1.0",
-    "@holo-host/web-sdk": "^0.6.8-prerelease",
+    "@holo-host/web-sdk": "^0.6.9-prerelease",
     "@testing-library/user-event": "^13.2.1",
     "add": "^2.0.6",
     "dayjs": "^1.11.5",
