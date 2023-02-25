@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { AppWebsocket } from "@holochain/client"
+import { AppWebsocket, CellType } from "@holochain/client"
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
@@ -60,7 +60,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         throw new Error('Tried to make a zome call before storing appInfo')
       }
 
-      const cellDatum = this.appInfo.cell_data.find(c => c.role_name === roleName)
+      const cellDatum = this.appInfo.cell_info[roleName][0][CellType.Provisioned]
 
       if (!cellDatum) {
         throw new Error (`Couldn't find cell with role_name ${roleName}`)
