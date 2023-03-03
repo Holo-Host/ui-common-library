@@ -24,8 +24,7 @@ const props = defineProps({
 
   headerStyles: {
     type: Object,
-    required: false,
-    default: {}
+    default: () => {}
   },
 
   sortBy: {

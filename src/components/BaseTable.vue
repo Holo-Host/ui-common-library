@@ -2,7 +2,6 @@
   <BaseCard  margin="sm" :classes="classes" :isEmpty="isEmpty"
   >
     <table class="base-table">
-   
       <BaseTableHeader
         :header-styles="headerStyles"
         :headers="headers"
@@ -24,9 +23,7 @@
       class="base-table__empty-content"
       @try-again-clicked="emit('try-again-clicked')"
     />
-
   </BaseCard>
-  
 
   <div class="base-table__footer">
     <BaseTablePagination
@@ -50,7 +47,7 @@ import BaseTablePagination from './BaseTablePagination.vue'
 
 const kDefaultPageSize = 10
 
-const emit = defineEmits(['try-again-clicked', 'page-number-changed', 'page-size-changed', ])
+const emit = defineEmits(['try-again-clicked', 'page-number-changed', 'page-size-changed'])
 
 const props = defineProps({
   headers: {
@@ -60,14 +57,12 @@ const props = defineProps({
 
   headerStyles: {
     type: Object,
-    required: false,
-    default: {}
+    default: () => {}
   },
-  
+
   classes: {
     type: Array,
-    required: false,
-    default: []
+    default: () => []
   },
 
   initialSortBy: {
@@ -131,7 +126,6 @@ const pagedData = computed(() => {
 const itemsCount = computed(() => sortedItems.value.length)
 
 watch(pageSize, () => (currentPage.value = 0))
-
 
 function onSortByChanged({ key, direction }) {
   sortBy.value = key
