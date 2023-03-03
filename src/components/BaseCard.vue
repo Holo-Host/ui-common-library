@@ -1,7 +1,11 @@
 <template>
   <div
-    class="card"
-    :class="{ 'two-columns': isMultiColumn }"
+    :class="[
+      'card',
+      { 'two-columns': isMultiColumn },
+      { 'overflow-clip': isEmpty },
+      ...classes,
+    ]"
   >
     <h2
       v-if="title"
@@ -16,7 +20,7 @@
       </h3>
     </h2>
 
-    <div class="card-content">
+    <div :class="['card-content', { 'min-y-200' : isEmpty }]">
       <div
         v-if="isLoading || isError || isDisabled"
         class="card-overlay"
@@ -93,6 +97,11 @@ defineProps({
     default: false
   },
 
+  isEmpty: {
+    type: Boolean,
+    default: false
+  },
+
   title: {
     type: String,
     default: ''
@@ -111,6 +120,11 @@ defineProps({
   margin: {
     type: String,
     default: 'md'
+  },
+
+  classes: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -189,7 +203,7 @@ const isMultiColumn = computed(() => slots.right && slots.left)
   }
 
   &--margin-sm {
-    margin: 20px 10px 0;
+    margin: 16px 5px 0;
   }
 }
 

@@ -112,10 +112,10 @@ function goToNextPage() {
     appearance: none;
     border: none;
     background-color: transparent;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--grey-dark-color);
-    padding: 1px 16px 0 6px;
+    padding: 1px 24px 0 6px;
     background-image: url("../../artifacts/images/chevron.svg");
     background-repeat: no-repeat;
     background-position: right;
@@ -126,15 +126,19 @@ function goToNextPage() {
     margin-left: auto;
   }
 
+  &__page {
+    display: flex;
+  }
+
   &__page-arrow-right {
-    margin-left: 42px;
-    transform: scale(1.4);
+    margin-left: 20px;
+    transform: scale(1.8);
     cursor: pointer;
   }
 
   &__page-arrow-left {
-    margin-left: 42px;
-    transform: scale(1.4) rotate(180deg);
+    margin-left: 10px;
+    transform: scale(1.8) rotate(180deg);
     cursor: pointer;
   }
 

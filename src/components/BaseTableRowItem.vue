@@ -3,21 +3,28 @@
     :class="[
       { 'table-row-item__mobile-header': isVisibleOnMobile },
       { 'table-row-item--bold': isBold },
+      ...classes,
     ]"
     class="table-row-item"
   >
     <div
       class="table-row-item__content"
-      :class="`table-row-item__content--align-${align}`"
+      :class="`table-row-item__content--align-${align} table-row-item__content--wrap-${wrap}`"
     >
       {{ value }}
       <slot />
     </div>
   </td>
+  <slot name="bottom" />
 </template>
 
 <script setup>
 defineProps({
+  classes: {
+    type: Array,
+    default: () => []
+  },
+
   value: {
     type: String,
     default: ''
@@ -31,6 +38,14 @@ defineProps({
   isBold: {
     type: Boolean,
     default: false
+  },
+
+  wrap: {
+    type: String,
+    default: 'normal',
+    validator(value) {
+      return ['normal', 'anywhere', 'break-word'].includes(value)
+    }
   },
 
   align: {
@@ -65,6 +80,18 @@ defineProps({
 
     &--align-center {
       justify-content: center;
+    }
+
+    &--wrap-break-word {
+      overflow-wrap: break-word;
+    }
+
+    &--wrap-anywhere {
+      overflow-wrap: anywhere;
+    }
+
+    &--wrap-normal {
+      overflow-wrap: normal;
     }
   }
 

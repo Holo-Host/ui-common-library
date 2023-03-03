@@ -5,6 +5,7 @@
       { 'header-row-item--is-selected': isSelected },
       { 'header-row-item--is-sortable': header.isSortable },
       { 'header-row-item__mobile-header': header.isVisibleOnMobile },
+      (header.align ? `header-row-item__content--align-${header.align}` : 'start')
     ]"
     :title="header.label"
     class="header-row-item"
@@ -50,7 +51,6 @@ defineProps({
 
 <style lang="scss" scoped>
 .header-row-item {
-  text-align: start;
   padding: 0 0 28px 26px;
   font-weight: 600;
   user-select: none;

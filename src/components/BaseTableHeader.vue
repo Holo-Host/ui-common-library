@@ -1,5 +1,5 @@
 <template>
-  <tr class="header-row">
+  <tr class="header-row" :style="headerStyles">
     <BaseTableHeaderItem
       v-for="header in headers"
       :key="header.key"
@@ -20,6 +20,11 @@ const props = defineProps({
   headers: {
     type: Object,
     required: true
+  },
+
+  headerStyles: {
+    type: Object,
+    default: () => {}
   },
 
   sortBy: {

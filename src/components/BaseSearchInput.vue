@@ -1,6 +1,7 @@
 <template>
   <div class="base-filter">
     <div
+      v-if="hasLabel"
       class="base-filter__label"
       :class="{ 'base-filter--disabled': isDisabled }"
     >
@@ -12,13 +13,16 @@
     >
       <input
         :value="value"
+        :style="inputStyles"
         class="base-filter__filter-input"
+        :placeholder="placeholder"
         @input="onInput"
       />
 
       <ExIcon
         v-if="value"
         :size="12"
+        :style="iconStyles"
         class="base-filter__ex-icon"
         @click="clear"
       />
@@ -36,9 +40,29 @@ const props = defineProps({
     required: true
   },
 
+  placeholder: {
+    type: String,
+    default: ''
+  },
+
+  inputStyles: {
+    type: Object,
+    default: () => {}
+  },
+
+  iconStyles: {
+    type: Object,
+    default: () => {}
+  },
+
   isDisabled: {
     type: Boolean,
     default: false
+  },
+
+  hasLabel: {
+    type: Boolean,
+    default: true
   },
 
   labelTranslationKey: {
@@ -102,8 +126,8 @@ const clear = () => {
   }
 
   &__filter-input {
-    border: 1px solid var(--grey-light-color);
-    border-radius: 5px;
+    border: 1px solid rgb(0 129 141);
+    border-radius: 8px;
     padding: 3px 5px;
 
     &:focus {

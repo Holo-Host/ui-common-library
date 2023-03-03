@@ -1,7 +1,9 @@
 <template>
-  <BaseCard margin="sm">
+  <BaseCard  margin="sm" :classes="classes" :isEmpty="isEmpty"
+  >
     <table class="base-table">
       <BaseTableHeader
+        :header-styles="headerStyles"
         :headers="headers"
         :sort-by="sortBy"
         @sort-by-changed="onSortByChanged"
@@ -11,16 +13,16 @@
         v-if="!isEmpty"
         :items="pagedData"
       />
-
-      <BaseTableEmptyContent
-        v-else
-        :is-loading="isLoading"
-        :is-error="isError"
-        :empty-message-translation-key="emptyMessageTranslationKey"
-        class="base-table__empty-content"
-        @try-again-clicked="emit('try-again-clicked')"
-      />
     </table>
+
+    <BaseTableEmptyContent
+      v-if="isEmpty"
+      :is-loading="isLoading"
+      :is-error="isError"
+      :empty-message-translation-key="emptyMessageTranslationKey"
+      class="base-table__empty-content"
+      @try-again-clicked="emit('try-again-clicked')"
+    />
   </BaseCard>
 
   <div class="base-table__footer">
@@ -45,12 +47,22 @@ import BaseTablePagination from './BaseTablePagination.vue'
 
 const kDefaultPageSize = 10
 
-const emit = defineEmits(['try-again-clicked'])
+const emit = defineEmits(['try-again-clicked', 'page-number-changed', 'page-size-changed'])
 
 const props = defineProps({
   headers: {
     type: Object,
     required: true
+  },
+
+  headerStyles: {
+    type: Object,
+    default: () => {}
+  },
+
+  classes: {
+    type: Array,
+    default: () => []
   },
 
   initialSortBy: {
@@ -115,7 +127,6 @@ const itemsCount = computed(() => sortedItems.value.length)
 
 watch(pageSize, () => (currentPage.value = 0))
 
-
 function onSortByChanged({ key, direction }) {
   sortBy.value = key
   sortDirection.value = direction
@@ -123,10 +134,12 @@ function onSortByChanged({ key, direction }) {
 
 function onPageChanged(page) {
   currentPage.value = page
+  emit('page-number-changed', { current: Number(page), total: Number(itemsCount) })
 }
 
 function onPageSizeChanged(size) {
   pageSize.value = size
+  emit('page-size-changed', Number(size))
 }
 </script>
 

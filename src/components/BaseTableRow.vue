@@ -2,7 +2,8 @@
   <tr
     :class="[
       'base-table-row',
-      {'base-table-row--is-expanded': isExpanded }
+      {'base-table-row--is-expanded': isExpanded },
+      ...classes
     ]"
   >
     <slot />
@@ -26,6 +27,13 @@
 <script setup>
 import { ref } from 'vue'
 import RightChevronIcon from './icons/RightChevronIcon.vue'
+
+defineProps({
+  classes: {
+    type: Array,
+    default: () => []
+  }
+})
 
 const isExpanded = ref(false)
 
