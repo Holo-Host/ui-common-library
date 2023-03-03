@@ -47,12 +47,12 @@ const props = defineProps({
 
   inputStyles: {
     type: Object,
-    default: {}
+    default: () => {}
   },
 
   iconStyles: {
     type: Object,
-    default: {}
+    default: () => {}
   },
 
   isDisabled: {

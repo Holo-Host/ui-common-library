@@ -3,7 +3,7 @@
     :class="[
       'card',
       { 'two-columns': isMultiColumn },
-      ( isEmpty ? 'overflow-clip' : '' ),
+      { 'overflow-clip': isEmpty },
       ...classes,
     ]"
   >
@@ -20,7 +20,7 @@
       </h3>
     </h2>
 
-    <div :class="['card-content', (isEmpty ? 'min-y-200' : '')]">
+    <div :class="['card-content', { 'min-y-200' : isEmpty }]">
       <div
         v-if="isLoading || isError || isDisabled"
         class="card-overlay"
@@ -124,9 +124,8 @@ defineProps({
 
   classes: {
     type: Array,
-    required: false,
-    default: []
-  },
+    default: () => []
+  }
 })
 
 const emit = defineEmits(['more-clicked', 'try-again-clicked'])

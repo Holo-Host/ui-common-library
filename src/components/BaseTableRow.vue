@@ -31,7 +31,7 @@ import RightChevronIcon from './icons/RightChevronIcon.vue'
 defineProps({
   classes: {
     type: Array,
-    default: []
+    default: () => []
   }
 })
 

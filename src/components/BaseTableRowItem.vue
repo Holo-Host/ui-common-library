@@ -22,7 +22,7 @@
 defineProps({
   classes: {
     type: Array,
-    default: []
+    default: () => []
   },
 
   value: {
@@ -85,7 +85,7 @@ defineProps({
     &--wrap-break-word {
       overflow-wrap: break-word;
     }
-    
+
     &--wrap-anywhere {
       overflow-wrap: anywhere;
     }
