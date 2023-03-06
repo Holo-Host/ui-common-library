@@ -1,8 +1,9 @@
 <template>
   <tr
+    class="base-table-row"
     :class="[
-      'base-table-row',
       {'base-table-row--is-expanded': isExpanded },
+      {'base-table-row--is-expandable': isExpandable },
       ...classes
     ]"
   >
@@ -17,8 +18,8 @@
 
   <tr
     v-if="isExpanded"
-    :class="[{'base-table-row__expanded-content--is-expanded': isExpanded }]"
     class="base-table-row__expanded-content"
+    :class="[{'base-table-row__expanded-content--is-expanded': isExpanded }]"
   >
     <slot name="expanded-content" />
   </tr>
@@ -32,6 +33,11 @@ defineProps({
   classes: {
     type: Array,
     default: () => []
+  },
+
+  isExpandable: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -48,19 +54,43 @@ function toggleExpanded() {
 
   &__expanded-content {
     display: none;
-  }
-}
 
-.base-table-row:last-child {
-  border: none;
+    &--is-expanded {
+      display: table-row;
+    }
+  }
+
+  &--is-expandable {
+    &--is-expanded {
+      border-bottom: none;
+    }
+
+    .up-chevron {
+      display: flex;
+      position: absolute;
+      right: 5px;
+      transform: scale(2) rotate(270deg);
+      margin: 14px 15px 0 auto;
+    }
+
+    .down-chevron {
+      display: flex;
+      position: absolute;
+      right: 5px;
+      transform: scale(2) rotate(90deg);
+      margin: 20px 15px 0 auto;
+    }
+  }
 }
 
 .up-chevron {
   display: none;
+  cursor: pointer;
 }
 
 .down-chevron {
   display: none;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1050px) {
