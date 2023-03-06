@@ -4,6 +4,12 @@ A collection of components, stores and other javascript code for use in holo hap
 
 This library includes a package.json that is only used for testing. You do NOT need to install any additional libraries to use the components in this project.
 
+## Ownership Info
+Codeowner: @mateuszRybczonek @paterick
+Consulted: @robbiecarlton @jettech
+Informed: None
+
+
 ### Run tests
 ```
 npm run test
