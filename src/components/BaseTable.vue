@@ -127,6 +127,11 @@ const itemsCount = computed(() => sortedItems.value.length)
 
 watch(pageSize, () => (currentPage.value = 0))
 
+// Set first page each time the items change
+// this prevents us staying on non-existing page when
+// new data is presented
+watch(itemsCount, () => (currentPage.value = 0))
+
 function onSortByChanged({ key, direction }) {
   sortBy.value = key
   sortDirection.value = direction
