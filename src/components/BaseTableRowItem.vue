@@ -3,9 +3,11 @@
     :class="[
       { 'table-row-item__mobile-header': isVisibleOnMobile },
       { 'table-row-item--bold': isBold },
+      { 'table-row-item--clickable': isClickable },
       ...classes,
     ]"
     class="table-row-item"
+    @click="onClick"
   >
     <div
       class="table-row-item__content"
@@ -19,7 +21,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   classes: {
     type: Array,
     default: () => []
@@ -40,6 +42,11 @@ defineProps({
     default: false
   },
 
+  isClickable: {
+    type: Boolean,
+    default: false
+  },
+
   wrap: {
     type: String,
     default: 'normal',
@@ -56,6 +63,14 @@ defineProps({
     }
   }
 })
+
+const emit = defineEmits(['click'])
+
+function onClick() {
+  if (props.isClickable) {
+    emit('click')
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -97,6 +112,10 @@ defineProps({
 
   &--bold {
     font-weight: bold;
+  }
+
+  &--clickable {
+    cursor: pointer;
   }
 }
 
