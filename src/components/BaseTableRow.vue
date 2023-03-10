@@ -9,11 +9,20 @@
   >
     <slot />
 
-    <RightChevronIcon
-      :class="[isExpanded ? 'up-chevron' : 'down-chevron']"
-      color="#00CAD9"
+    <BaseTableRowItem
+      v-if="isExpandable"
+      is-visible-on-mobile
+      is-clickable
+      align="center"
       @click="toggleExpanded"
-    />
+    >
+      <div class="base-table-row__expand-arrow">
+        <RightChevronIcon
+          :class="[isExpanded ? 'base-table-row__expand-arrow-up-chevron' : 'base-table-row__expand-arrow-down-chevron']"
+          color="#00CAD9"
+        />
+      </div>
+    </BaseTableRowItem>
   </tr>
 
   <tr
@@ -27,6 +36,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import BaseTableRowItem from './BaseTableRowItem.vue'
 import RightChevronIcon from './icons/RightChevronIcon.vue'
 
 defineProps({
@@ -60,37 +70,32 @@ function toggleExpanded() {
     }
   }
 
-  &--is-expandable {
-    &--is-expanded {
-      border-bottom: none;
-    }
+  &__expand-arrow-container {
+    cursor: pointer;
+  }
 
-    .up-chevron {
-      display: flex;
-      position: absolute;
-      right: 5px;
+  &__expand-arrow {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    &-up-chevron {
       transform: scale(2) rotate(270deg);
-      margin: 14px 15px 0 auto;
+      transform-origin: 20% 40%;
     }
 
-    .down-chevron {
-      display: flex;
-      position: absolute;
-      right: 5px;
+    &-down-chevron {
       transform: scale(2) rotate(90deg);
-      margin: 20px 15px 0 auto;
     }
   }
 }
 
 .up-chevron {
   display: none;
-  cursor: pointer;
 }
 
 .down-chevron {
   display: none;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 1050px) {
@@ -113,6 +118,7 @@ function toggleExpanded() {
     transform: scale(1.4) rotate(270deg);
     padding: 5px;
     margin: 7px 0 0 auto;
+    cursor: pointer;
   }
 
   .down-chevron {
@@ -120,6 +126,7 @@ function toggleExpanded() {
     transform: scale(1.4) rotate(90deg);
     padding: 5px;
     margin: 12px 0 -5px auto;
+    cursor: pointer;
   }
 }
 </style>

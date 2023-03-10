@@ -3,9 +3,11 @@
     :class="[
       { 'table-row-item__mobile-header': isVisibleOnMobile },
       { 'table-row-item--bold': isBold },
+      { 'table-row-item--clickable': isClickable },
       ...classes,
     ]"
     class="table-row-item"
+    @click="isClickable ? emit('click'): () => {}"
   >
     <div
       class="table-row-item__content"
@@ -40,6 +42,11 @@ defineProps({
     default: false
   },
 
+  isClickable: {
+    type: Boolean,
+    default: false
+  },
+
   wrap: {
     type: String,
     default: 'normal',
@@ -56,6 +63,8 @@ defineProps({
     }
   }
 })
+
+const emit = defineEmits(['click'])
 </script>
 
 <style lang="scss" scoped>
@@ -97,6 +106,10 @@ defineProps({
 
   &--bold {
     font-weight: bold;
+  }
+
+  &--clickable {
+    cursor: pointer;
   }
 }
 
