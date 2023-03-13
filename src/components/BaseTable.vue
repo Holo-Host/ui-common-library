@@ -1,39 +1,40 @@
 <template>
-  <BaseCard  margin="sm" :classes="classes" :isEmpty="isEmpty"
-  >
-    <table class="base-table">
-      <BaseTableHeader
-        :header-styles="headerStyles"
-        :headers="headers"
-        :sort-by="sortBy"
-        @sort-by-changed="onSortByChanged"
+  <div>
+    <BaseCard  margin="sm" :classes="classes" :isEmpty="isEmpty">
+      <table class="base-table">
+        <BaseTableHeader
+          :header-styles="headerStyles"
+          :headers="headers"
+          :sort-by="sortBy"
+          @sort-by-changed="onSortByChanged"
+        />
+
+        <slot
+          v-if="!isEmpty"
+          :items="pagedData"
+        />
+      </table>
+
+      <BaseTableEmptyContent
+        v-if="isEmpty"
+        :is-loading="isLoading"
+        :is-error="isError"
+        :empty-message-translation-key="emptyMessageTranslationKey"
+        class="base-table__empty-content"
+        @try-again-clicked="emit('try-again-clicked')"
       />
+    </BaseCard>
 
-      <slot
-        v-if="!isEmpty"
-        :items="pagedData"
+    <div class="base-table__footer">
+      <BaseTablePagination
+        :page-size="pageSize"
+        :current-page="currentPage"
+        :items-count="itemsCount"
+        :is-disabled="isLoading || isError || !items.length"
+        @page-size-changed="onPageSizeChanged"
+        @page-changed="onPageChanged"
       />
-    </table>
-
-    <BaseTableEmptyContent
-      v-if="isEmpty"
-      :is-loading="isLoading"
-      :is-error="isError"
-      :empty-message-translation-key="emptyMessageTranslationKey"
-      class="base-table__empty-content"
-      @try-again-clicked="emit('try-again-clicked')"
-    />
-  </BaseCard>
-
-  <div class="base-table__footer">
-    <BaseTablePagination
-      :page-size="pageSize"
-      :current-page="currentPage"
-      :items-count="itemsCount"
-      :is-disabled="isLoading || isError || !items.length"
-      @page-size-changed="onPageSizeChanged"
-      @page-changed="onPageChanged"
-    />
+    </div>
   </div>
 </template>
 
@@ -47,7 +48,12 @@ import BaseTablePagination from './BaseTablePagination.vue'
 
 const kDefaultPageSize = 10
 
-const emit = defineEmits(['try-again-clicked', 'page-number-changed', 'page-size-changed'])
+const emit = defineEmits([
+  'try-again-clicked',
+  'page-number-changed',
+  'page-size-changed',
+  'sort-by-changed'
+])
 
 const props = defineProps({
   headers: {
@@ -135,6 +141,7 @@ watch(itemsCount, () => (currentPage.value = 0))
 function onSortByChanged({ key, direction }) {
   sortBy.value = key
   sortDirection.value = direction
+  emit('sort-by-changed', { key, direction })
 }
 
 function onPageChanged(page) {
