@@ -49,6 +49,7 @@ function onHeaderClicked(header) {
 
     emit('sortByChanged', {
       key: header.key,
+      type: header.type,
       direction: sortDirection.value
     })
   }
