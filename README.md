@@ -75,8 +75,8 @@ export const useHolochainStore = makeUseHolochainStore({
   app_ws_url: 'http://localhost:8888', // path to your local hc app websocket
 })
 
-const CHAPERONE_URL = process.env.VUE_APP_CHAPERONE_SERVER_URL
-  ? process.env.VUE_APP_CHAPERONE_SERVER_URL
+const CHAPERONE_URL = import.meta.env.VITE_APP_CHAPERONE_SERVER_URL
+  ? import.meta.env.VITE_APP_CHAPERONE_SERVER_URL
   : "http://localhost:24274"
 
 export const useHoloStore = makeUseHoloStore({
