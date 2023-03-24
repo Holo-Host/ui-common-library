@@ -101,6 +101,7 @@ const pageSize = ref(kDefaultPageSize)
 const currentPage = ref(0)
 
 const sortBy = ref(props.initialSortBy)
+const sortByType = ref('string')
 const sortDirection = ref(ESortDirections.desc)
 
 const isEmpty = computed(() => props.isLoading || !props.items.length || props.isError)
@@ -108,11 +109,15 @@ const isEmpty = computed(() => props.isLoading || !props.items.length || props.i
 const sortedItems = computed(() => {
   const sortKey = sortBy.value
 
-  const itemsCopy = [...props.items]
-
-  return itemsCopy.sort((a, b) => {
+  return [...props.items].sort((a, b) => {
     if (a[sortKey] === b[sortKey]) {
       return 0
+    }
+
+    if (sortByType.value === 'date') {
+      return sortDirection.value === ESortDirections.desc
+        ? new Date(a[sortKey]).getTime() - new Date(b[sortKey]).getTime()
+        : new Date(b[sortKey]).getTime() - new Date(a[sortKey]).getTime()
     }
 
     if (sortDirection.value === ESortDirections.desc) {
@@ -138,10 +143,11 @@ watch(pageSize, () => (currentPage.value = 0))
 // new data is presented
 watch(itemsCount, () => (currentPage.value = 0))
 
-function onSortByChanged({ key, direction }) {
+function onSortByChanged({ key, type, direction }) {
   sortBy.value = key
+  sortByType.value = type
   sortDirection.value = direction
-  emit('sort-by-changed', { key, direction })
+  emit('sort-by-changed', { key, type, direction })
 }
 
 function onPageChanged(page) {
