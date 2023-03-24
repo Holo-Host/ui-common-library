@@ -116,8 +116,8 @@ const sortedItems = computed(() => {
 
     if (sortByType.value === 'date') {
       return sortDirection.value === ESortDirections.desc
-        ? new Date(a[sortKey]).getTime() - new Date(b[sortKey]).getTime()
-        : new Date(b[sortKey]).getTime() - new Date(a[sortKey]).getTime()
+        ? new Date(b[sortKey]).getTime() - new Date(a[sortKey]).getTime()
+        : new Date(a[sortKey]).getTime() - new Date(b[sortKey]).getTime()
     }
 
     if (sortDirection.value === ESortDirections.desc) {
