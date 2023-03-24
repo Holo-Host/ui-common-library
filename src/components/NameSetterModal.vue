@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import Button from './Button'
-import Modal from './Modal'
+import Button from './Button.vue'
+import Modal from './Modal.vue'
 
 export default {
   name: 'NameSetterModal',
