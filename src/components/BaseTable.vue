@@ -39,7 +39,6 @@
 </template>
 
 <script setup>
-import dayjs from 'dayjs'
 import { computed, ref, watch } from 'vue'
 import { ESortDirections } from '../types/ui'
 import BaseCard from './BaseCard.vue'
@@ -116,13 +115,9 @@ const sortedItems = computed(() => {
     }
 
     if (sortByType.value === 'date') {
-      const isAfter = dayjs(a[sortKey]).isAfter(dayjs(b[sortKey]))
-
-      if (sortDirection.value === ESortDirections.desc) {
-        return isAfter ? -1 : 1
-      } else {
-        return isAfter ? 1 : -1
-      }
+      return sortDirection.value === ESortDirections.desc
+        ? new Date(a[sortKey]).getTime() - new Date(b[sortKey]).getTime()
+        : new Date(b[sortKey]).getTime() - new Date(a[sortKey]).getTime()
     }
 
     if (sortDirection.value === ESortDirections.desc) {
