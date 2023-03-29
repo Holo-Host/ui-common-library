@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ExIcon from './icons/ExIcon'
+import ExIcon from './icons/ExIcon.vue'
 
 export default {
   name: 'Modal',

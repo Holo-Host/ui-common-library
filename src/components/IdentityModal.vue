@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import Button from './Button'
+import Button from './Button.vue'
 import Identicon from './Identicon.vue'
-import Modal from './Modal'
+import Modal from './Modal.vue'
 
 export default {
   name: 'IdentityModal',
