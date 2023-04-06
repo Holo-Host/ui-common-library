@@ -74,21 +74,22 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     },
 
     async callZome(args) {
-      const { roleId, zomeName, fnName, payload } = args
+      const { role_name, zome_name, fn_name, payload } = args
+      console.log(`useHolo store callZome role: ${role_name} zome: ${zome_name} fn: ${fn_name}`, payload, args)
 
-      useIsLoadingStore().callIsLoading({ zomeName, fnName })
+      useIsLoadingStore().callIsLoading({ zomeName: zome_name, fnName: fn_name })
 
       let result
 
       try {
         result = await client.callZome({
-          roleId,
-          zomeName,
-          fnName,
+          role_name,
+          zome_name,
+          fn_name,
           payload
         })        
       } finally {
-        useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
+        useIsLoadingStore().callIsNotLoading({ zomeName: zome_name, fnName: fn_name })
       }
 
       return result
