@@ -3,6 +3,7 @@
     :class="[
       { 'table-row-item__mobile-header': isVisibleOnMobile },
       { 'table-row-item--bold': isBold },
+      { 'table-row-item--italic': isItalic },
       { 'table-row-item--clickable': isClickable },
       ...classes,
     ]"
@@ -38,6 +39,11 @@ const props = defineProps({
   },
 
   isBold: {
+    type: Boolean,
+    default: false
+  },
+
+  isItalic: {
     type: Boolean,
     default: false
   },
@@ -112,6 +118,10 @@ function onClick() {
 
   &--bold {
     font-weight: bold;
+  }
+
+  &--italic {
+    font-style: italic;
   }
 
   &--clickable {
