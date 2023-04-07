@@ -77,7 +77,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       const { role_name, zome_name, fn_name, payload } = args
       console.log(`useHolo store callZome role: ${role_name} zome: ${zome_name} fn: ${fn_name}`, payload, args)
 
-      useIsLoadingStore().callIsLoading({ zomeName: zome_name, fnName: fn_name })
+      useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       let result
 
@@ -89,7 +89,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
           payload
         })        
       } finally {
-        useIsLoadingStore().callIsNotLoading({ zomeName: zome_name, fnName: fn_name })
+        useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
 
       return result

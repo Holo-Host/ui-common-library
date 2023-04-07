@@ -73,7 +73,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         throw new Error(`Couldn't find cell with role_name ${role_name}`)
       }
 
-      useIsLoadingStore().callIsLoading({ zomeName: zome_name, fnName: fn_name })
+      useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       try {
         const result = await this.client.callZome(
@@ -90,7 +90,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         
         return result
       } finally {
-        useIsLoadingStore().callIsNotLoading({ zomeName: zome_name, fnName: fn_name })
+        useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     }
   }
