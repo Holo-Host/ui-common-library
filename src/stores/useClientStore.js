@@ -42,7 +42,7 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       const result = await useInterfaceStore().callZome({ role_name, zome_name, fn_name, payload })
 
-      console.log(`${zomePath} returned with ${inspect(result)}`)
+      console.log(`${zomePath} result`, result)
 
       return result
     },
