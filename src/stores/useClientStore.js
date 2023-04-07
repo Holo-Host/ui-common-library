@@ -32,7 +32,6 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
     },
 
     async callZome({ role_name, zome_name, fn_name, payload = null }) {
-      console.log(`Client store callZome called with role: ${role_name} zome: ${zome_name} fn: ${fn_name}`)
       const zomePath = `${zome_name}.${fn_name}`
       console.log(`calling ${zomePath} with ${inspect(payload)}`)
 

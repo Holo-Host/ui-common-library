@@ -75,7 +75,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
 
     async callZome(args) {
       const { role_name, zome_name, fn_name, payload } = args
-      console.log(`useHolo store callZome role: ${role_name} zome: ${zome_name} fn: ${fn_name}`, payload, args)
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
