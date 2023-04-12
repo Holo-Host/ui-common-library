@@ -55,28 +55,32 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
     },
 
-    async callZome({ roleId, zomeName, fnName, payload = null }) {
+    async callZome(args) {
+      const { zome_name, fn_name, payload } = args
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
       }
 
-      const cellDatum = this.appInfo.cell_data.find(c => c.role_id === roleId)
-
-      if (!cellDatum) {
-        throw new Error(`Couldn't find cell with role_id ${roleId}`)
+      const role_names = Object.keys(app_info.cell_info)
+      if (role_names.length === 0 ) {
+        throw new Error('No cells found in appInfo')
       }
 
-      const { cell_id } = cellDatum
+      const roleName = role_names.find(roleName => roleName === role_name)
 
-      useIsLoadingStore().callIsLoading({ zomeName, fnName })
+      if (!roleName) {
+        throw new Error(`Couldn't find cell with role_name ${role_name}`)
+      }
+
+      useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       try {
         const result = await this.client.callZome(
           {
             cap_secret: null,
-            cell_id,
-            zome_name: zomeName,
-            fn_name: fnName,
+            role_name,
+            zome_name,
+            fn_name,
             payload,
             provenance: cell_id[1]
           },
@@ -85,7 +89,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         
         return result
       } finally {
-        useIsLoadingStore().callIsNotLoading({ zomeName, fnName })
+        useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     }
   }

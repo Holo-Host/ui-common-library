@@ -52,9 +52,9 @@ type Signal = {
 ```
 
 ### useIsLoadingStore
-`isLoadingStore` allows you to check the loading status of a particular zomeName, fnName pair. calling
+`isLoadingStore` allows you to check the loading status of a particular zome_name, fn_name pair. calling
 ```
-useIsLoadingStore().isLoading({ zomeName, fnName })
+useIsLoadingStore().isLoading({ zome_name, fn_name })
 ```
 will return a bool
 
@@ -106,9 +106,9 @@ const clientStore = useClientStore()
 if (clientStore.isReady) {
   console.log(await clientStore.appInfo()) 
   clientStore.callZome({
-    roleId: 'your-dna-role',
-    zomeName: 'a-zome',
-    fnName: 'a-fn',
+    role_name: 'your-dna-role',
+    zome_name: 'a-zome',
+    fn_name: 'a-fn',
     payload: null
   })
 }

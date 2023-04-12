@@ -3,9 +3,9 @@
 export const presentHcSignal = hcSignal => {
   return {
     cell: {
-      cell_id: hcSignal.data.cellId,
+      cell_id: hcSignal.cellId,
       role_id: 'unknown'
     },
-    data: hcSignal.data.payload
+    data: hcSignal.payload
   }
 }
