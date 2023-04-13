@@ -1,5 +1,6 @@
 <template>
   <td
+    ref="el"
     :class="[
       { 'table-row-item__mobile-header': isVisibleOnMobile },
       { 'table-row-item--bold': isBold },
@@ -22,6 +23,9 @@
 </template>
 
 <script setup>
+import { useElementHover } from '@vueuse/core'
+import { ref, watch } from 'vue'
+
 const props = defineProps({
   classes: {
     type: Array,
@@ -53,6 +57,11 @@ const props = defineProps({
     default: false
   },
 
+  isHoverable: {
+    type: Boolean,
+    default: false
+  },
+
   wrap: {
     type: String,
     default: 'normal',
@@ -70,13 +79,23 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(['click', 'hover'])
 
 function onClick() {
   if (props.isClickable) {
     emit('click')
   }
 }
+
+// Hover effect
+const el = ref()
+const isHovered = useElementHover(el, { delayEnter: 300, delayLeave: 0 })
+
+watch(isHovered, (value) => {
+  if (props.isHoverable) {
+    emit('hover', value)
+  }
+})
 </script>
 
 <style lang="scss" scoped>

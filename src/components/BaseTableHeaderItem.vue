@@ -4,6 +4,7 @@
     :class="[
       { 'header-row-item--is-selected': isSelected },
       { 'header-row-item--is-sortable': header.isSortable },
+      { 'header-row-item--with-description': header.description },
       { 'header-row-item__mobile-header': header.isVisibleOnMobile },
       (header.align ? `header-row-item__content--align-${header.align}` : 'start')
     ]"
@@ -20,6 +21,14 @@
         :class="{ 'header-row-item__arrow--rotate-180': sortDirection === ESortDirections.desc }"
         class="header-row-item__arrow"
       />
+    </div>
+
+    <div
+      v-if="header.description"
+      class="header-row-item__content header-row-item__content--subheader"
+      :class="[header.align ? `header-row-item__content--align-${header.align}` : '']"
+    >
+      {{ header.description }}
     </div>
   </th>
 </template>
@@ -55,6 +64,10 @@ defineProps({
   font-weight: 600;
   user-select: none;
 
+  &--with-description {
+    padding-bottom: 12px;
+  }
+
   &--is-sortable {
     cursor: pointer;
   }
@@ -88,6 +101,12 @@ defineProps({
 
     &--align-center {
       justify-content: center;
+    }
+
+    &--subheader {
+      font-size: 12px;
+      line-height: 16px;
+      color: var(--grey-color);
     }
   }
 
