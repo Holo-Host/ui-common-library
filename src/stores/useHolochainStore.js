@@ -62,8 +62,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
   
       console.log(`🦠 callZome cell_info (role_name: ${role_name})`, this.appInfo.cell_info)
-      console.log(`🦠 callZome holofuel cell_info (role_name: ${role_name})`, this.appInfo.cell_info[role_name])
-      const cellId = this.appInfo.cell_info[role_name]?.Provisioned?.cell_id
+      console.log(`🦠 callZome holofuel cell_info (role_name: ${role_name})`, this.appInfo.cell_info[role_name][0])
+      const cellId = this.appInfo.cell_info[role_name]?[0]?.Provisioned?.cell_id
 
       if (!cellId) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
