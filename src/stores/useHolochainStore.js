@@ -60,16 +60,11 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
       }
+  
+      const cellId = this.appInfo.cell_info[role_name]?.Provisioned?.cell_id 
 
-      const role_names = Object.keys(this.appInfo.cell_info)
-      if (role_names.length === 0 ) {
-        throw new Error('No cells found in appInfo')
-      }
-
-      const roleName = role_names.find(roleName => roleName === role_name)
-
-      if (!roleName) {
-        throw new Error(`Couldn't find cell with role_name ${role_name}`)
+      if (!cellId) {
+        throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
@@ -82,7 +77,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
             zome_name,
             fn_name,
             payload,
-            provenance: cell_id[1]
+            provenance: cellId[1]
           },
           HC_APP_TIMEOUT
         )
