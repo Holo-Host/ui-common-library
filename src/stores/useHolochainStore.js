@@ -61,9 +61,14 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         throw new Error('Tried to make a zome call before storing appInfo')
       }
   
+      const whatever = appInfo.cell_info[role_name][0]
+      console.log('🦠callZome whatever', whatever, whatever?.provisioned, whatever?.provisioned?.cell_id)
+      const bs = whatever?.provisioned?.cell_id[1]
+      console.log('🦠 callZome bs', bs)
+
       const provenance_cell_id = appInfo.cell_info[role_name][0]?.provisioned?.cell_id[1]
 
-      if (!cellId) {
+      if (!provenance_cell_id) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
