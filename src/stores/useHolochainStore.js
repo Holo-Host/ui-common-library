@@ -63,26 +63,18 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         throw new Error('Tried to make a zome call before storing appInfo')
       }
   
-      console.log('🦠callZome appInfo', this.appInfo)
       const cell_info = this.appInfo.cell_info[role_name][0]
-      console.log('🦠callZome cell_info', cell_info, cell_info?.provisioned, cell_info?.provisioned?.cell_id)
       const provisioned_cell_id = cell_info?.provisioned?.cell_id
-      console.log('🦠 callZome provisioned_cell_id', provisioned_cell_id)
 
-      // const s3 = encodeAgentId(s2)
-
-      // console.log('🦠 callZome s3', s3)
-
-      // const provenance_cell_id = this.appInfo.cell_info[role_name][0]?.provisioned?.cell_id[1]
-
-      // if (!provenance_cell_id) {
-      //   throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
-      // }
+      if (!provisioned_cell_id) {
+        throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
+      }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
-      const adminWs = await AdminWebsocket.connect("ws:localhost:444")
-      await adminWs.authorizeSigningCredentials(provisioned_cell_id)
+      // This works locally but need to figure out how to make an admin call on a holoport
+      // const adminWs = await AdminWebsocket.connect("ws:localhost:4445")
+      // await adminWs.authorizeSigningCredentials(provisioned_cell_id)
 
       try {
         const result = await this.client.callZome(
