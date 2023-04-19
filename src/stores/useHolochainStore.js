@@ -5,6 +5,8 @@ import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 
+import { encodeAgentId } from '../utils/agent'
+
 const HC_APP_TIMEOUT = 35_000
 
 const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore('holochain', {
@@ -62,16 +64,20 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
   
       console.log('🦠callZome appInfo', this.appInfo)
-      const s1 = this.appInfo.cell_info[role_name][0]
-      console.log('🦠callZome s1', s1, s1?.provisioned, s1?.provisioned?.cell_id)
-      const s2 = s1?.provisioned?.cell_id[1]
-      console.log('🦠 callZome s2', s2)
+      const cell_info = this.appInfo.cell_info[role_name][0]
+      console.log('🦠callZome cell_info', cell_info, cell_info?.provisioned, cell_info?.provisioned?.cell_id)
+      const provisioned_cell_id = cell_info?.provisioned?.cell_id
+      console.log('🦠 callZome provisioned_cell_id', provisioned_cell_id)
 
-      const provenance_cell_id = this.appInfo.cell_info[role_name][0]?.provisioned?.cell_id[1]
+      // const s3 = encodeAgentId(s2)
 
-      if (!provenance_cell_id) {
-        throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
-      }
+      // console.log('🦠 callZome s3', s3)
+
+      // const provenance_cell_id = this.appInfo.cell_info[role_name][0]?.provisioned?.cell_id[1]
+
+      // if (!provenance_cell_id) {
+      //   throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
+      // }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
@@ -79,11 +85,11 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         const result = await this.client.callZome(
           {
             cap_secret: null,
-            role_name,
+            // role_name,
             zome_name,
             fn_name,
             payload,
-            provenance: provenance_cell_id
+            cell_id: provisioned_cell_id
           },
           HC_APP_TIMEOUT
         )
