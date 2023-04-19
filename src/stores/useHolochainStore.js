@@ -1,5 +1,5 @@
 import { inspect } from 'util'
-import { AppWebsocket } from '@holochain/client'
+import { AdminWebsocket, AppWebsocket } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
@@ -80,6 +80,9 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       // }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
+
+      const adminWs = await AdminWebsocket.connect("ws:localhost:444")
+      await adminWs.authorizeSigningCredentials(provisioned_cell_id)
 
       try {
         const result = await this.client.callZome(
