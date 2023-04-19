@@ -61,10 +61,10 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
         throw new Error('Tried to make a zome call before storing appInfo')
       }
   
-      const whatever = appInfo.cell_info[role_name][0]
-      console.log('🦠callZome whatever', whatever, whatever?.provisioned, whatever?.provisioned?.cell_id)
-      const bs = whatever?.provisioned?.cell_id[1]
-      console.log('🦠 callZome bs', bs)
+      const s1 = appInfo.cell_info[role_name][0]
+      console.log('🦠callZome whatever', s1, s1?.provisioned, s1?.provisioned?.cell_id)
+      const s2 = s1?.provisioned?.cell_id[1]
+      console.log('🦠 callZome bs', s2)
 
       const provenance_cell_id = appInfo.cell_info[role_name][0]?.provisioned?.cell_id[1]
 
