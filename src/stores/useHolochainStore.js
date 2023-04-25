@@ -72,10 +72,11 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
+      const signingKeyPair = generateSigningKeyPair()
 
       const params = {
         cellId: provisioned_cell_id,
-        signingKey: generateSigningKeyPair()
+        signingKey: signingKeyPair[1]
       }
 
       console.log(`callZome calling ⛓️ hposHolochainCall ⛓️`, params)
