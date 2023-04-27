@@ -65,27 +65,29 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       }
   
       const cell_info = this.appInfo.cell_info[role_name][0]
-      const provisioned_cell_id = cell_info?.provisioned?.cell_id
+      const cellId = cell_info?.provisioned?.cell_id
+      const provisioned_cell_id = [new Uint8Array(cellId[0]), new Uint8Array(cellId[1])]
 
       if (!provisioned_cell_id) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
-      const signingKeyPair = generateSigningKeyPair()
+      const [_, signingKey] = await generateSigningKeyPair()
+      const uintSigningKey = new Uint8Array(signingKey)
 
       const params = {
         cellId: provisioned_cell_id,
-        signingKey: signingKeyPair[1]
+        signingKey: uintSigningKey
       }
 
-      console.log(`callZome calling ⛓️ hposHolochainCall ⛓️`, params)
+      console.log(`🦠callZome calling ⛓️ hposHolochainCall ⛓️`, params)
       const response = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
-      console.log(`callZome ⛓️ hposHolochainCall ⛓️ result`, response)
+      console.log(`🦠callZome ⛓️ hposHolochainCall ⛓️ result`, response)
 
       // This works locally but need to figure out how to make an admin call on a holoport
       // const adminWs = await AdminWebsocket.connect("ws:localhost:4445")
-      // await adminWs.authorizeSigningCredentials(provisioned_cell_id)
+      // await adminWs.authorizeSigningCredentials(cellId)
 
       try {
         const result = await this.client.callZome(
@@ -95,7 +97,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
             zome_name,
             fn_name,
             payload,
-            cell_id: provisioned_cell_id
+            cell_id: cellId
           },
           HC_APP_TIMEOUT
         )
@@ -111,7 +113,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       headers: userHeaders = {},
       params
     }) {
-      console.log(`hposHolochainCall path: ${path}`, params)
+      console.log(`🦠hposHolochainCall path: ${path}`, params)
       const axiosConfig = {
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +128,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
       const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
   
       const authToken = localStorage.getItem('authToken')
-      // const authToken = 'yzSR4uOn_Sd1tFj3A3-QTAITyxRAGafaRwNZsMUEEuaBUJfpzoLXoSd0iu1VPxQ2NurYxNxMLUaVtd_cCAsPNe6M1QzMROT4Gf_NJh-JQRJDa_26iDYlwEEvvOoOpt-R1mNM0N2KV77anOH9Eq_leRowm4IWXoXAtoLXFFvnxbw'
+      // const authToken = 'KQZMEQnKNHaQx4h8As6dulxud3NR7mBCiVd2wOP2Z-Wd4K2DvM_a4KFQTwLVZ-SDQc0LwPHZr_Q6KzKD4XNNGQeyJOqRPzJjbLQsuCEdoTm1FHIi3wNRcRvNhf2tRpcqnuqHyqTAOZTBrSGbM8DMSlZH2iOF427q8GnNR9_cIv8'
   
       const headers = {
         'X-Hpos-Auth-Token': authToken,
