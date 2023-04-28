@@ -66,16 +66,15 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
   
       const cell_info = this.appInfo.cell_info[role_name][0]
       const cellId = cell_info?.provisioned?.cell_id
-      const provisioned_cell_id = [new Uint8Array(cellId[0]), new Uint8Array(cellId[1])]
 
-      if (!provisioned_cell_id) {
+      if (!cellId) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       if( is_hpos_served && !this.capToken ) { // If hosted on a holoport we need a cap_token to make zome calls
-        this.capToken = await this.getCapToken()
+        this.capToken = await this.getCapToken(cellId)
         console.log(`🦠callZome HPOS_SERVED cap_token set`, this.capToken)
       }
 
@@ -102,15 +101,13 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     },
-    async getCapToken() {
+    async getCapToken(cellId) {
       const [_, signingKey] = await generateSigningKeyPair()
-      const uintSigningKey = new Uint8Array(signingKey)
 
       const params = {
-        cellId: provisioned_cell_id,
-        signingKey: uintSigningKey
+        cellId,
+        signingKey
       }
-
 
       console.log(`🦠callZome calling ⛓️ hposHolochainCall ⛓️`, params)
       const response = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
