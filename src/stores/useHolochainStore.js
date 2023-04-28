@@ -5,13 +5,10 @@ import { defineStore } from 'pinia'
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
-import { IS_HPOS_SERVED } from "../utils/environment"
-
-import { encodeAgentId } from '../utils/agent'
 
 const HC_APP_TIMEOUT = 35_000
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore('holochain', {
+const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
@@ -77,12 +74,12 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url }) => defineStore(
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
-      if( IS_HPOS_SERVED && !this.capToken ) { // If hosted on a holoport we need a cap_token to make zome calls
+      if( is_hpos_served && !this.capToken ) { // If hosted on a holoport we need a cap_token to make zome calls
         this.capToken = await this.getCapToken()
         console.log(`🦠callZome HPOS_SERVED cap_token set`, this.capToken)
       }
 
-      if( !IS_HPOS_SERVED && !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
+      if( !is_hpos_served && !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
         const adminWs = await AdminWebsocket.connect("ws:localhost:4445")
         await adminWs.authorizeSigningCredentials(cellId)
         this.isAuthorized = true
