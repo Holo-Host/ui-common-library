@@ -64,17 +64,27 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
         throw new Error('Tried to make a zome call before storing appInfo')
       }
   
-      const cell_info = this.appInfo.cell_info[role_name][0]
-      const cellId = cell_info?.provisioned?.cell_id
+      // const cell_info = this.appInfo.cell_info[role_name][0]
+      // const cellId = cell_info?.provisioned?.cell_id
 
-      if (!cellId) {
-        throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
-      }
+      // if (!cellId) {
+      //   throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
+      // }
+
+      // args.cellId = cellId
 
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
+      try {
+        const result = await this.zomeCall(args)
+        return result
+      } finally {
+        useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
+      }
+
       if( is_hpos_served && !this.capToken ) { // If hosted on a holoport we need a cap_token to make zome calls
-        this.capToken = await this.getCapToken(cellId)
+        const { signingkey, cap_token } = await this.getCapToken(cellId)
+        this.capToken = await Object.values(cap_token)
         console.log(`🦠callZome HPOS_SERVED cap_token set`, this.capToken)
       }
 
@@ -87,11 +97,13 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
       try {
         const result = await this.client.callZome(
           {
-            cap_secret: this.capToken ? Object.values(this.capToken) : null,
+            cap_secret: this.capToken ? this.capToken : null,
             zome_name,
             fn_name,
             payload,
-            cell_id: cellId
+            cell_id: cellId,
+            provenance: signingkey,
+            signature: sig
           },
           HC_APP_TIMEOUT
         )
@@ -113,6 +125,19 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
       const response = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
       console.log(`🦠callZome ⛓️ hposHolochainCall ⛓️ result`, response)
 
+      return { signingKey, response }
+    },
+    async zomeCall(args) {
+      const zomeCallArgs = {
+        appId: installed_app_id,
+        roleId: args.role_name,
+        zomeName: args.zome_name,
+        fnName: args.fn_name,
+        payload: args.payload
+      }
+
+      console.log(`🦠callZome calling zomeCall(🤷🏽) - hposHolochainCall ⛓️`, zomeCallArgs)
+      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, zomeCallArgs})
       return response
     },
     async hposHolochainCall({
