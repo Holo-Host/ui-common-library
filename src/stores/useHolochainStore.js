@@ -8,7 +8,7 @@ import useSignalStore from './useSignalStore'
 
 const HC_APP_TIMEOUT = 35_000
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served }) => defineStore('holochain', {
+const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, hc_admin_port }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
@@ -59,73 +59,54 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
     },
 
     async callZome(args) {
-      const { zome_name, fn_name, payload, role_name } = args
+      const { zome_name, fn_name } = args
       if (!this.appInfo) {
         throw new Error('Tried to make a zome call before storing appInfo')
       }
   
-      // const cell_info = this.appInfo.cell_info[role_name][0]
-      // const cellId = cell_info?.provisioned?.cell_id
-
-      // if (!cellId) {
-      //   throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
-      // }
-
-      // args.cellId = cellId
-
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       try {
-        const result = await this.zomeCall(args)
-        return result
-      } finally {
-        useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
-      }
-
-      if( is_hpos_served && !this.capToken ) { // If hosted on a holoport we need a cap_token to make zome calls
-        const { signingkey, cap_token } = await this.getCapToken(cellId)
-        this.capToken = await Object.values(cap_token)
-        console.log(`🦠callZome HPOS_SERVED cap_token set`, this.capToken)
-      }
-
-      if( !is_hpos_served && !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
-        const adminWs = await AdminWebsocket.connect("ws:localhost:4445")
-        await adminWs.authorizeSigningCredentials(cellId)
-        this.isAuthorized = true
-      }
-
-      try {
-        const result = await this.client.callZome(
-          {
-            cap_secret: this.capToken ? this.capToken : null,
-            zome_name,
-            fn_name,
-            payload,
-            cell_id: cellId,
-            provenance: signingkey,
-            signature: sig
-          },
-          HC_APP_TIMEOUT
-        )
-        
-        return result
+        if( is_hpos_served ) {
+          return await this.zomeCall(args)
+          
+        } else {
+          return await this.holochainCallZome(args)
+        }
       } finally {
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     },
-    async getCapToken(cellId) {
-      const [_, signingKey] = await generateSigningKeyPair()
+    async holochainCallZome(args) {
+      const { zome_name, fn_name, payload, role_name } = args
 
-      const params = {
-        cellId,
-        signingKey
+      const cell_info = this.appInfo.cell_info[role_name][0]
+      const cellId = cell_info?.provisioned?.cell_id
+
+      if (!cellId) {
+        throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
+      }
+      
+      if( !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
+        console.log(`🌀holochainCallZome authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`)
+        const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+        await adminWs.authorizeSigningCredentials(cellId)
+        this.isAuthorized = true
       }
 
-      console.log(`🦠callZome calling ⛓️ hposHolochainCall ⛓️`, params)
-      const response = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
-      console.log(`🦠callZome ⛓️ hposHolochainCall ⛓️ result`, response)
+      console.log(`holochainCallZome calling holochain callZome -- is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name}`, payload, cellId)
 
-      return { signingKey, response }
+      const result = await this.client.callZome(
+        {
+          zome_name,
+          fn_name,
+          payload,
+          cell_id: cellId
+        },
+        HC_APP_TIMEOUT
+      )
+      
+      return result
     },
     async zomeCall(args) {
       const zomeCallArgs = {
