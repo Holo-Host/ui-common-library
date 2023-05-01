@@ -137,7 +137,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served })
       }
 
       console.log(`🦠callZome calling zomeCall(🤷🏽) - hposHolochainCall ⛓️`, zomeCallArgs)
-      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, zomeCallArgs})
+      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
       return response
     },
     async hposHolochainCall({
