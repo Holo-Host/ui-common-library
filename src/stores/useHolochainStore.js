@@ -146,7 +146,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         this.signingCredentials = signingCredentials
         console.log(`🔓 setSigningCredentials`, signingCredentials)
       } catch (e) {
-        console.log(`🔒🛑Error setting signing credentials`, e, signingCredentials)
+        console.log(`🔒🛑Error setting signing credentials`, e, this.signingCredentials)
       }
     },    
     async hposHolochainCall({
