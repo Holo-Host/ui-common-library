@@ -89,7 +89,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      if( is_hpos_served && !this.signingCredentials) {
+      let retryCount = 0
+      while( is_hpos_served && !this.signingCredentials && retryCount++ < 15) {
         await this.setHCSigningCredentials(cellId)
       }
       
@@ -100,8 +101,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         this.isAuthorized = true
       }
 
-      console.log(`🖲️holochainCallZome calling holochain callZome -- is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name}`, payload, cellId)
-
       const result = await this.client.callZome(
         {
           zome_name,
@@ -111,6 +110,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         },
         HC_APP_TIMEOUT
       )
+
+      console.log(`🖲️holochainCallZome calling holochain callZome -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
       
       return result
     },
@@ -137,15 +138,15 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
         const signingCredentials = {
           capSecret: Object.values(cap_token),
-          keyPair,
-          signingKey
+          keyPair: {publicKey: Object.values(keyPair[0]), secretKey: Object.values(keyPair[1])},
+          signingKey: Object.values(signingKey)
         }
 
         await setSigningCredentials(cellId, signingCredentials)
         this.signingCredentials = signingCredentials
         console.log(`🔓 setSigningCredentials`, signingCredentials)
       } catch (e) {
-        console.log(`🔒🛑Error setting signing credentials`, e)
+        console.log(`🔒🛑Error setting signing credentials`, e, signingCredentials)
       }
     },    
     async hposHolochainCall({
