@@ -1,6 +1,6 @@
 import { inspect } from 'util'
 import axios from 'axios'
-import { AdminWebsocket, AppWebsocket, generateSigningKeyPair } from '@holochain/client'
+import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
@@ -14,7 +14,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
-    capToken: null,
+    signingCredentials: null,
     isAuthorized: false
   }),
   actions: {
@@ -67,12 +67,14 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       try {
-        if( is_hpos_served ) {
-          return await this.zomeCall(args)
+        // if( is_hpos_served ) {
+        //   return await this.zomeCall(args)
           
-        } else {
-          return await this.holochainCallZome(args)
-        }
+        // } else {
+        //   return await this.holochainCallZome(args)
+        // }
+
+        return await this.holochainCallZome(args)
       } finally {
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
@@ -86,15 +88,19 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
       if (!cellId) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
+
+      if( is_hpos_served && !this.signingCredentials) {
+        await this.setHCSigningCredentials(cellId)
+      }
       
-      if( !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
+      if( !is_hpos_served && !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
         console.log(`🌀holochainCallZome authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`)
         const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
         await adminWs.authorizeSigningCredentials(cellId)
         this.isAuthorized = true
       }
 
-      console.log(`holochainCallZome calling holochain callZome -- is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name}`, payload, cellId)
+      console.log(`🖲️holochainCallZome calling holochain callZome -- is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name}`, payload, cellId)
 
       const result = await this.client.callZome(
         {
@@ -117,10 +123,31 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         payload: args.payload
       }
 
-      console.log(`🦠callZome calling zomeCall(🤷🏽) - hposHolochainCall ⛓️`, zomeCallArgs)
+      console.log(`🦠callZome calling zomeCall - hposHolochainCall`, zomeCallArgs)
       const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
       return response
     },
+    async setHCSigningCredentials(cellId) {
+      try {
+        const [keyPair, signingKey] = await generateSigningKeyPair()
+
+        const params = { cellId, signingKey }
+
+        const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
+
+        const signingCredentials = {
+          capSecret: Object.values(cap_token),
+          keyPair,
+          signingKey
+        }
+
+        await setSigningCredentials(cellId, signingCredentials)
+        this.signingCredentials = signingCredentials
+        console.log(`🔓 setSigningCredentials`, signingCredentials)
+      } catch (e) {
+        console.log(`🔒🛑Error setting signing credentials`, e)
+      }
+    },    
     async hposHolochainCall({
       path,
       headers: userHeaders = {},
