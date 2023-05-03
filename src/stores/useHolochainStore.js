@@ -14,8 +14,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
-    signingCredentials: null,
-    isAuthorized: false
+    signingCredentials: null
   }),
   actions: {
     async initialize() {
@@ -89,20 +88,14 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      let retryCount = 0
-      while( is_hpos_served && !this.signingCredentials && retryCount++ < 15) {
-        console.log(`🌀holochainCallZome setting signingCredentials for zome_name: ${zome_name} fn_name: ${fn_name} `)
-        await this.setHCSigningCredentials(cellId)
-      }
-      
-      if( !is_hpos_served && !this.isAuthorized ) { // If running a raw holochain we need to authorize zome calls once
-        console.log(`🌀holochainCallZome authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`)
-        const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-        await adminWs.authorizeSigningCredentials(cellId)
-        this.isAuthorized = true
+      if( !this.signingCredentials)
+      {
+        this.setCredentials(cellId)
       }
 
-      console.log(`🖲️holochainCallZome before zome call -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId attached)`, payload, cellId)
+      await this.signingCredentials
+
+      console.log(`🖲️holochainCallZome before zome call -- signingCredentials set: ${this.signingCredentials !== null}  zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId attached)`, payload, cellId)
       
       let result = null
       try {
@@ -116,10 +109,10 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
           HC_APP_TIMEOUT
         )
       } catch (e) {
-        console.log(`🖲️🛑holochainCallZome error -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, error attached)`, payload, cellId, e)
+        console.log(`🖲️🛑holochainCallZome error -- signingCredentials set: ${this.signingCredentials !== null} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, error attached)`, payload, cellId, e)
       }
 
-      console.log(`🖲️holochainCallZome result -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
+      console.log(`🖲️holochainCallZome result -- signingCredentials set: ${this.signingCredentials !== null} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
       
       return result
     },
@@ -136,27 +129,44 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
       const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
       return response
     },
-    async setHCSigningCredentials(cellId) {
-      try {
-        const [keyPair, signingKey] = await generateSigningKeyPair()
+    setCredentials(cellId) {
+      this.signingCredentials = new Promise(async (resolve, reject) => {
+        if( !is_hpos_served ) { // If running a raw holochain we need to authorize zome calls once
+          console.log(`🌀holochainCallZome authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`)
+          try {
+            const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+            await adminWs.authorizeSigningCredentials(cellId)
+          } catch(e) {
+            console.log(`🌀🛑holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
+            reject()
+          }
 
-        const params = { cellId, signingKey }
+          resolve()
+        } else {
+          let signingCredentials = {}
+          try {
+            const [keyPair, signingKey] = await generateSigningKeyPair()
+            const params = { cellId, signingKey }
+    
+            const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
+    
+            signingCredentials = {
+              capSecret: Object.values(cap_token),
+              keyPair,
+              signingKey
+            }
+    
+            await setSigningCredentials(cellId, signingCredentials)
+          } catch (e) {
+            console.log(`🔒🛑Error setting signing credentials`, e, signingCredentials)
+            reject()
+          }
 
-        const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
-
-        const signingCredentials = {
-          capSecret: Object.values(cap_token),
-          keyPair,
-          signingKey
+          console.log(`🔓 setSigningCredentials`, signingCredentials)
+          resolve()
         }
-
-        await setSigningCredentials(cellId, signingCredentials)
-        this.signingCredentials = signingCredentials
-        console.log(`🔓 setSigningCredentials`, signingCredentials)
-      } catch (e) {
-        console.log(`🔒🛑Error setting signing credentials`, e, this.signingCredentials)
-      }
-    },    
+      })
+    },
     async hposHolochainCall({
       path,
       headers: userHeaders = {},
