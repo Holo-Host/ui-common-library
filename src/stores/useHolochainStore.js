@@ -138,8 +138,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
         const signingCredentials = {
           capSecret: Object.values(cap_token),
-          keyPair: {publicKey: Object.values(keyPair[0]), secretKey: Object.values(keyPair[1])},
-          signingKey: Object.values(signingKey)
+          keyPair,
+          signingKey
         }
 
         await setSigningCredentials(cellId, signingCredentials)
