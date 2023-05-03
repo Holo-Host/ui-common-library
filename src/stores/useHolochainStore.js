@@ -91,6 +91,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
       let retryCount = 0
       while( is_hpos_served && !this.signingCredentials && retryCount++ < 15) {
+        console.log(`🌀holochainCallZome setting signingCredentials for zome_name: ${zome_name} fn_name: ${fn_name} `)
         await this.setHCSigningCredentials(cellId)
       }
       
@@ -101,17 +102,24 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         this.isAuthorized = true
       }
 
-      const result = await this.client.callZome(
-        {
-          zome_name,
-          fn_name,
-          payload,
-          cell_id: cellId
-        },
-        HC_APP_TIMEOUT
-      )
+      console.log(`🖲️holochainCallZome before zome call -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId attached)`, payload, cellId)
+      
+      let result = null
+      try {
+        result = await this.client.callZome(
+          {
+            zome_name,
+            fn_name,
+            payload,
+            cell_id: cellId
+          },
+          HC_APP_TIMEOUT
+        )
+      } catch (e) {
+        console.log(`🖲️🛑holochainCallZome error -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, error attached)`, payload, cellId, e)
+      }
 
-      console.log(`🖲️holochainCallZome calling holochain callZome -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
+      console.log(`🖲️holochainCallZome result -- signingCredentials set: ${this.signingCredentials !== null} is_authorized: ${this.isAuthorized} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
       
       return result
     },
