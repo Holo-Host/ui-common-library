@@ -2,7 +2,7 @@ import { inspect } from 'util'
 import axios from 'axios'
 import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
-import { presentHcSignal } from '../utils'
+import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 
@@ -104,7 +104,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
             zome_name,
             fn_name,
             payload,
-            cell_id: cellId
+            cell_id: [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))]
           },
           HC_APP_TIMEOUT
         )
@@ -151,7 +151,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
             const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
     
             signingCredentials = {
-              capSecret: Object.values(cap_token),
+              // capSecret: Object.values(cap_token),
+              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Nunber(value)))),
               keyPair,
               signingKey
             }
