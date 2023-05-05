@@ -152,7 +152,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     
             signingCredentials = {
               // capSecret: Object.values(cap_token),
-              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Nunber(value)))),
+              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Number(value)))),
               keyPair,
               signingKey
             }
