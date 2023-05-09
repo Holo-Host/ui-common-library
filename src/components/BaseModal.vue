@@ -174,6 +174,10 @@ const emit = defineEmits(['close'])
       margin: 0 -6px;
     }
 
+    &__message-content {
+      width: 100%;
+    }
+
     &__buttons {
       padding-bottom: 10px;
     }

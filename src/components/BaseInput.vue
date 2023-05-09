@@ -23,6 +23,7 @@
     <div class="base-input__content">
       <input
         :id="inputId"
+        :key="inputKey"
         ref="inputRef"
         v-bind="$attrs"
         :name="inputName"
@@ -45,15 +46,30 @@
         <VisibleEyeIcon v-if="isPasswordVisible" @click="hidePassword" />
         <InvisibleEyeIcon v-else @click="showPassword" />
       </div>
+
+      <div
+        v-if="unit"
+        class="base-input__unit"
+      >
+        {{ unit }}
+      </div>
     </div>
 
     <p
       v-if="hasErrors"
-      class="base-input__error"
+      class="base-input__message base-input__error"
       data-test-base-input-errors
     >
       <!-- If there is no message, put a non-breaking space to prevent collapse -->
-      {{ message || '&nbsp;' }}
+      {{ message || (!tip ? '&nbsp;' : '') }}
+    </p>
+
+    <p
+      v-if="tip && isValid"
+      class="base-input__message"
+    >
+      <!-- If there is no message, put a non-breaking space to prevent collapse -->
+      {{ tip || '&nbsp;' }}
     </p>
   </div>
 </template>
@@ -83,6 +99,11 @@ const props = defineProps({
   autofocus: {
     type: Boolean,
     default: false
+  },
+
+  decimalPlaces: {
+    type: Number,
+    default: 0
   },
 
   isDisabled: {
@@ -148,6 +169,16 @@ const props = defineProps({
   message: {
     type: String,
     default: ''
+  },
+
+  unit: {
+    type: String,
+    default: ''
+  },
+
+  tip: {
+    type: String,
+    default: ''
   }
 })
 
@@ -155,6 +186,7 @@ const emit = defineEmits(['update:modelValue', 'blur', 'focus', 'keydown'])
 
 const {
   inputRef,
+  inputKey,
   isPasswordVisible,
   inputName,
   inputId,
@@ -233,11 +265,29 @@ const {
     }
   }
 
-  &__error {
+  &__message {
     margin: 5px 0 4px 1px;
     font-size: 12px;
+    color: var(--grey-color);
+    font-weight: 400;
+  }
+
+  &__error {
     color: var(--red-color);
     font-weight: 600;
+  }
+
+  &__unit {
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding-right: 12px;
+    font-style: 14px;
+    font-weight: 800;
   }
 
   .eye-icon {

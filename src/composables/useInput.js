@@ -16,6 +16,7 @@ export function useInput({ props, emit }) {
 
   const inputName = ref('')
   const inputId = ref('')
+  const inputKey = ref(0)
 
   const computedInputType = computed(() => {
     if (props.inputType !== EInputType.password) {
@@ -47,8 +48,30 @@ export function useInput({ props, emit }) {
     inputId.value = inputName.value
   }
 
-  function onInput(event) {
-    emit('update:modelValue', event.target.value)
+  async function onInput(event) {
+    let value = event.target?.value
+
+    if (props.inputType === EInputType.number && props.decimalPlaces >= 0 && !!event.target.value) {
+      const [wholeValue = '0', decimalValue = ''] = event.target.value.split('.')
+
+      if (decimalValue) {
+        // Restrict the number of decimal places
+        value =
+          props.decimalPlaces === 0
+            ? wholeValue // No decimal places
+            : `${wholeValue}.${decimalValue.substring(0, props.decimalPlaces)}`
+
+        // Re-render the input to sync with the new value
+        inputKey.value = inputKey.value + 1
+
+        await nextTick(() => {
+          // Focus the input so user can continue typing
+          inputRef.value?.focus()
+        })
+      }
+    }
+
+    emit('update:modelValue', value)
   }
 
   function showPassword() {
@@ -64,6 +87,7 @@ export function useInput({ props, emit }) {
   return {
     props,
     inputRef,
+    inputKey,
     isPasswordVisible,
     emit,
     inputName,
