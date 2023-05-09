@@ -66,13 +66,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
       useIsLoadingStore().callIsLoading({ zome_name, fn_name })
 
       try {
-        // if( is_hpos_served ) {
-        //   return await this.zomeCall(args)
-          
-        // } else {
-        //   return await this.holochainCallZome(args)
-        // }
-
         return await this.holochainCallZome(args)
       } finally {
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
@@ -95,8 +88,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
       await this.signingCredentials
 
-      console.log(`🖲️holochainCallZome before zome call -- signingCredentials set: ${this.signingCredentials !== null}  zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId attached)`, payload, cellId)
-      
       let result = null
       try {
         result = await this.client.callZome(
@@ -109,11 +100,9 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
           HC_APP_TIMEOUT
         )
       } catch (e) {
-        console.log(`🖲️🛑holochainCallZome error -- signingCredentials set: ${this.signingCredentials !== null} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, error attached)`, payload, cellId, e)
+        console.log(`holochainCallZome error -- zome_name: ${zome_name} fn_name: ${fn_name}`, e)
       }
 
-      console.log(`🖲️holochainCallZome result -- signingCredentials set: ${this.signingCredentials !== null} zome_name: ${zome_name} fn_name: ${fn_name} (payload, cellId, result attached)`, payload, cellId, result)
-      
       return result
     },
     async zomeCall(args) {
@@ -125,33 +114,32 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         payload: args.payload
       }
 
-      console.log(`🦠callZome calling zomeCall - hposHolochainCall`, zomeCallArgs)
       const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
       return response
     },
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
         if( !is_hpos_served ) { // If running a raw holochain we need to authorize zome calls once
-          console.log(`🌀holochainCallZome authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`)
           try {
             const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
             await adminWs.authorizeSigningCredentials(cellId)
           } catch(e) {
-            console.log(`🌀🛑holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
+            console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
             reject()
           }
 
           resolve()
         } else {
-          let signingCredentials = {}
           try {
             const [keyPair, signingKey] = await generateSigningKeyPair()
-            const params = { cellId, signingKey }
+            const params = {
+              cell_id: [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))],
+              signingKey
+            }
     
             const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
     
-            signingCredentials = {
-              // capSecret: Object.values(cap_token),
+            const signingCredentials = {
               capSecret: new Uint8Array(listify(cap_token, (_, value) => (Number(value)))),
               keyPair,
               signingKey
@@ -159,11 +147,10 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     
             await setSigningCredentials(cellId, signingCredentials)
           } catch (e) {
-            console.log(`🔒🛑Error setting signing credentials`, e, signingCredentials)
+            console.log(`Error setting signing credentials`, e)
             reject()
           }
 
-          console.log(`🔓 setSigningCredentials`, signingCredentials)
           resolve()
         }
       })
