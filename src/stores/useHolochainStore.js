@@ -132,11 +132,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         } else {
           try {
             const [keyPair, signingKey] = await generateSigningKeyPair()
-            const params = {
-              cell_id: [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))],
-              signingKey
-            }
-    
+            const params = { cellId, signingKey }    
             const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
     
             const signingCredentials = {
