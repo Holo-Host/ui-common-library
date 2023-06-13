@@ -16,12 +16,12 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     appInfo: null
   }),
   getters: {
-    isAnonymous: state => state.agentState.isAnonymous,
-    isAvailable: state => state.agentState.isAvailable,
-    isLoggedIn: state => state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
-    error: state => !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
+    isAnonymous: state => state.agentState && state.agentState.isAnonymous,
+    isAvailable: state => state.agentState && state.agentState.isAvailable,
+    isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
+    error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
-    agentId: state => state.agentState.id
+    agentId: state => state.agentState?.id
   },
   actions: {
     async initialize() {
@@ -36,7 +36,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       }
 
       const onAgentState = agentState => {
-        if (agentState.unrecoverableError) {
+        if (agentState && agentState.unrecoverableError) {
           console.error('unrecoverable agent state', agentState.unrecoverableError)
         }
 
