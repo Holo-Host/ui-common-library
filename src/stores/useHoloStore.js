@@ -21,7 +21,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
-    agentId: state => state.agentState?.id
+    agentId: state => state.agentState?.id,
+    // XYZZY add email to agent state, and add getter to useHoloStore
   },
   actions: {
     async initialize() {
@@ -97,6 +98,10 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     async loadAppInfo() {
       this.appInfo = await client.appInfo()
       return this.appInfo
+    },
+
+    async signPayload(payload) {
+      return await client.signPayload(payload)
     }
 
   }
