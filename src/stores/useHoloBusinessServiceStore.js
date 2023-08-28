@@ -1,20 +1,33 @@
 import { defineStore } from 'pinia'
 import { authenticateAgent } from 'src/services/hbs'
 
+const kycLevel1 = 'holo_kyc_1'
+const kycLevel2 = 'holo_kyc_2'
+
 const useHoloBusinessServiceStore = defineStore('hbs', {
   state: () => ({
-    agentKeyLevel: 0
+    agentKeyLevel: null
   }),
-  getters: {
-    isAgentKeyPopulated: state => state.agentKeyLevel > 0,
-  },
   actions: {
     async loadAgentKycLevel(email, public_key) {
-        if( ! this.isAgentAuthenticated ) {
-            const authResult = await authenticateAgent(email, public_key)
-            console.log(`agentKycLevel authResult`, authResult)
-            this.agentKeyLevel = 99
+
+      const authResult = await authenticateAgent(email, public_key)
+      if( authResult && authResult.id ) {
+        switch(authResult.kyc) {
+          case kycLevel1: {
+            this.agentKeyLevel = 1
+            break
+          }
+          case kycLevel2: {
+            this.agentKeyLevel = 2
+            break
+          }
+          default: {
+            this.agentKeyLevel = null
+          }
         }
+            
+      }
     }
   }
 })
