@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { authenticateAgent } from 'src/services/hbs'
+// import { authenticateAgent } from 'src/services/hbs'
+import { authenticateAgent } from "@uicommon/services/hbs"
 
 const kycLevel1 = 'holo_kyc_1'
 const kycLevel2 = 'holo_kyc_2'
