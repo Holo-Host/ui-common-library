@@ -7,8 +7,8 @@ const HbsServiceURL = (service, key, port) => {
         return `http://localhost:${port}/${service}`
   
       case Environment.localNoBackend:
-        // return `https://hbs.dev.holotest.net/${service}`
-        return `http://localhost:3001/${service}`
+        return `https://hbs.dev.holotest.net/${service}`
+        // return `http://localhost:3001/${service}`
   
       case Environment.development:
         return `https://hbs.dev.holotest.net/${service}`
