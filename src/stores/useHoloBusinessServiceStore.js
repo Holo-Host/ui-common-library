@@ -12,7 +12,7 @@ const useHoloBusinessServiceStore = defineStore('hbs', {
     async loadAgentKycLevel(email, public_key) {
 
       const authResult = await authenticateAgent(email, public_key)
-      if( authResult && authResult.id ) {
+      if( authResult && authResult.kyc ) {
         switch(authResult.kyc) {
           case kycLevel1: {
             this.agentKeyLevel = 1
