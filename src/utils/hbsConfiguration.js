@@ -24,21 +24,23 @@ const HbsServiceURL = (service, key, port) => {
     }
   }
 
-  export const AUTH_SERVICE_URL = HbsServiceURL(
-    'auth',
-    process.env.VUE_ENV || Environment.localNoBackend,
-    process.env.VUE_OPS_SERVICE_PORT || '3003'
-  )
-  
   const AuthServiceVersion = {
     [Environment.local]: 'v1',
     [Environment.development]: 'v1',
     [Environment.qa]: 'v1',
     [Environment.production]: 'v1'
-  }
-  
-  export const AUTH_SERVICE_VERSION = process.env.VUE_ENV
-    ? AuthServiceVersion[process.env.VUE_ENV]
+  }  
+  const CONFIG_ENVIRONMENT = ( import.meta.env ) ? import.meta.env.VITE_ENV : process.env.VUE_ENV
+  const HBS_SERVICE_PORT = ( import.meta.env ) ? import.meta.env.VITE_OPS_SERVICE_PORT : process.env.VUE_OPS_SERVICE_PORT
+
+  export const AUTH_SERVICE_URL = HbsServiceURL(
+    'auth',
+    CONFIG_ENVIRONMENT || Environment.localNoBackend,
+    HBS_SERVICE_PORT || '3003'
+  )
+
+  export const AUTH_SERVICE_VERSION = CONFIG_ENVIRONMENT
+    ? AuthServiceVersion[CONFIG_ENVIRONMENT]
     : AuthServiceVersion[Environment.local]
   
   

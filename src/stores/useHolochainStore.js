@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
+import { kycLevel1, kycLevel2 } from '../services/hbs'
 
 const HC_APP_TIMEOUT = 35_000
 
@@ -154,7 +155,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     async hposHolochainCall({
       path,
       headers: userHeaders = {},
-      params
+      params,
+      method = 'post',
     }) {
       const axiosConfig = {
         headers: {
@@ -175,9 +177,33 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         ...userHeaders
       }
   
-      const response = await axios.post(fullUrl, params, { headers })
-      return response.data
-    }
+      let response
+
+      switch (method) {
+        case 'get':
+          response = await axios.get(fullUrl, { params, headers })
+          return response.data
+    
+        case 'post':
+          response = await axios.post(fullUrl, params, { headers })
+          return response.data
+    
+        case 'put':
+          response = await axios.put(fullUrl, params, { headers })
+          return response.data
+    
+        case 'delete':
+          response = await axios.delete(fullUrl, { params, headers })
+          return response.data
+    
+        default:
+          throw new Error(`No case in hposCall for ${method} method`)
+        }
+    },
+    async getKycLevel() {
+      const kycLevel = await this.hposHolochainCall({path: 'kyc', headers: {}, params: {}, method: 'get'})
+      return kycLevel ? (kycLevel === kycLevel2) ? 2 : 1 : null
+    },
   }
 })
 

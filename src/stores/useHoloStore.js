@@ -2,6 +2,7 @@ import WebSdk from '@holo-host/web-sdk'
 import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
+import { loadAgentKycLevel } from '../services/hbs'
 
 let client
 
@@ -13,7 +14,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
     isReady: false,
-    appInfo: null
+    appInfo: null,
+    kycLevel: null
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -22,7 +24,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
-    agentEmail: state => state.agentState?.email
+    agentEmail: state => state.agentState?.email,
+    agentKycLevel: state => state.kycLevel
   },
   actions: {
     async initialize() {
@@ -99,11 +102,18 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
+    async getKycLevel() {
+      const payload = {
+        "email": this.agentEmail,
+        "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
+        "pubKey": this.agentId
+      }
 
-    async signPayload(payload) {
-      return await client.signPayload(payload)
+      const { _, signature  } = await client.signPayload(payload)
+      const kycLevel = await loadAgentKycLevel(payload, signature)
+      this.kycLevel = kycLevel
+      return kycLevel
     }
-
   }
 })
 
