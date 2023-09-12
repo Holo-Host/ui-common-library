@@ -51,7 +51,6 @@ const props = defineProps({
 const emit = defineEmits(['login'])
 
 function handleSpringboardLogin() {
-  console.log(`♨️♨️♨️handleSpringboardLogin this.environment: ${props.environment}`)
   emit('login')
   const tabName = `${props.appName}-springboard`
   window.open(`${springBoardUrl(props.environment)}/home?kyc=true`, tabName).focus()
