@@ -1,27 +1,29 @@
 import axios from 'axios'
-import { AUTH_SERVICE_URL, AUTH_SERVICE_VERSION } from '../utils/hbsConfiguration'
+import { authServiceUrl, authServiceVersion } from '../utils/hbsConfiguration'
 import { httpCall } from '../utils/httpProvider'
 
 export const kycLevel1 = 'holo_kyc_1'
 export const kycLevel2 = 'holo_kyc_2'
 
-async function authCall(args) {
+async function authCall(args, envirionment, hbsServicePort) {
   return httpCall({
-    serviceUrl: AUTH_SERVICE_URL,
-    version: AUTH_SERVICE_VERSION,
+    serviceUrl: authServiceUrl(envirionment),
+    version: authServiceVersion(hbsServicePort),
     method: 'post',
     ...args
   })
 }
   
-export async function authenticateAgent(payload, signature) {
+export async function authenticateAgent(payload, signature, envirionment, hbsServicePort) {
   try {
     const result = await authCall({
       params: payload,
       endpoint: 'holo-client',
       headers: {
         'X-Signature': signature
-      }
+      },
+      envirionment,
+      hbsServicePort
     })
 
     return result.data
@@ -34,8 +36,8 @@ export async function authenticateAgent(payload, signature) {
   }
 }
 
-export async function loadAgentKycLevel(payload, signature) {
-  const authResult = await authenticateAgent(payload, signature)
+export async function loadAgentKycLevel(payload, signature, envirionment, hbsServicePort) {
+  const authResult = await authenticateAgent(payload, signature, envirionment, hbsServicePort)
   return (authResult && authResult.kyc) ? (authResult.kyc === kycLevel2) ? 2 : 1 : null
 }
   

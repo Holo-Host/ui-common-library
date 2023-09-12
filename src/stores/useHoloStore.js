@@ -102,7 +102,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
-    async getKycLevel() {
+    async getKycLevel(envirionment, hbsServicePort) {
       const payload = {
         "email": this.agentEmail,
         "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
@@ -110,7 +110,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       }
 
       const { _, signature  } = await client.signPayload(payload)
-      const kycLevel = await loadAgentKycLevel(payload, signature)
+      const kycLevel = await loadAgentKycLevel(payload, signature, envirionment, hbsServicePort)
       this.kycLevel = kycLevel
       return kycLevel
     }

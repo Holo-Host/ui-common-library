@@ -117,7 +117,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         resolve()
       })
     },
-    async getKycLevel() {
+    async getKycLevel(_, _) {
       return null // raw holochain doesn't have a mechanism for fetching agent's kyc level
     },
   }
