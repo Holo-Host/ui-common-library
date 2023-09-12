@@ -1,5 +1,5 @@
 <template>
-    <BaseModal :is-visible="visibleModal === EModal.go_to_springboard" @close="hideModal">
+    <BaseModal :is-visible="true" @close="closeModal">
         <div class="go-to-springboard-modal">
             <img src="/images/holo-logo-2.png" class="go-to-springboard-modal__springboard-logo" alt="springboard-logo" />
 
@@ -32,21 +32,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useModals } from '../composables/useModals'
-import { EButtonType, EModal } from '../types/ui'
+import { EButtonType } from '../types/ui'
 import BaseButton from './BaseButton.vue'
 import BaseModal from './BaseModal.vue'
-
-const { visibleModal, hideModal } = useModals()
+import { SPRINGBOARD_URL } from '../utils/springboardConfiguration'
 
 const props = defineProps({
   appName: {
-    type: String,
-    required: true
-  },
-
-  springboardUrl: {
     type: String,
     required: true
   }
@@ -55,11 +47,13 @@ const props = defineProps({
 const emit = defineEmits(['login'])
 
 function handleSpringboardLogin() {
-  hideModal()
-
   emit('login')
-  const tabName = `${props.appName}-hf`
-  window.open(props.springboardUrl, tabName).focus()
+  const tabName = `${props.appName}-springboard`
+  window.open(`${SPRINGBOARD_URL}/home?kyc=true`, tabName).focus()
+}
+
+function closeModal() {
+  emit('login')
 }
 
 </script>
