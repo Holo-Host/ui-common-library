@@ -35,21 +35,26 @@
 import { EButtonType } from '../types/ui'
 import BaseButton from './BaseButton.vue'
 import BaseModal from './BaseModal.vue'
-import { SPRINGBOARD_URL } from '../utils/springboardConfiguration'
+import { springBoardUrl } from '../utils/springboardConfiguration'
 
 const props = defineProps({
   appName: {
     type: String,
     required: true
-  }
+  },
+  environment: {
+    type: String,
+    required: true
+  }  
 })
 
 const emit = defineEmits(['login'])
 
 function handleSpringboardLogin() {
+  console.log(`♨️♨️♨️handleSpringboardLogin this.environment: ${props.environment}`)
   emit('login')
   const tabName = `${props.appName}-springboard`
-  window.open(`${SPRINGBOARD_URL}/home?kyc=true`, tabName).focus()
+  window.open(`${springBoardUrl(props.environment)}/home?kyc=true`, tabName).focus()
 }
 
 function closeModal() {
