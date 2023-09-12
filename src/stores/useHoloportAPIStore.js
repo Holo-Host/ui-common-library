@@ -94,7 +94,7 @@ const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoport
           throw new Error(`No case in hposCall for ${method} method`)
         }
     },
-    async getKycLevel(_, _) {
+    async getKycLevel(_, __) {
       const kycLevel = await this.hposHolochainCall({path: 'kyc', headers: {}, params: {}, method: 'get'})
       return kycLevel ? (kycLevel === kycLevel2) ? 2 : 1 : null
     },
