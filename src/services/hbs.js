@@ -36,7 +36,7 @@ export async function authenticateAgent(payload, signature, envirionment, hbsSer
   }
 }
 
-export async function loadAgentKycLevel(payload, signature, envirionment, hbsServicePort) {
+export async function fetchAgentKycLevel(payload, signature, envirionment, hbsServicePort) {
   const authResult = await authenticateAgent(payload, signature, envirionment, hbsServicePort)
   return (authResult && authResult.kyc) ? (authResult.kyc === kycLevel2) ? 2 : 1 : null
 }

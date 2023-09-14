@@ -2,7 +2,7 @@ import WebSdk from '@holo-host/web-sdk'
 import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
-import { loadAgentKycLevel } from '../services/hbs'
+import { fetchAgentKycLevel } from '../services/hbs'
 
 let client
 
@@ -102,7 +102,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
-    async getKycLevel(envirionment, hbsServicePort) {
+    async loadAgentKycLevel(envirionment, hbsServicePort) {
       const payload = {
         "email": this.agentEmail,
         "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
@@ -110,7 +110,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       }
 
       const { _, signature  } = await client.signPayload(payload)
-      const kycLevel = await loadAgentKycLevel(payload, signature, envirionment, hbsServicePort)
+      const kycLevel = await fetchAgentKycLevel(payload, signature, envirionment, hbsServicePort)
       this.kycLevel = kycLevel
       return kycLevel
     }
