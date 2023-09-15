@@ -1,5 +1,4 @@
 import { inspect } from 'util'
-import axios from 'axios'
 import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
@@ -105,79 +104,22 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
       return result
     },
-    async zomeCall(args) {
-      const zomeCallArgs = {
-        appId: installed_app_id,
-        roleId: args.role_name,
-        zomeName: args.zome_name,
-        fnName: args.fn_name,
-        payload: args.payload
-      }
-
-      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
-      return response
-    },
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
-        if( !is_hpos_served ) { // If running a raw holochain we need to authorize zome calls once
-          try {
-            const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-            await adminWs.authorizeSigningCredentials(cellId)
-          } catch(e) {
-            console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
-            reject()
-          }
-
-          resolve()
-        } else {
-          try {
-            const [keyPair, signingKey] = await generateSigningKeyPair()
-            const params = { cellId, signingKey }    
-            const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
-    
-            const signingCredentials = {
-              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Number(value)))),
-              keyPair,
-              signingKey
-            }
-    
-            await setSigningCredentials(cellId, signingCredentials)
-          } catch (e) {
-            console.log(`Error setting signing credentials`, e)
-            reject()
-          }
-
-          resolve()
+        try {
+          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+          await adminWs.authorizeSigningCredentials(cellId)
+        } catch(e) {
+          console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
+          reject()
         }
+
+        resolve()
       })
     },
-    async hposHolochainCall({
-      path,
-      headers: userHeaders = {},
-      params
-    }) {
-      const axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        }
-      }
-
-      const HPOS_API_URL = `${window.location.protocol}//${window.location.host}`
-      const pathPrefix = '/holochain-api/v1/'
-      const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
-  
-      const authToken = localStorage.getItem('authToken')
-  
-      const headers = {
-        'X-Hpos-Auth-Token': authToken,
-        ...axiosConfig.headers,
-        ...userHeaders
-      }
-  
-      const response = await axios.post(fullUrl, params, { headers })
-      return response.data
-    }
+    async loadAgentKycLevel(_, __) {
+      return null // raw holochain doesn't have a mechanism for fetching agent's kyc level
+    },
   }
 })
 

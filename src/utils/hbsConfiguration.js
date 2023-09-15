@@ -24,21 +24,25 @@ const HbsServiceURL = (service, key, port) => {
     }
   }
 
-  export const AUTH_SERVICE_URL = HbsServiceURL(
-    'auth',
-    process.env.VUE_ENV || Environment.localNoBackend,
-    process.env.VUE_OPS_SERVICE_PORT || '3003'
-  )
-  
   const AuthServiceVersion = {
     [Environment.local]: 'v1',
     [Environment.development]: 'v1',
     [Environment.qa]: 'v1',
     [Environment.production]: 'v1'
-  }
-  
-  export const AUTH_SERVICE_VERSION = process.env.VUE_ENV
-    ? AuthServiceVersion[process.env.VUE_ENV]
+  }  
+
+  export const authServiceVersion = function(envirionment) {
+    return (envirionment)
+    ? AuthServiceVersion[envirionment]
     : AuthServiceVersion[Environment.local]
+  }
+
+  export const authServiceUrl = function(envirionment, hbsServicePort) {
+    return HbsServiceURL(
+      'auth',
+      envirionment || Environment.localNoBackend,
+      hbsServicePort || '3003'
+    )    
+  }
   
   

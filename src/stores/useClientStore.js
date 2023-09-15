@@ -5,10 +5,12 @@ import { encodeAgentId } from '../utils/agent'
 const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
-    isReady: false
+    isReady: false,
+    agentKyc: null
   }),
   getters: {
-    agentId: state => state.agentKey && encodeAgentId(state.agentKey)
+    agentId: state => state.agentKey && encodeAgentId(state.agentKey),
+    agentKycLevel: state => state.agentKyc
   },
   actions: {
     async initialize() {
@@ -45,6 +47,12 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       return result
     },
+
+    async loadAgentKycLevel(envirionment, hbsServicePort) {
+      const kycLevel = await useInterfaceStore().loadAgentKycLevel(envirionment, hbsServicePort)
+      this.agentKyc = kycLevel
+      return kycLevel
+    }
   }
 })
 
