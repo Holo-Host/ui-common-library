@@ -22,7 +22,16 @@ const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoport
     },
 
     async callZome(args) {
-        useHolochainStore().callZome(args)
+      const zomeCallArgs = {
+        appId: installed_app_id,
+        roleId: args.role_name,
+        zomeName: args.zome_name,
+        fnName: args.fn_name,
+        payload: args.payload
+      }
+
+      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
+      return response
     },
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
