@@ -17,14 +17,15 @@ async function authCall(args, envirionment, hbsServicePort) {
 export async function authenticateAgent(payload, signature, envirionment, hbsServicePort) {
   try {
     const result = await authCall({
-      params: payload,
-      endpoint: 'holo-client',
-      headers: {
-        'X-Signature': signature
+        params: payload,
+        endpoint: 'holo-client',
+        headers: {
+          'X-Signature': signature
+        },
       },
       envirionment,
       hbsServicePort
-    })
+    )
 
     return result.data
   } catch (e) {
