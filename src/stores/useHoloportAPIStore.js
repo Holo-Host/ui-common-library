@@ -10,16 +10,15 @@ const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoport
     // These two values are subscribed to by clientStore
     appInfo: useHolochainStore().appInfo,
     isReady: false,
-    signingCredentials: useHolochainStore().signingCredentials
+    signingCredentials: null
   }),
   actions: {
     async initialize() {
-        useHolochainStore().initialize()
         this.isReady = true
     },
 
     async loadAppInfo() {
-        useHolochainStore().loadAppInfo()
+        // useHolochainStore().loadAppInfo()
         this.isReady = true
     },
 
