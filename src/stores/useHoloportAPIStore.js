@@ -14,7 +14,7 @@ const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoport
   }),
   actions: {
     async initialize() {
-        this.isReady = true
+        // this.isReady = true
     },
 
     async loadAppInfo() {
