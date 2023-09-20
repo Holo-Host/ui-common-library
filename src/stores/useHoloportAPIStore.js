@@ -4,11 +4,11 @@ import { defineStore } from 'pinia'
 import { listify } from '../utils'
 import { kycLevel2 } from '../services/hbs'
 
-const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoportAPI', {
+const makeUseHoloportAPIStore = () => defineStore('holoportAPI', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
-    appInfo: useHolochainStore().appInfo,
+    appInfo: null,
     isReady: false,
     signingCredentials: null
   }),
