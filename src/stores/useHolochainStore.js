@@ -1,4 +1,5 @@
 import { inspect } from 'util'
+import axios from 'axios'
 import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
@@ -104,21 +105,107 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
       return result
     },
+    async zomeCall(args) {
+      const zomeCallArgs = {
+        appId: installed_app_id,
+        roleId: args.role_name,
+        zomeName: args.zome_name,
+        fnName: args.fn_name,
+        payload: args.payload
+      }
+
+      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
+      return response
+    },    
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
-        try {
-          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-          await adminWs.authorizeSigningCredentials(cellId)
-        } catch(e) {
-          console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
-          reject()
-        }
+        if( !is_hpos_served ) { // If running a raw holochain we need to authorize zome calls once
+          try {
+            const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+            await adminWs.authorizeSigningCredentials(cellId)
+          } catch(e) {
+            console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
+            reject()
+          }
 
-        resolve()
+          resolve()
+        } else {
+          try {
+            const [keyPair, signingKey] = await generateSigningKeyPair()
+            const params = { cellId, signingKey }    
+            const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
+
+            const signingCredentials = {
+              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Number(value)))),
+              keyPair,
+              signingKey
+            }
+
+            await setSigningCredentials(cellId, signingCredentials)
+          } catch (e) {
+            console.log(`Error setting signing credentials`, e)
+            reject()
+          }
+
+          resolve()
+        }
       })
     },
+    async hposHolochainCall({
+      path,
+      headers: userHeaders = {},
+      params,
+      method = 'post',
+    }) {
+      const axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
+
+      const HPOS_API_URL = `${window.location.protocol}//${window.location.host}`
+      const pathPrefix = '/holochain-api/v1/'
+      const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
+
+      const authToken = localStorage.getItem('authToken')
+
+      const headers = {
+        'X-Hpos-Auth-Token': authToken,
+        ...axiosConfig.headers,
+        ...userHeaders
+      }
+
+      let response
+
+      switch (method) {
+        case 'get':
+          response = await axios.get(fullUrl, { params, headers })
+          return response.data
+
+        case 'post':
+          response = await axios.post(fullUrl, params, { headers })
+          return response.data
+
+        case 'put':
+          response = await axios.put(fullUrl, params, { headers })
+          return response.data
+
+        case 'delete':
+          response = await axios.delete(fullUrl, { params, headers })
+          return response.data
+
+        default:
+          throw new Error(`No case in hposCall for ${method} method`)
+        }
+    },    
     async loadAgentKycLevel(_, __) {
-      return null // raw holochain doesn't have a mechanism for fetching agent's kyc level
+      if( !is_hpos_served) {
+        return null // raw holochain doesn't have a mechanism for retrieving agent's kyc
+      }
+      
+      const kycLevel = await this.hposHolochainCall({path: 'kyc', headers: {}, params: {}, method: 'get'})
+      return kycLevel ? (kycLevel === kycLevel2) ? 2 : 1 : null
     },
   }
 })
