@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
+import { AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { listify } from '../utils'
 import { kycLevel2 } from '../services/hbs'
