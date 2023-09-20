@@ -19,7 +19,7 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
 
       useInterfaceStore().$subscribe((_, state) => {
         // This could be more efficient by inspecting the contents of mutation
-        this.isReady = useInterfaceStore().isReady
+        this.isReady = state
 
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key
