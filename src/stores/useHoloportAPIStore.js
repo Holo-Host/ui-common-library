@@ -6,7 +6,7 @@ import { kycLevel2 } from '../services/hbs'
 
 const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoportAPI', {
   state: () => ({
-    client: useHolochainStore().client,
+    client: null,
     // These two values are subscribed to by clientStore
     appInfo: useHolochainStore().appInfo,
     isReady: false,
@@ -14,12 +14,43 @@ const makeUseHoloportAPIStore = ({ useHolochainStore }) => defineStore('holoport
   }),
   actions: {
     async initialize() {
-        this.isReady = true
+      try {
+        const holochainClient = await AppWebsocket.connect(
+          app_ws_url,
+          HC_APP_TIMEOUT,
+          signal => useSignalStore().handleSignal(presentHcSignal(signal))
+        )
+
+        this.client = holochainClient
+
+        holochainClient.client.socket.onclose = function(e) {
+          console.log(
+            'Socket to Holochain App Interface has closed.',
+            inspect(e)
+          )
+          this.client = null
+          this.isReady = false
+        }
+
+        this.loadAppInfo()
+      } catch (e) {
+        console.error('Holochain connection error ', e)
+        this.isReady = false
+      }
     },
 
     async loadAppInfo() {
-        useHolochainStore().loadAppInfo()
+      try {
+        const appInfo = await this.client.appInfo({
+          installed_app_id
+        })
+        this.appInfo = appInfo
         this.isReady = true
+
+        return appInfo
+      } catch (error) {
+        console.error('appInfo() returned error.', inspect(error))
+      }
     },
 
     async callZome(args) {
