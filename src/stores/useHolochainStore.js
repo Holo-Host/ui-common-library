@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
+import { kycLevel2 } from '../services/hbs'
 
 const HC_APP_TIMEOUT = 35_000
 
