@@ -120,36 +120,15 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
     },    
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
-        if( !is_hpos_served ) { // If running a raw holochain we need to authorize zome calls once
-          try {
-            const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-            await adminWs.authorizeSigningCredentials(cellId)
-          } catch(e) {
-            console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
-            reject()
-          }
-
-          resolve()
-        } else {
-          try {
-            const [keyPair, signingKey] = await generateSigningKeyPair()
-            const params = { cellId, signingKey }    
-            const cap_token = await this.hposHolochainCall({path: 'cap_token', headers: {}, params})
-
-            const signingCredentials = {
-              capSecret: new Uint8Array(listify(cap_token, (_, value) => (Number(value)))),
-              keyPair,
-              signingKey
-            }
-
-            await setSigningCredentials(cellId, signingCredentials)
-          } catch (e) {
-            console.log(`Error setting signing credentials`, e)
-            reject()
-          }
-
-          resolve()
+        try {
+          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+          await adminWs.authorizeSigningCredentials(cellId)
+        } catch(e) {
+          console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
+          reject()
         }
+
+        resolve()
       })
     },
     async hposHolochainCall({
