@@ -17,10 +17,12 @@
       v-if="!isEmpty"
       class="happ-card__content"
     >
-      <HAppImage
-        :happ="happ"
-        class="happ-card__desktop-image"
-      />
+      <slot name="happ-image">
+        <HAppImage
+          :happ="happ"
+          class="happ-card__desktop-image"
+        />
+      </slot>
 
       <div class="happ-card__details">
         <div class="happ-card__name">
