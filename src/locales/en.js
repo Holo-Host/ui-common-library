@@ -1,7 +1,7 @@
 const translations = {
   $: {
     app_version: '{app} version {version}',
-    bandwidth: 'Bandwidth',
+    data_transfer: 'Data Transfer',
     cancel: 'Cancel',
     confirm: 'Confirm',
     continue: 'Continue',
