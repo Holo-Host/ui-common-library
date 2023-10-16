@@ -256,7 +256,7 @@ export const hAppMock = {
   isPaused: false,
   enabled: true,
   sourceChains: 0,
-  usage: { bandwidth: 0, cpu: 0 },
+  usage: { data_transfer: 0, cpu: 0 },
   storage: 0
 }
 
