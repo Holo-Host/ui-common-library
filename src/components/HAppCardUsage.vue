@@ -31,15 +31,15 @@ const items = computed(() => {
       isDisabled: true
     },
     {
-      value: presentBytes(props.happ.storage),
-      unit: t('$.storage'),
-      isDisabled: true
-    },
-    {
       value: presentBytes(props.happ.usage?.bandwidth),
-      unit: t('$.bandwidth'),
+      unit: t('$.data_transfer'),
       isDisabled: false
-    }
+    },
+    // {
+    //   value: presentBytes(props.happ.storage),
+    //   unit: t('$.storage'),
+    //   isDisabled: true
+    // }
   ]
 })
 </script>
