@@ -35,7 +35,7 @@
             <ArrowIcon
               class="happ-card__name-arrow-icon"
               :class="[areDetailsAvailable ? 'pointer' : 'disabled']"
-              @click="emit('details-link-click')"
+              @click="areDetailsAvailable ? emit('details-link-click') : () => {}"
             />
           </slot>
         </div>
