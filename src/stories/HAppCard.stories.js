@@ -9,7 +9,8 @@ export default {
   argTypes: {
     happ: hAppMock,
     isEmpty: false,
-    emptyCardLabel: ''
+    emptyCardLabel: '',
+    areDetailsAvailable: false
   }
 }
 
@@ -25,14 +26,24 @@ export const Default = kTemplate.bind({})
 Default.args = {
   happ: hAppMock,
   isEmpty: false,
-  emptyCardLabel: ''
+  emptyCardLabel: '',
+  areDetailsAvailable: false
 }
 
 export const EmptyWithLabel = kTemplate.bind({})
 EmptyWithLabel.args = {
   happ: null,
   isEmpty: true,
-  emptyCardLabel: '$.errors.no_data'
+  emptyCardLabel: '$.errors.no_data',
+  areDetailsAvailable: false
+}
+
+export const WithEnabledLink = kTemplate.bind({})
+WithEnabledLink.args = {
+  happ: hAppMock,
+  isEmpty: false,
+  emptyCardLabel: '',
+  areDetailsAvailable: true
 }
 
 const kEmptyWithCustomContentTemplate = (args) => ({

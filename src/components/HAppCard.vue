@@ -32,7 +32,11 @@
           </slot>
 
           <slot name="link-icon">
-            <ArrowIcon class="happ-card__name-arrow-icon" />
+            <ArrowIcon
+              class="happ-card__name-arrow-icon"
+              :class="[areDetailsAvailable ? 'pointer' : 'disabled']"
+              @click="areDetailsAvailable ? emit('details-link-click') : () => {}"
+            />
           </slot>
         </div>
 
@@ -63,6 +67,11 @@ const props = defineProps({
     default: () => {}
   },
 
+  areDetailsAvailable: {
+    type: Boolean,
+    default: false
+  },
+
   isEmpty: {
     type: Boolean,
     default: false
@@ -74,12 +83,13 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['details-link-click'])
+
 const earnings = computed(() =>
   props.happ.last7daysEarnings && Number(props.happ.last7daysEarnings)
     ? formatCurrency(Number(props.happ.last7daysEarnings))
     : '--'
 )
-
 </script>
 
 <style lang="scss" scoped>
@@ -135,7 +145,6 @@ const earnings = computed(() =>
 
     &-arrow-icon {
       margin-left: auto;
-      opacity: 0.2;
     }
   }
 
@@ -150,6 +159,10 @@ const earnings = computed(() =>
 /* Temporary, remove once we have all live data */
 .disabled {
   opacity: 0.2;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .bold {
