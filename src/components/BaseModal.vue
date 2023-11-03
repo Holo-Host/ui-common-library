@@ -14,7 +14,12 @@
           <ExIcon class="ex-icon" :size="16" />
         </button>
 
-        <div class="base-modal__content">
+        <div
+          class="base-modal__content"
+          :class="{
+            'base-modal__content--small-padding': contentPadding === 'sm',
+          }"
+        >
           <span v-if="title" class="base-modal__title">
             {{ title }}
           </span>
@@ -63,6 +68,14 @@ defineProps({
   subTitle: {
     type: String,
     default: ''
+  },
+
+  contentPadding: {
+    type: String,
+    default: 'md',
+    validator(value) {
+      return ['sm', 'md'].includes(value)
+    }
   }
 })
 
@@ -79,7 +92,7 @@ const emit = defineEmits(['close'])
   z-index: 20;
   padding: 26px;
   opacity: 1;
-  max-width: 580px;
+  max-width: 640px;
 
   &__overlay {
     position: fixed;
@@ -105,6 +118,10 @@ const emit = defineEmits(['close'])
     line-height: 19px;
     text-align: center;
     color: #313c59;
+
+    &--small-padding {
+      padding: 26px 12px;
+    }
   }
 
   &__title {
@@ -161,6 +178,10 @@ const emit = defineEmits(['close'])
 
     &__sub-title {
       margin-bottom: 26px;
+    }
+
+    &__buttons {
+      margin-top: 32px;
     }
   }
 }
