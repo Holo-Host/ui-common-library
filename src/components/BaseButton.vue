@@ -48,7 +48,7 @@ const props = defineProps({
     type: Number,
     default: EButtonType.primary,
     validator(value) {
-      return [EButtonType.primary, EButtonType.secondary, EButtonType.gray, EButtonType.custom].includes(value)
+      return [EButtonType.primary, EButtonType.secondary, EButtonType.tertiary, EButtonType.gray, EButtonType.custom].includes(value)
     }
   },
 
