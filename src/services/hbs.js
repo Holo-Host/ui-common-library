@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { authServiceUrl, authServiceVersion } from '../utils/hbsConfiguration'
+import { authServiceUrl, authServiceVersion, registrationServiceUrl, registrationServiceVersion } from '../utils/hbsConfiguration'
 import { httpCall } from '../utils/httpProvider'
 
 export const kycLevel1 = 'holo_kyc_1'
@@ -41,4 +41,42 @@ export async function fetchAgentKycLevel(payload, signature, envirionment, hbsSe
   const authResult = await authenticateAgent(payload, signature, envirionment, hbsServicePort)
   return (authResult && authResult.kyc) ? (authResult.kyc === kycLevel2) ? 2 : 1 : null
 }
-  
+
+
+async function registrationCall(args, envirionment, hbsServicePort) {
+  return httpCall({
+    serviceUrl: registrationServiceUrl(envirionment),
+    version: registrationServiceVersion(hbsServicePort),
+    method: 'post',
+    ...args
+  })
+}
+
+async function registrationFetchHostCriteria(payload, envirionment, hbsServicePort) {
+  try {
+    const result = await registrationCall({
+        params: payload,
+        endpoint: 'fetch-host-criteria',
+      },
+      envirionment,
+      hbsServicePort
+    )
+
+    return result.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return e.message
+    } else {
+      return 'unknown error'
+    }
+  }
+}
+
+export async function fetchHostCriteria(hostIds, envirionment, hbsServicePort) {
+  const payload = {
+    "ids": hostIds || []
+  }
+
+  const result = await registrationFetchHostCriteria(payload, envirionment, hbsServicePort)
+  return result
+}

@@ -4,11 +4,13 @@ import { Environment } from './consts'
 const HbsServiceURL = (service, key, port) => {
     switch (key) {
       case Environment.local:
-        return `http://localhost:${port}/${service}`
+        // return `http://localhost:${port}/${service}`
+        return `https://hbs.dev.holotest.net/${service}`
+        // return `http://localhost:3000/${service}`
   
       case Environment.localNoBackend:
         return `https://hbs.dev.holotest.net/${service}`
-        // return `http://localhost:3001/${service}`
+        // return `http://localhost:3000/${service}`
   
       case Environment.development:
         return `https://hbs.dev.holotest.net/${service}`
@@ -37,6 +39,7 @@ const HbsServiceURL = (service, key, port) => {
     : AuthServiceVersion[Environment.local]
   }
 
+
   export const authServiceUrl = function(envirionment, hbsServicePort) {
     return HbsServiceURL(
       'auth',
@@ -44,5 +47,26 @@ const HbsServiceURL = (service, key, port) => {
       hbsServicePort || '3003'
     )    
   }
+
+  const RegistrationServiceVersion = {
+    [Environment.local]: 'v1',
+    [Environment.development]: 'v1',
+    [Environment.qa]: 'v1',
+    [Environment.production]: 'v1'
+  }
+
+  export const registrationServiceVersion = function(envirionment) {
+    return (envirionment)
+    ? RegistrationServiceVersion[envirionment]
+    : RegistrationServiceVersion[Environment.local]
+  }  
+
+  export const registrationServiceUrl = function(envirionment, hbsServicePort) {
+    return HbsServiceURL(
+      'registration',
+      envirionment || Environment.localNoBackend,
+      hbsServicePort || '3003'
+    )    
+  }  
   
   
