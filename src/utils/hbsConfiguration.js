@@ -4,13 +4,10 @@ import { Environment } from './consts'
 const HbsServiceURL = (service, key, port) => {
     switch (key) {
       case Environment.local:
-        // return `http://localhost:${port}/${service}`
-        return `https://hbs.dev.holotest.net/${service}`
-        // return `http://localhost:3000/${service}`
+        return `http://localhost:${port}/${service}`
   
       case Environment.localNoBackend:
         return `https://hbs.dev.holotest.net/${service}`
-        // return `http://localhost:3000/${service}`
   
       case Environment.development:
         return `https://hbs.dev.holotest.net/${service}`
