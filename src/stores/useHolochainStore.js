@@ -90,13 +90,17 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
       await this.signingCredentials
 
       let result = null
+
+      const cell_id = [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))]
+
       try {
         result = await this.client.callZome(
           {
             zome_name,
             fn_name,
             payload,
-            cell_id: [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))]
+            cell_id,
+            provenance: cell_id[1]
           },
           HC_APP_TIMEOUT
         )
