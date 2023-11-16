@@ -40,10 +40,10 @@
           </slot>
         </div>
 
-        <div class="happ-card__earnings disabled">
+        <div class="happ-card__earnings">
           {{ $t('$.last_7_days') }}:
           <span class="bold">
-            &nbsp;{{ earnings }} HF
+            &nbsp{{ formatCurrency(Number(props.happ.earnings.last7Days)) }} HF
           </span>
         </div>
 
@@ -54,7 +54,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { formatCurrency } from '../utils/numbers'
 import BaseCard from './BaseCard.vue'
 import HAppCardUsage from './HAppCardUsage.vue'
@@ -84,12 +83,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['details-link-click'])
-
-const earnings = computed(() =>
-  props.happ.last7daysEarnings && Number(props.happ.last7daysEarnings)
-    ? formatCurrency(Number(props.happ.last7daysEarnings))
-    : '--'
-)
 </script>
 
 <style lang="scss" scoped>
