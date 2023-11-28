@@ -12,6 +12,19 @@
     class="header-row-item"
   >
     <div
+      v-if="header.checkBoxFunction"
+      class="header-row-item__content"
+      :class="[header.align ? `header-row-item__content--align-${header.align}` : '']"
+    >
+      <BaseCheckbox
+        id="select-all"
+        :checked="header.checkBoxValue"
+        class="todo_checkbox"
+        @update:checked="header.checkBoxFunction"
+      />
+    </div>
+    <div
+      v-else
       class="header-row-item__content"
       :class="[header.align ? `header-row-item__content--align-${header.align}` : '']"
     >
@@ -36,6 +49,7 @@
 <script setup>
 import { ESortDirections } from '../types/ui'
 import ShortUpArrowIcon from './icons/ShortUpArrowIcon.vue'
+import BaseCheckbox from './BaseCheckbox.vue';
 
 defineProps({
   header: {
