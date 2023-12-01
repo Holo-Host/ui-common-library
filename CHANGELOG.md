@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Bug in useHoloStore that was failing to update `appInfo` and `isReady` on initialization. [(#29)]
 
 ### Changed
+- Added HBS registration calls [(#75)]
 - Updated useHoloStore to use agent_pub_key [(#51)]
 - Updated useClientStore to use agent_pub_key [(#50)]
 - Modified HAppCard, HAppCardUsage, and HAppImage to support publisher portal hApp view [(#43)]
@@ -27,3 +28,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 [(#43)]: https://github.com/Holo-Host/ui-common-library/pull/43
 [(#50)]: https://github.com/Holo-Host/ui-common-library/pull/50
 [(#51)]: https://github.com/Holo-Host/ui-common-library/pull/51
+[(#75)]: https://github.com/Holo-Host/ui-common-library/pull/75

@@ -28,13 +28,13 @@ const items = computed(() => {
     {
       value: presentMicroSeconds(props.happ.usage?.cpu),
       unit: t('$.cpu'),
-      isDisabled: true
+      isDisabled: false
     },
     {
       value: presentBytes(props.happ.usage?.bandwidth),
       unit: t('$.data_transfer'),
       isDisabled: false
-    },
+    }
     // {
     //   value: presentBytes(props.happ.storage),
     //   unit: t('$.storage'),

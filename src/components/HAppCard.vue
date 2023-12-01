@@ -32,14 +32,18 @@
           </slot>
 
           <slot name="link-icon">
-            <ArrowIcon class="happ-card__name-arrow-icon" />
+            <ArrowIcon
+              class="happ-card__name-arrow-icon"
+              :class="[areDetailsAvailable ? 'pointer' : 'disabled']"
+              @click="areDetailsAvailable ? emit('details-link-click') : () => {}"
+            />
           </slot>
         </div>
 
-        <div class="happ-card__earnings disabled">
+        <div class="happ-card__earnings">
           {{ $t('$.last_7_days') }}:
           <span class="bold">
-            &nbsp;{{ earnings }} HF
+            &nbsp{{ formatCurrency(Number(props.happ.earnings.last7Days)) }} HF
           </span>
         </div>
 
@@ -50,7 +54,6 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
 import { formatCurrency } from '../utils/numbers'
 import BaseCard from './BaseCard.vue'
 import HAppCardUsage from './HAppCardUsage.vue'
@@ -61,6 +64,11 @@ const props = defineProps({
   happ: {
     type: Object,
     default: () => {}
+  },
+
+  areDetailsAvailable: {
+    type: Boolean,
+    default: false
   },
 
   isEmpty: {
@@ -74,12 +82,7 @@ const props = defineProps({
   }
 })
 
-const earnings = computed(() =>
-  props.happ.last7daysEarnings && Number(props.happ.last7daysEarnings)
-    ? formatCurrency(Number(props.happ.last7daysEarnings))
-    : '--'
-)
-
+const emit = defineEmits(['details-link-click'])
 </script>
 
 <style lang="scss" scoped>
@@ -135,7 +138,6 @@ const earnings = computed(() =>
 
     &-arrow-icon {
       margin-left: auto;
-      opacity: 0.2;
     }
   }
 
@@ -150,6 +152,10 @@ const earnings = computed(() =>
 /* Temporary, remove once we have all live data */
 .disabled {
   opacity: 0.2;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .bold {
