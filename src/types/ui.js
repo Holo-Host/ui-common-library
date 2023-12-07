@@ -1,5 +1,6 @@
 export const ESpinnerSize = {
   none: 0,
+  xs: 0.3,
   small: 1,
   medium: 2,
   large: 3,
