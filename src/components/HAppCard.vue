@@ -40,7 +40,7 @@
           </slot>
         </div>
 
-        <div class="happ-card__earnings">
+        <div class="happ-card__earnings" v-if="props.happ.earnings">
           {{ $t('$.last_7_days') }}:
           <span class="bold">
             &nbsp{{ formatCurrency(Number(props.happ.earnings.last7Days)) }} HF
