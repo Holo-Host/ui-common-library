@@ -3,6 +3,30 @@ import axios from 'axios'
 const REQUEST_TIMEOUT = 10000
 
 
+export async function serviceApiHttpCall({
+  serviceUrl,
+  method = 'get',
+  endpoint = '',
+  headers = {},
+  params = {},
+  query = '',
+  isRaw = false
+}) {
+  let url = isRaw ? serviceUrl ?? '' : `${serviceUrl}/${endpoint}`
+
+  if (query) {
+    url = `${url}${query}`
+  }
+
+  switch (method) {
+    case 'get':
+      return axios.get(url, { params, headers, timeout: REQUEST_TIMEOUT })
+
+    default:
+      throw new Error(`No case in httpProvider for ${method} method`)
+  }
+}
+
 export async function httpCall({
   serviceUrl,
   version = 'v1',
