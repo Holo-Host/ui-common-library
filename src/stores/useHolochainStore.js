@@ -108,6 +108,12 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         )
       } catch (e) {
         console.log(`holochainCallZome error -- zome_name: ${zome_name} fn_name: ${fn_name}`, e)
+        if (e.type === 'error') {
+          console.log('throwing new error')
+          throw new Error(`${e.data.type} - ${e.data.data}`)
+        } else {
+          throw e
+        }
       }
 
       return result
