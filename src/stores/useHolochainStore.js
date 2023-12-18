@@ -2,7 +2,7 @@ import { inspect } from 'util'
 import axios from 'axios'
 import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
-import { presentHcSignal, listify } from '../utils'
+import { listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 import { kycLevel2 } from '../services/hbs'
@@ -23,8 +23,10 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         const holochainClient = await AppWebsocket.connect(
           app_ws_url,
           HC_APP_TIMEOUT,
-          signal => useSignalStore().handleSignal(presentHcSignal(signal))
         )
+
+        holochainClient.on('signal', signal => 
+          useSignalStore().handleSignal(signal))
 
         this.client = holochainClient
 
