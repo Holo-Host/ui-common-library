@@ -3,7 +3,7 @@
     <div
       v-if="isVisible"
       class="base-modal__overlay"
-      @click="isDismissible ? emit('close') : () => {}"
+      @click="isDismissible && isClickableOutside ? emit('close') : () => {}"
     >
       <div class="base-modal" @click.stop>
         <button
@@ -46,6 +46,11 @@ import ExIcon from './icons/ExIcon.vue'
 
 defineProps({
   hasCloseButton: {
+    type: Boolean,
+    default: true
+  },
+
+  isClickableOutside: {
     type: Boolean,
     default: true
   },
