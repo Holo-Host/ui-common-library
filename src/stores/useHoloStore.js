@@ -6,6 +6,8 @@ import { fetchAgentKycLevel } from '../services/hbs'
 import { hAppServiceLogs, hAppStats, dashboardStats } from '../services/servicelogApi'
 import { generateB64Nonce } from '../utils/nonce'
 
+const msgpack = require('@msgpack/msgpack')
+
 let client
 
 const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {
@@ -123,13 +125,14 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
           "nonce": nonce,
           "timestamp": timestamp,
           "payload": {
-              "days": days,
-              "happ_id": happId
+            "happ_id": happId
           }
       }
 
       const { _, signature  } = await client.signPayload(payload)
-      const service_logs = await hAppServiceLogs(payload, signature, nonce, timestamp, this.agentKey, environment, serviceLogPort)
+      const encoded_service_logs = await hAppServiceLogs(happId, signature, nonce, timestamp, this.agentKey, environment, serviceLogPort)
+      console.log(`fetchHAppServiceLogs -- encoded_service_logs`, encoded_service_logs)
+      const service_logs = msgpack.decode(encoded_service_logs)
 
       console.log(`fetchHAppServiceLogs`, service_logs)
       return service_logs

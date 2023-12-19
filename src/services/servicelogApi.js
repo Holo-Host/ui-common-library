@@ -5,8 +5,6 @@ import { serviceApiHttpCall } from '../utils/httpProvider'
 async function serviceLogApiCall(args, environment, serviceLogPort) {
     const url = serviceLogApiUrl(environment, serviceLogPort)
 
-    console.log(`🧮 serviceLogApiCall url: ${url}`, args)
-
     return serviceApiHttpCall({
         serviceUrl: url,
         method: 'get',
@@ -14,10 +12,10 @@ async function serviceLogApiCall(args, environment, serviceLogPort) {
     })
 }
 
-export async function hAppServiceLogs(payload, signature, nonce, timestamp, pubkey, environment, serviceLogPort) {
+export async function hAppServiceLogs(happId, signature, nonce, timestamp, pubkey, environment, serviceLogPort) {
     try {
         const result = await serviceLogApiCall({
-            params: payload,
+            params: { happId },
             headers: {
                 "X-Nonce": nonce,
                 "X-Timestamp": timestamp,
