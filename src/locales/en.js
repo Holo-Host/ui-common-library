@@ -7,6 +7,7 @@ const translations = {
     continue: 'Continue',
     close: 'Close',
     cpu: 'CPU',
+    hpu: 'HPU',
     dont_show_this_message_again: "Don't show this message again",
     draft: 'Draft',
     error: 'Error',

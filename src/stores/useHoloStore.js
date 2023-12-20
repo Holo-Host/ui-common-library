@@ -3,8 +3,8 @@ import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 import { fetchAgentKycLevel } from '../services/hbs'
-import { hAppServiceLogs, hAppStats, dashboardStats } from '../services/servicelogApi'
-import { generateB64Nonce } from '../utils/nonce'
+import { hAppServiceLogs, hAppStats, dashboardStats, allHappStats } from '../services/servicelogApi'
+import { generateServiceLogPayload } from '../utils/serviceLogPayload'
 
 const msgpack = require('@msgpack/msgpack')
 
@@ -119,58 +119,33 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return kycLevel
     },
     async fetchHAppServiceLogs(happId, environment, serviceLogPort) {
-      const timestamp = Date.now() - (30 * 1000)
-      const nonce = generateB64Nonce() 
-      const payload = {
-          "nonce": nonce,
-          "timestamp": timestamp,
-          "payload": {
-            "happ_id": happId
-          }
-      }
-
+      const payload = generateServiceLogPayload({ "happ_id": happId })
       const { _, signature  } = await client.signPayload(payload)
-      const encoded_service_logs = await hAppServiceLogs(happId, signature, nonce, timestamp, this.agentKey, environment, serviceLogPort)
-      console.log(`fetchHAppServiceLogs -- encoded_service_logs`, encoded_service_logs)
-      const service_logs = msgpack.decode(encoded_service_logs)
+      const encoded_service_logs = await hAppServiceLogs(payload, signature, this.agentKey, environment, serviceLogPort)
+      // const service_logs = msgpack.decode(encoded_service_logs)
 
-      console.log(`fetchHAppServiceLogs`, service_logs)
-      return service_logs
+      console.log('encoded_service_logs', encoded_service_logs)
+      return encoded_service_logs
     },
     async fetchHAppStats(happId, days, environment, serviceLogPort) {
-      const timestamp = Date.now() - (30 * 1000)
-      const nonce = generateB64Nonce() 
-      const payload = {
-          "nonce": nonce,
-          "timestamp": timestamp,
-          "payload": {
-              "days": days,
-              "happ_id": happId
-          }
-      }
-
+      const payload = generateServiceLogPayload({ "days": days, "happ_id": happId })
       const { _, signature  } = await client.signPayload(payload)
-      const hAppStatistics = await hAppStats(happId, days, signature, nonce, timestamp, this.agentKey, environment, serviceLogPort)
+      const hAppStatistics = await hAppStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
-      console.log(`fetchHAppStats`, hAppStatistics)
       return hAppStatistics
     },
-    async fetchDashboardStats(days, environment, serviceLogPort) {
-      const timestamp = Date.now() - (30 * 1000)
-      const nonce = generateB64Nonce()
-
-      const payload = {
-          "nonce": nonce,
-          "timestamp": timestamp,
-          "payload": {
-              "days": days,
-          }
-      }
-
+    async fetchAllHAppStats(days, environment, serviceLogPort) {
+      const payload = generateServiceLogPayload({ "days": days })
       const { _, signature  } = await client.signPayload(payload)
-      const dashboardStatistics = await dashboardStats(days, signature, nonce, timestamp, this.agentKey, environment, serviceLogPort)
+      const hAppStatistics = await allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
-      console.log(`fetchDashboardStats`, dashboardStatistics)
+      return hAppStatistics
+    },    
+    async fetchDashboardStats(days, environment, serviceLogPort) {
+      const payload = generateServiceLogPayload({ "days": days })
+      const { _, signature  } = await client.signPayload(payload)
+      const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
+
       return dashboardStatistics
     },    
   }
