@@ -10,13 +10,11 @@ const ServicelogApiURLForEnvironment = (key, port) => {
         return `http://localhost:${port}`
   
       case Environment.development:
-        return `https://servicelog-api.dev.holotest.net`
-  
+        return `https://servicelog-vault.dev.holotest.net/v1`
       case Environment.qa:
-        return `https://servicelog-api.qa.holotest.net`
-  
+        return `https://servicelog-vault.qa.holotest.net/v1`
       case Environment.production:
-        return `https://servicelog-api.holo.host`
+        return `https://servicelog-vault.holo.host/v1`
   
       default:
         throw new Error('Error resolving service url. Found invalid environment key.')
