@@ -9,8 +9,8 @@ const SpringboardURL = {
     [Environment.production]: 'https://springboard.holo.host'
 }
   
-export const springBoardUrl = function(envirionment) {
-    return (envirionment)
-    ? SpringboardURL[envirionment]
+export const springBoardUrl = function(environment) {
+    return (environment)
+    ? SpringboardURL[environment]
     : SpringboardURL[Environment.local]
 }

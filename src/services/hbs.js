@@ -5,16 +5,16 @@ import { httpCall } from '../utils/httpProvider'
 export const kycLevel1 = 'holo_kyc_1'
 export const kycLevel2 = 'holo_kyc_2'
 
-async function authCall(args, envirionment, hbsServicePort) {
+async function authCall(args, environment, hbsServicePort) {
   return httpCall({
-    serviceUrl: authServiceUrl(envirionment),
+    serviceUrl: authServiceUrl(environment),
     version: authServiceVersion(hbsServicePort),
     method: 'post',
     ...args
   })
 }
   
-export async function authenticateAgent(payload, signature, envirionment, hbsServicePort) {
+export async function authenticateAgent(payload, signature, environment, hbsServicePort) {
   try {
     const result = await authCall({
         params: payload,
@@ -23,7 +23,7 @@ export async function authenticateAgent(payload, signature, envirionment, hbsSer
           'X-Signature': signature
         },
       },
-      envirionment,
+      environment,
       hbsServicePort
     )
 
@@ -37,28 +37,28 @@ export async function authenticateAgent(payload, signature, envirionment, hbsSer
   }
 }
 
-export async function fetchAgentKycLevel(payload, signature, envirionment, hbsServicePort) {
-  const authResult = await authenticateAgent(payload, signature, envirionment, hbsServicePort)
+export async function fetchAgentKycLevel(payload, signature, environment, hbsServicePort) {
+  const authResult = await authenticateAgent(payload, signature, environment, hbsServicePort)
   return (authResult && authResult.kyc) ? (authResult.kyc === kycLevel2) ? 2 : 1 : null
 }
 
 
-async function registrationCall(args, envirionment, hbsServicePort) {
+async function registrationCall(args, environment, hbsServicePort) {
   return httpCall({
-    serviceUrl: registrationServiceUrl(envirionment),
+    serviceUrl: registrationServiceUrl(environment),
     version: registrationServiceVersion(hbsServicePort),
     method: 'post',
     ...args
   })
 }
 
-async function registrationFetchHostCriteria(payload, envirionment, hbsServicePort) {
+async function registrationFetchHostCriteria(payload, environment, hbsServicePort) {
   try {
     const result = await registrationCall({
         params: payload,
         endpoint: 'fetch-host-criteria',
       },
-      envirionment,
+      environment,
       hbsServicePort
     )
 
@@ -72,11 +72,11 @@ async function registrationFetchHostCriteria(payload, envirionment, hbsServicePo
   }
 }
 
-export async function fetchHostCriteria(hostIds, envirionment, hbsServicePort) {
+export async function fetchHostCriteria(hostIds, environment, hbsServicePort) {
   const payload = {
     "ids": hostIds || []
   }
 
-  const result = await registrationFetchHostCriteria(payload, envirionment, hbsServicePort)
+  const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
   return result
 }

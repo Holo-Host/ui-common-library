@@ -30,17 +30,17 @@ const HbsServiceURL = (service, key, port) => {
     [Environment.production]: 'v1'
   }  
 
-  export const authServiceVersion = function(envirionment) {
-    return (envirionment)
-    ? AuthServiceVersion[envirionment]
+  export const authServiceVersion = function(environment) {
+    return (environment)
+    ? AuthServiceVersion[environment]
     : AuthServiceVersion[Environment.local]
   }
 
 
-  export const authServiceUrl = function(envirionment, hbsServicePort) {
+  export const authServiceUrl = function(environment, hbsServicePort) {
     return HbsServiceURL(
       'auth',
-      envirionment || Environment.localNoBackend,
+      environment || Environment.localNoBackend,
       hbsServicePort || '3003'
     )    
   }
@@ -52,16 +52,16 @@ const HbsServiceURL = (service, key, port) => {
     [Environment.production]: 'v1'
   }
 
-  export const registrationServiceVersion = function(envirionment) {
-    return (envirionment)
-    ? RegistrationServiceVersion[envirionment]
+  export const registrationServiceVersion = function(environment) {
+    return (environment)
+    ? RegistrationServiceVersion[environment]
     : RegistrationServiceVersion[Environment.local]
   }  
 
-  export const registrationServiceUrl = function(envirionment, hbsServicePort) {
+  export const registrationServiceUrl = function(environment, hbsServicePort) {
     return HbsServiceURL(
       'registration',
-      envirionment || Environment.localNoBackend,
+      environment || Environment.localNoBackend,
       hbsServicePort || '3003'
     )    
   }  
