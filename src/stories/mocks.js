@@ -20,7 +20,7 @@ export const headersMap = new Map([
     'counterparty',
     {
       key: 'counterparty',
-      label: 'Publisher',
+      label: 'hApp Manager',
       isVisibleOnMobile: false,
       isSortable: true
     }
