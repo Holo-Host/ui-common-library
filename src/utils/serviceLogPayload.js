@@ -5,9 +5,9 @@ export const generateServiceLogPayload = (payload) => {
     const nonce = generateB64Nonce() 
     const service_log_payload = {
         "nonce": nonce,
-        "timestamp": timestamp,
-        "payload": payload
-    }    
+        "timestamp": timestamp.toString(),
+        payload
+    }
 
     return service_log_payload
 }

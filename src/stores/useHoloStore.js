@@ -106,7 +106,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
-    async loadAgentKycLevel(envirionment, hbsServicePort) {
+    async loadAgentKycLevel(environment, hbsServicePort) {
       const payload = {
         "email": this.agentEmail,
         "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
@@ -114,7 +114,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       }
 
       const { _, signature  } = await client.signPayload(payload)
-      const kycLevel = await fetchAgentKycLevel(payload, signature, envirionment, hbsServicePort)
+      const kycLevel = await fetchAgentKycLevel(payload, signature, environment, hbsServicePort)
       this.kycLevel = kycLevel
       return kycLevel
     },
@@ -128,21 +128,21 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return encoded_service_logs
     },
     async fetchHAppStats(happId, days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days, "happ_id": happId })
+      const payload = generateServiceLogPayload({ "days": days.toString(), "happ_id": happId })
       const { _, signature  } = await client.signPayload(payload)
       const hAppStatistics = await hAppStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
       return hAppStatistics
     },
     async fetchAllHAppStats(happIds, days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "happIds": happIds, "days": days })
+      const payload = generateServiceLogPayload({ "happIds": happIds, "days": days.toString() })
       const { _, signature  } = await client.signPayload(payload)
       const hAppStatistics = await allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
       return hAppStatistics
     },    
     async fetchDashboardStats(days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days })
+      const payload = generateServiceLogPayload({ "days": days.toString() })
       const { _, signature  } = await client.signPayload(payload)
       const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
 

@@ -7,7 +7,7 @@ const ServicelogApiURLForEnvironment = (key, port) => {
         return `http://localhost:${port}`
   
       case Environment.localNoBackend:
-        return `http://localhost:${port}`
+        return `https://servicelog-vault.dev.holotest.net/v1`
   
       case Environment.development:
         return `https://servicelog-vault.dev.holotest.net/v1`
@@ -24,7 +24,7 @@ const ServicelogApiURLForEnvironment = (key, port) => {
   export const serviceLogApiUrl = function(environment, serviceLogPort) {
     const servicelog_api_url = ServicelogApiURLForEnvironment(
       environment || Environment.localNoBackend,
-      serviceLogPort || '3004'
+      serviceLogPort || '8000'
     )
 
     return servicelog_api_url

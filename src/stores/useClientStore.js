@@ -48,8 +48,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
       return result
     },
 
-    async loadAgentKycLevel(envirionment, hbsServicePort) {
-      const kycLevel = await useInterfaceStore().loadAgentKycLevel(envirionment, hbsServicePort)
+    async loadAgentKycLevel(environment, hbsServicePort) {
+      const kycLevel = await useInterfaceStore().loadAgentKycLevel(environment, hbsServicePort)
       this.agentKyc = kycLevel
       return kycLevel
     }
