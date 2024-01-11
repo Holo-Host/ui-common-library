@@ -6,8 +6,8 @@ export const generateServiceLogPayload = (payload) => {
     const service_log_payload = {
         "nonce": nonce,
         "timestamp": timestamp.toString(),
-        ...payload
-    }    
+        payload
+    }
 
     return service_log_payload
 }

@@ -128,21 +128,21 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return encoded_service_logs
     },
     async fetchHAppStats(happId, days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days, "happ_id": happId })
+      const payload = generateServiceLogPayload({ "days": days.toString(), "happ_id": happId })
       const { _, signature  } = await client.signPayload(payload)
       const hAppStatistics = await hAppStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
       return hAppStatistics
     },
     async fetchAllHAppStats(happIds, days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "happIds": happIds, "days": days })
+      const payload = generateServiceLogPayload({ "happIds": happIds, "days": days.toString() })
       const { _, signature  } = await client.signPayload(payload)
       const hAppStatistics = await allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
       return hAppStatistics
     },    
     async fetchDashboardStats(days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days })
+      const payload = generateServiceLogPayload({ "days": days.toString() })
       const { _, signature  } = await client.signPayload(payload)
       const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
 
