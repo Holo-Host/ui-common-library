@@ -122,9 +122,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       const payload = generateServiceLogPayload({ "happ_id": happId })
       const { _, signature  } = await client.signPayload(payload)
       const encoded_service_logs = await hAppServiceLogs(payload, signature, this.agentKey, environment, serviceLogPort)
-      // const service_logs = msgpack.decode(encoded_service_logs)
 
-      console.log('encoded_service_logs', encoded_service_logs)
       return encoded_service_logs
     },
     async fetchHAppStats(happId, days, environment, serviceLogPort) {
