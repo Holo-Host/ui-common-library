@@ -11,7 +11,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { presentBytes } from '../utils/numbers'
+import { presentBytes, presentHolofuelAmount } from '../utils/numbers'
 import HAppCardUsageItem from './HAppCardUsageItem.vue'
 
 const { t } = useI18n()
@@ -26,8 +26,8 @@ const props = defineProps({
 const items = computed(() => {
   return [
     {
-      value: `${props.happ.usage?.cpu} HPU`,
-      unit: t('$.cpu'),
+      value: `${presentHolofuelAmount(props.happ.usage?.cpu)}`,
+      unit: t('$.hpu'),
       isDisabled: false
     },
     {

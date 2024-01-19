@@ -43,3 +43,28 @@ export const presentMicroSeconds = (ms) => {
   // eslint-disable-next-line no-magic-numbers
   return `${parseFloat((ms / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
 }
+
+export const presentHolofuelAmount = amountString => {
+  if (!amountString) {
+    return '--'
+  }
+  const { integerPart, decimalPart } = parseHolofuelAmount(amountString)
+  return insertCommas(integerPart) + decimalPart.slice(0, 5)
+}
+
+const parseHolofuelAmount = amountString => {
+  const dotIndex = amountString.search(/\./)
+  const integerPart = amountString.slice(0, dotIndex === -1 ? amountString.length : dotIndex)
+  const decimalPart = amountString.slice(integerPart.length)
+  return { integerPart, decimalPart }
+}
+
+const insertCommas = numberString => {
+  let result = ''
+  let i = numberString.length
+  while (/\d{4}/.test(numberString.slice(i - 4, i))) {
+    result = `,${numberString.slice(i - 3, i)}${result}`
+    i -= 3
+  }
+  return numberString.slice(0, i) + result
+}
