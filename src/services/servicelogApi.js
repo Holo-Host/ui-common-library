@@ -70,7 +70,7 @@ export async function hAppStats(payload, signature, pubkey, environment, service
 export async function allHappStats(payload, signature, pubkey, environment, serviceLogPort) {
     try {
         const result = await serviceLogApiCall({
-            params: { happ_ids: payload.payload.happIds,  days: payload.payload.days },
+            params: { happ_ids: payload.payload.happ_ids,  days: payload.payload.days },
             endpoint: 'stats/happs',
         },
         signature,
