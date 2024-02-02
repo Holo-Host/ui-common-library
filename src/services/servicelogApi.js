@@ -22,7 +22,7 @@ async function serviceLogApiCall(args, signature, nonce, timestamp, pubkey, envi
 export async function hAppServiceLogs(payload, signature, pubkey, environment, serviceLogPort) {
     try {
         const result = await serviceLogApiCall({
-            params: { happId: payload.payload.happ_id },
+            params: { happ_id: payload.payload.happ_id },
             endpoint: 'service_logs',
         },
         signature,
@@ -46,7 +46,7 @@ export async function hAppServiceLogs(payload, signature, pubkey, environment, s
 export async function hAppStats(payload, signature, pubkey, environment, serviceLogPort) {
     try {
         const result = await serviceLogApiCall({
-            params: { happId: payload.payload.happ_id, days: payload.payload.days },
+            params: { happ_id: payload.payload.happ_id, days: payload.payload.days },
             endpoint: 'stats/happ',
         },
         signature,
@@ -70,7 +70,7 @@ export async function hAppStats(payload, signature, pubkey, environment, service
 export async function allHappStats(payload, signature, pubkey, environment, serviceLogPort) {
     try {
         const result = await serviceLogApiCall({
-            params: { happIds: payload.payload.happIds,  days: payload.payload.days },
+            params: { happ_ids: payload.payload.happIds,  days: payload.payload.days },
             endpoint: 'stats/happs',
         },
         signature,
