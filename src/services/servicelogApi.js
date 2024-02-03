@@ -69,6 +69,7 @@ export async function hAppStats(payload, signature, pubkey, environment, service
 
 export async function allHappStats(payload, signature, pubkey, environment, serviceLogPort) {
     try {
+        console.log('PAYLOAD that was signed: ', payload)
         const happIds = JSON.parse(payload.payload.happ_ids)
         const result = await serviceLogApiCall({
             params: { happ_ids: happIds,  days: payload.payload.days },
