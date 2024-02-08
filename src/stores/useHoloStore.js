@@ -21,7 +21,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isReady: false,
     appInfo: null,
     kycLevel: null,
-    dashboardStatistics: emptyHappStatistics
+    dashboardStatistics: emptyHappStatistics,
+    allHappStatistics: []
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -135,14 +136,31 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return hAppStatistics
     },
     async fetchAllHAppStats(happIds, days, environment, serviceLogPort) {
-      // NB: The happ_ids param needs to be a string to succeed the msgpack serialization
-      // and validation check in the server.
-      const happIdsString = JSON.stringify(happIds)
-      const payload = generateServiceLogPayload({ "days": days.toString(), "happ_ids": happIdsString })
-      const { _, signature  } = await client.signPayload(payload)
-      const hAppStatistics = await allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return hAppStatistics
+      try {
+        // NB: The happ_ids param needs to be a string to succeed the msgpack serialization
+        // and validation check in the server.
+        const happIdsString = JSON.stringify(happIds)
+        const payload = generateServiceLogPayload({ "days": days.toString(), "happ_ids": happIdsString })
+        const { _, signature  } = await client.signPayload(payload)
+        allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
+          .then((hApp_stats) => {
+            if( hApp_stats && hApp_stats.length > 0 ) {
+              const {hAppStatsList, hAppStatsErrors } = hApp_stats.reduce((acc, res) => {
+                if (res["Ok"]) {
+                  acc.hAppStatsList.push(res["Ok"])
+                } else {
+                  acc.hAppStatsErrors.push(res["Err"])
+                }
+                return acc
+              }, {hAppStatsList:[], hAppStatsErrors: []});
+      
+              allHappStatistics = hAppStatsList
+            }
+          })
+      } catch (e) {
+        console.error('Error fetching all hApp stats', e.message)
+        allHappStatistics = []
+      }
     },    
     async fetchDashboardStats(days, environment, serviceLogPort) {
       try {
