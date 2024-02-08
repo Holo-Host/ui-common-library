@@ -5,6 +5,7 @@ import useSignalStore from './useSignalStore'
 import { fetchAgentKycLevel } from '../services/hbs'
 import { hAppServiceLogs, hAppStats, dashboardStats, allHappStats } from '../services/servicelogApi'
 import { generateServiceLogPayload } from '../utils/serviceLogPayload'
+import { emptyHappStatistics } from 'src/utils/hAppStatistics'
 
 const msgpack = require('@msgpack/msgpack')
 
@@ -19,7 +20,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     // These two values are subscribed to by clientStore
     isReady: false,
     appInfo: null,
-    kycLevel: null
+    kycLevel: null,
+    dashboardStatistics: emptyHappStatistics
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -143,11 +145,16 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       return hAppStatistics
     },    
     async fetchDashboardStats(days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days.toString() })
-      const { _, signature  } = await client.signPayload(payload)
-      const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return dashboardStatistics
+      try {
+        const payload = generateServiceLogPayload({ "days": days.toString() })
+        const { _, signature  } = await client.signPayload(payload)
+        const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
+  
+        this.dashboardStatistics = dashboardStatistics
+      } catch (e) {
+        console.error('Error fetching dashboard stats', e.message)
+        this.dashboardStatistics = emptyHappStatistics
+      }
     },    
   }
 })

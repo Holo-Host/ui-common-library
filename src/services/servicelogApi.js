@@ -93,25 +93,17 @@ export async function allHappStats(payload, signature, pubkey, environment, serv
 }
 
 export async function dashboardStats(payload, signature, pubkey, environment, serviceLogPort) {
-    try {
-        const result = await serviceLogApiCall({
-            params: { days: payload.payload.days },
-            endpoint: 'stats/dashboard',
-        },
-        signature,
-        payload.nonce,
-        payload.timestamp,
-        pubkey,
-        environment,
-        serviceLogPort
-        )
+    const result = await serviceLogApiCall({
+        params: { days: payload.payload.days },
+        endpoint: 'stats/dashboard',
+    },
+    signature,
+    payload.nonce,
+    payload.timestamp,
+    pubkey,
+    environment,
+    serviceLogPort
+    )
 
-        return result.data
-    } catch (e) {
-        if (axios.isAxiosError(e)) {
-        return e.message
-        } else {
-        return 'unknown error'
-        }
-    }
+    return result.data
 }
