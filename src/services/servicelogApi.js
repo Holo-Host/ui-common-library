@@ -44,27 +44,19 @@ export async function hAppServiceLogs(payload, signature, pubkey, environment, s
 }
 
 export async function hAppStats(payload, signature, pubkey, environment, serviceLogPort) {
-    try {
-        const result = await serviceLogApiCall({
-            params: { happ_id: payload.payload.happ_id, days: payload.payload.days },
-            endpoint: 'stats/happ',
-        },
-        signature,
-        payload.nonce,
-        payload.timestamp,
-        pubkey,        
-        environment,
-        serviceLogPort
-        )
+    const result = await serviceLogApiCall({
+        params: { happ_id: payload.payload.happ_id, days: payload.payload.days },
+        endpoint: 'stats/happ',
+    },
+    signature,
+    payload.nonce,
+    payload.timestamp,
+    pubkey,        
+    environment,
+    serviceLogPort
+    )
 
-        return result.data
-    } catch (e) {
-        if (axios.isAxiosError(e)) {
-        return e.message
-        } else {
-        return 'unknown error'
-        }
-    }
+    return result.data
 }
 
 export async function allHappStats(payload, signature, pubkey, environment, serviceLogPort) {
