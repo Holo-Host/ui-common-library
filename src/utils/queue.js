@@ -36,6 +36,11 @@ export default class Queue {
         }
       }
     }
+
+    // pushes a delay of `delay` ms to the end of the queue
+    wait (delay) {
+      return this.enqueue_and_wait(() => new Promise((resolve => setTimeout(resolve, delay))))
+    }
   
     async close() {
       // This code path is not currently used. If it doesn't work as expected, don't be too surprised
