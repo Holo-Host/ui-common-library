@@ -164,7 +164,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
           })
       } catch (e) {
         console.error('Error fetching all hApp stats', e.message)
-        allHappStatistics = []
+        this.allHappStatistics = []
       }
     },    
     async fetchDashboardStats(days, environment, serviceLogPort) {
