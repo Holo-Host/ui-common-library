@@ -44,74 +44,50 @@ export async function hAppServiceLogs(payload, signature, pubkey, environment, s
 }
 
 export async function hAppStats(payload, signature, pubkey, environment, serviceLogPort) {
-    try {
-        const result = await serviceLogApiCall({
-            params: { happ_id: payload.payload.happ_id, days: payload.payload.days },
-            endpoint: 'stats/happ',
-        },
-        signature,
-        payload.nonce,
-        payload.timestamp,
-        pubkey,        
-        environment,
-        serviceLogPort
-        )
+    const result = await serviceLogApiCall({
+        params: { happ_id: payload.payload.happ_id, days: payload.payload.days },
+        endpoint: 'stats/happ',
+    },
+    signature,
+    payload.nonce,
+    payload.timestamp,
+    pubkey,        
+    environment,
+    serviceLogPort
+    )
 
-        return result.data
-    } catch (e) {
-        if (axios.isAxiosError(e)) {
-        return e.message
-        } else {
-        return 'unknown error'
-        }
-    }
+    return result.data
 }
 
 export async function allHappStats(payload, signature, pubkey, environment, serviceLogPort) {
-    try {
-        const happIds = JSON.parse(payload.payload.happ_ids)
-        const result = await serviceLogApiCall({
-            params: { happ_ids: happIds,  days: payload.payload.days },
-            endpoint: 'stats/happs',
-        },
-        signature,
-        payload.nonce,
-        payload.timestamp,
-        pubkey,        
-        environment,
-        serviceLogPort
-        )
+    const happIds = JSON.parse(payload.payload.happ_ids)
+    const result = await serviceLogApiCall({
+        params: { happ_ids: happIds,  days: payload.payload.days },
+        endpoint: 'stats/happs',
+    },
+    signature,
+    payload.nonce,
+    payload.timestamp,
+    pubkey,        
+    environment,
+    serviceLogPort
+    )
 
-        return result.data
-    } catch (e) {
-        if (axios.isAxiosError(e)) {
-        return e.message
-        } else {
-        return 'unknown error'
-        }
-    }
+    return result.data
 }
 
 export async function dashboardStats(payload, signature, pubkey, environment, serviceLogPort) {
-    try {
-        const result = await serviceLogApiCall({
-            params: { days: payload.payload.days },
-            endpoint: 'stats/dashboard',
-        },
-        signature,
-        payload.nonce,
-        payload.timestamp,
-        pubkey,
-        environment,
-        serviceLogPort
-        )
+    const result = await serviceLogApiCall({
+        params: { days: payload.payload.days },
+        endpoint: 'stats/dashboard',
+    },
+    signature,
+    payload.nonce,
+    payload.timestamp,
+    pubkey,
+    environment,
+    serviceLogPort
+    )
 
-        return result.data
-    } catch (e) {
-        if (axios.isAxiosError(e)) {
-        return e.message
-        } else {
-        return 'unknown error'
-        }
-    }
+    return result.data
 }

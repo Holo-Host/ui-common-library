@@ -5,6 +5,7 @@ import useSignalStore from './useSignalStore'
 import { fetchAgentKycLevel } from '../services/hbs'
 import { hAppServiceLogs, hAppStats, dashboardStats, allHappStats } from '../services/servicelogApi'
 import { generateServiceLogPayload } from '../utils/serviceLogPayload'
+import { emptyHappStatistics } from 'src/utils/hAppStatistics'
 
 const msgpack = require('@msgpack/msgpack')
 
@@ -19,7 +20,9 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     // These two values are subscribed to by clientStore
     isReady: false,
     appInfo: null,
-    kycLevel: null
+    kycLevel: null,
+    dashboardStatistics: emptyHappStatistics,
+    allHappStatistics: []
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -118,37 +121,9 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.kycLevel = kycLevel
       return kycLevel
     },
-    async fetchHAppServiceLogs(happId, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "happ_id": happId })
-      const { _, signature  } = await client.signPayload(payload)
-      const encoded_service_logs = await hAppServiceLogs(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return encoded_service_logs
-    },
-    async fetchHAppStats(happId, days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days.toString(), "happ_id": happId })
-      const { _, signature  } = await client.signPayload(payload)
-      const hAppStatistics = await hAppStats(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return hAppStatistics
-    },
-    async fetchAllHAppStats(happIds, days, environment, serviceLogPort) {
-      // NB: The happ_ids param needs to be a string to succeed the msgpack serialization
-      // and validation check in the server.
-      const happIdsString = JSON.stringify(happIds)
-      const payload = generateServiceLogPayload({ "days": days.toString(), "happ_ids": happIdsString })
-      const { _, signature  } = await client.signPayload(payload)
-      const hAppStatistics = await allHappStats(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return hAppStatistics
-    },    
-    async fetchDashboardStats(days, environment, serviceLogPort) {
-      const payload = generateServiceLogPayload({ "days": days.toString() })
-      const { _, signature  } = await client.signPayload(payload)
-      const dashboardStatistics = await dashboardStats(payload, signature, this.agentKey, environment, serviceLogPort)
-
-      return dashboardStatistics
-    },    
+    async signPayload(payload) {
+      return client.signPayload(payload)
+    }   
   }
 })
 
