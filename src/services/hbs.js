@@ -80,3 +80,14 @@ export async function fetchHostCriteria(hostIds, environment, hbsServicePort) {
   const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
   return result
 }
+
+export async function registrationFetchJurisdictions(environment, hbsServicePort) {
+  const result = httpCall({
+    serviceUrl: registrationServiceUrl(environment),
+    version: registrationServiceVersion(hbsServicePort),
+    method: 'get',
+    endpoint: 'jurisdictions'
+  })
+
+  return result
+}

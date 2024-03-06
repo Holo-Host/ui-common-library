@@ -2,10 +2,7 @@ import WebSdk from '@holo-host/web-sdk'
 import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
-import { fetchAgentKycLevel } from '../services/hbs'
-import { hAppServiceLogs, hAppStats, dashboardStats, allHappStats } from '../services/servicelogApi'
-import { generateServiceLogPayload } from '../utils/serviceLogPayload'
-import { emptyHappStatistics } from 'src/utils/hAppStatistics'
+import { fetchAgentKycLevel, registrationFetchJurisdictions } from '../services/hbs'
 
 const msgpack = require('@msgpack/msgpack')
 
@@ -21,8 +18,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isReady: false,
     appInfo: null,
     kycLevel: null,
-    dashboardStatistics: emptyHappStatistics,
-    allHappStatistics: []
+    jurisdictions: []
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -32,7 +28,8 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
     agentEmail: state => state.agentState?.email,
-    agentKycLevel: state => state.kycLevel
+    agentKycLevel: state => state.kycLevel,
+    hbsJurisdictions: state => state.jurisdictions
   },
   actions: {
     async initialize() {
@@ -121,6 +118,15 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.kycLevel = kycLevel
       return kycLevel
     },
+    async loadJurisdictions(environment, hbsServicePort) {
+      try {
+        registrationFetchJurisdictions(environment, hbsServicePort).then((jurisdictions) => {
+          this.jurisdictions = jurisdictions.data
+        })
+      } catch (e) {
+        console.error(`Error fetching jurisdictions: ${e}`)
+      }
+    },    
     async signPayload(payload) {
       return client.signPayload(payload)
     }   
