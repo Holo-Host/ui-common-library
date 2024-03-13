@@ -2,7 +2,6 @@ import WebSdk from '@holo-host/web-sdk'
 import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
-import { fetchAgentKycLevel, registrationFetchJurisdictions } from '../services/hbs'
 
 const msgpack = require('@msgpack/msgpack')
 
@@ -16,9 +15,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
     isReady: false,
-    appInfo: null,
-    kycLevel: null,
-    jurisdictions: []
+    appInfo: null
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -27,9 +24,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
-    agentEmail: state => state.agentState?.email,
-    agentKycLevel: state => state.kycLevel,
-    hbsJurisdictions: state => state.jurisdictions
+    agentEmail: state => state.agentState?.email
   },
   actions: {
     async initialize() {
@@ -106,27 +101,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
-    async loadAgentKycLevel(environment, hbsServicePort) {
-      const payload = {
-        "email": this.agentEmail,
-        "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
-        "pubKey": this.agentId
-      }
-
-      const { _, signature  } = await client.signPayload(payload)
-      const kycLevel = await fetchAgentKycLevel(payload, signature, environment, hbsServicePort)
-      this.kycLevel = kycLevel
-      return kycLevel
-    },
-    async loadJurisdictions(environment, hbsServicePort) {
-      try {
-        registrationFetchJurisdictions(environment, hbsServicePort).then((jurisdictions) => {
-          this.jurisdictions = jurisdictions.data
-        })
-      } catch (e) {
-        console.error(`Error fetching jurisdictions: ${e}`)
-      }
-    },    
     async signPayload(payload) {
       return client.signPayload(payload)
     }   
