@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { fetchAgentKycLevel, registrationFetchJurisdictions } from '../services/hbs'
 
-const makeUseHBSStore = ({ useHoloStore }) => {
+const makeUseHbsStore = ({ useHoloStore }) => {
     return defineStore('hbs', {
         state: () => ({
             kycLevel: null,
@@ -37,4 +37,4 @@ const makeUseHBSStore = ({ useHoloStore }) => {
     })
 }
  
-export default makeUseHBSStore
+export default makeUseHbsStore
