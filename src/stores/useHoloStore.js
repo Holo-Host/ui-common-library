@@ -3,8 +3,6 @@ import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 
-const msgpack = require('@msgpack/msgpack')
-
 let client
 
 const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {

@@ -21,6 +21,7 @@ const makeUseHbsStore = ({ useHoloStore }) => {
             
                 const { _, signature  } = await await useHoloStore().signPayload(payload)
                 const kycLevel = await fetchAgentKycLevel(payload, signature, environment, hbsServicePort)
+                console.log(`🚁 HBS loadAgentKycLevel KYC level: ${kycLevel}`)
                 this.kycLevel = kycLevel
                 return kycLevel
             },

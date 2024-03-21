@@ -2,7 +2,7 @@ import { inspect } from 'util'
 import { defineStore } from 'pinia'
 import { encodeAgentId } from '../utils/agent'
 
-const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('client', {
+const makeUseClientStore = ({ useInterfaceStore, onInit, loadKycLevel }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
@@ -49,7 +49,7 @@ const makeUseClientStore = ({ useInterfaceStore, onInit }) => defineStore('clien
     },
 
     async loadAgentKycLevel(environment, hbsServicePort) {
-      const kycLevel = await useInterfaceStore().loadAgentKycLevel(environment, hbsServicePort)
+      const kycLevel = await loadKycLevel(environment, hbsServicePort)
       this.agentKyc = kycLevel
       return kycLevel
     }
