@@ -5,7 +5,7 @@ import useSignalStore from './useSignalStore'
 
 let client
 
-const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {
+const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => defineStore('holo', {
   state: () => ({
     agentState: {},
     happId: null,
@@ -32,6 +32,10 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
         } else {
           client = await WebSdk.connect(connectionArgs)
         }
+
+        if (addClientToWindow) {
+          window.envoy = client
+        }        
       } catch (e) {
         throw e
       }
