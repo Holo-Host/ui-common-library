@@ -2,6 +2,10 @@ import WebSdk from '@holo-host/web-sdk'
 import { defineStore } from 'pinia'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
+import { fetchAgentKycLevel } from '../services/hbs'
+import { emptyHappStatistics } from 'src/utils/hAppStatistics'
+
+const msgpack = require('@msgpack/msgpack')
 
 let client
 
@@ -18,7 +22,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
     isAvailable: state => state.agentState && state.agentState.isAvailable,
-    isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
+    isLoggedIn: state => !state.agentState?.isAnonymous && state.agentState?.isAvailable === true,
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
