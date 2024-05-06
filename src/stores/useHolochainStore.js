@@ -1,15 +1,15 @@
 import { inspect } from 'util'
-import axios from 'axios'
 import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
 import useSignalStore from './useSignalStore'
 import { kycLevel2 } from '../services/hbs'
+import { hposHolochainCall } from '../services/hpos'
 
 const HC_APP_TIMEOUT = 35_000
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, hc_admin_port }) => defineStore('holochain', {
+const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
@@ -110,18 +110,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
 
       return result
     },
-    async zomeCall(args) {
-      const zomeCallArgs = {
-        appId: installed_app_id,
-        roleId: args.role_name,
-        zomeName: args.zome_name,
-        fnName: args.fn_name,
-        payload: args.payload
-      }
-
-      const response = await this.hposHolochainCall({path: 'zome_call', headers: {}, params: zomeCallArgs})
-      return response
-    },    
     setCredentials(cellId) {
       this.signingCredentials = new Promise(async (resolve, reject) => {
         try {
@@ -135,60 +123,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, is_hpos_served, h
         resolve()
       })
     },
-    async hposHolochainCall({
-      path,
-      headers: userHeaders = {},
-      params,
-      method = 'post',
-    }) {
-      const axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        }
-      }
-
-      const HPOS_API_URL = `${window.location.protocol}//${window.location.host}`
-      const pathPrefix = '/holochain-api/v1/'
-      const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
-
-      const authToken = localStorage.getItem('authToken')
-
-      const headers = {
-        'X-Hpos-Auth-Token': authToken,
-        ...axiosConfig.headers,
-        ...userHeaders
-      }
-
-      let response
-
-      switch (method) {
-        case 'get':
-          response = await axios.get(fullUrl, { params, headers })
-          return response.data
-
-        case 'post':
-          response = await axios.post(fullUrl, params, { headers })
-          return response.data
-
-        case 'put':
-          response = await axios.put(fullUrl, params, { headers })
-          return response.data
-
-        case 'delete':
-          response = await axios.delete(fullUrl, { params, headers })
-          return response.data
-
-        default:
-          throw new Error(`No case in hposCall for ${method} method`)
-        }
-    },    
-    async loadAgentKycLevel(_, __) {
-      if( !is_hpos_served) {
-        return null // raw holochain doesn't have a mechanism for retrieving agent's kyc
-      }
-      
-      const kycLevel = await this.hposHolochainCall({path: 'kyc', headers: {}, params: {}, method: 'get'})
+    async fetchAgentKycLevel(_, __) {
+      const kycLevel = await hposHolochainCall({path: 'kyc', headers: {}, params: {}, method: 'get'})
       return kycLevel ? (kycLevel === kycLevel2) ? 2 : 1 : null
     },
   }

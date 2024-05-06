@@ -9,7 +9,7 @@ const msgpack = require('@msgpack/msgpack')
 
 let client
 
-const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo', {
+const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => defineStore('holo', {
   state: () => ({
     agentState: {},
     happId: null,
@@ -17,10 +17,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
     isReady: false,
-    appInfo: null,
-    kycLevel: null,
-    dashboardStatistics: emptyHappStatistics,
-    allHappStatistics: []
+    appInfo: null
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -29,8 +26,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
-    agentEmail: state => state.agentState?.email,
-    agentKycLevel: state => state.kycLevel
+    agentEmail: state => state.agentState?.email
   },
   actions: {
     async initialize() {
@@ -40,6 +36,10 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
         } else {
           client = await WebSdk.connect(connectionArgs)
         }
+
+        if (addClientToWindow) {
+          window.envoy = client
+        }        
       } catch (e) {
         throw e
       }
@@ -106,18 +106,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk }) => defineStore('holo',
     async loadAppInfo() {
       this.appInfo = await client.appInfo()
       return this.appInfo
-    },
-    async loadAgentKycLevel(environment, hbsServicePort) {
-      const payload = {
-        "email": this.agentEmail,
-        "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
-        "pubKey": this.agentId
-      }
-
-      const { _, signature  } = await client.signPayload(payload)
-      const kycLevel = await fetchAgentKycLevel(payload, signature, environment, hbsServicePort)
-      this.kycLevel = kycLevel
-      return kycLevel
     },
     async signPayload(payload) {
       return client.signPayload(payload)
