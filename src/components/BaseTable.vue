@@ -120,6 +120,12 @@ const sortedItems = computed(() => {
         : new Date(a[sortKey]).getTime() - new Date(b[sortKey]).getTime()
     }
 
+    if (sortByType.value === 'number') {
+      return sortDirection.value === ESortDirections.desc
+        ? Number(b[sortKey]) - Number(a[sortKey])
+        : Number(a[sortKey]) - Number(b[sortKey])
+    }
+
     if (sortDirection.value === ESortDirections.desc) {
       return a[sortKey] > b[sortKey] ? -1 : 1
     } else {
