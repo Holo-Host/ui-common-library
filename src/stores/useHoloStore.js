@@ -5,6 +5,7 @@ import useSignalStore from './useSignalStore'
 
 let client
 
+
 const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => defineStore('holo', {
   state: () => ({
     agentState: {},
@@ -13,7 +14,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
     isReady: false,
-    appInfo: null
+    appInfo: null,
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
@@ -52,7 +53,9 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
 
         this.agentState = agentState
 
+
         this.isReady = this.isLoggedIn
+
       }
 
       client.on('agent-state', onAgentState)
@@ -61,7 +64,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       this.happId = client.happId
 
       // Set agent state in case `agent-state` event is never emitted. This is the case with Mock Web SDK because it never emits events
-      onAgentState(client.agent)
+      onAgentState(client.agentState)
     },
 
     signIn() {

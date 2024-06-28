@@ -2,11 +2,14 @@ import { inspect } from 'util'
 import { defineStore } from 'pinia'
 import { encodeAgentId } from '../utils/agent'
 
+let completeInitialization = () => {} // updated in the state fn below
+
 const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
-    agentKyc: null
+    agentKyc: null,
+    waitTilInitialized: new Promise(resolve => completeInitialization = resolve)
   }),
   getters: {
     agentId: state => state.agentKey && encodeAgentId(state.agentKey),
@@ -26,7 +29,9 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
         }
       })
 
-      useInterfaceStore().initialize()
+      await useInterfaceStore().initialize()
+
+      completeInitialization()
     },
 
     async appInfo() {
