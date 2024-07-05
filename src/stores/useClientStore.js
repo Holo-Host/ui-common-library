@@ -8,6 +8,7 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
+    hasMemproofs: false,
     agentKyc: null,
     waitTilInitialized: new Promise(resolve => completeInitialization = resolve)
   }),
@@ -23,6 +24,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       useInterfaceStore().$subscribe((_, state) => {
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
+        console.log('^&* client store setting hasMemproofs:', state.hasMemproofs)
+        this.hasMemproofs = state.hasMemproofs
 
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key

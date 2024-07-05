@@ -13,13 +13,14 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     connectionError: null,
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
-    isReady: false,
+    isReady: false,    
     appInfo: null,
   }),
   getters: {
     isAnonymous: state => state.agentState && state.agentState.isAnonymous,
     isAvailable: state => state.agentState && state.agentState.isAvailable,
     isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
+    hasMemproofs: state => state.agentState?.handleSignal,
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
@@ -55,7 +56,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
 
 
         this.isReady = this.isLoggedIn
-
       }
 
       client.on('agent-state', onAgentState)
