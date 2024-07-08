@@ -18,6 +18,8 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     signingCredentials: null
   }),
   actions: {
+    // BEGIN useInterfaceStore methods
+
     async initialize() {
       try {
         const holochainClient = await AppWebsocket.connect(
@@ -72,6 +74,14 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     },
+
+    provideMemproofs(memproofs) {
+      return this.client.provideMemproofs(memproofs)
+    },
+
+    // END useInterfaceStore methods
+    // BEGIN holo specific methods
+
     async holochainCallZome(args) {
       const { zome_name, fn_name, payload, role_name } = args
 

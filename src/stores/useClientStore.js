@@ -56,6 +56,10 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       return result
     },
 
+    provideMemproofs(memproofs) { // memproofs is { [key: string]: Uint8Array }
+      return this.useInterfaceStore().provideMemproofs(memproofs)
+    },
+
     async loadAgentKycLevel(environment, hbsServicePort) {
       const kycLevel = await fetchKycLevel(environment, hbsServicePort)
       this.agentKyc = kycLevel

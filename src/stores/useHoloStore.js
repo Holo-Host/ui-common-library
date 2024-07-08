@@ -27,6 +27,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     agentEmail: state => state.agentState?.email
   },
   actions: {
+    // BEGIN useInterfaceStore methods
     async initialize() {
       try {
         if (MockWebSdk) {
@@ -67,20 +68,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       onAgentState(client.agentState)
     },
 
-    signIn() {
-      this.isAuthFormOpen = true
-      return client.signIn({ cancellable: false })
-    },
-
-    signUp() {
-      this.isAuthFormOpen = true
-      client.signUp({ cancellable: false })
-    },
-
-    signOut() {
-      client.signOut()
-    },
-
     async callZome(args) {
       const { role_name, zome_name, fn_name, payload } = args
 
@@ -106,9 +93,31 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
+
+    provideMemproofs(memproofs) {
+      return client.provideMemproofs(memproofs)
+    },
+
+    // END useInterfaceStore methods
+    // BEGIN holo specific methods
+
     async signPayload(payload) {
       return client.signPayload(payload)
-    }   
+    },
+
+    signIn() {
+      this.isAuthFormOpen = true
+      return client.signIn({ cancellable: false })
+    },
+
+    signUp() {
+      this.isAuthFormOpen = true
+      client.signUp({ cancellable: false })
+    },
+
+    signOut() {
+      client.signOut()
+    },
   }
 })
 
