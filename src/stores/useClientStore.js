@@ -14,7 +14,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
   }),
   getters: {
     agentId: state => state.agentKey && encodeAgentId(state.agentKey),
-    agentKycLevel: state => state.agentKyc
+    agentKycLevel: state => state.agentKyc,
+    isAnonymous: _ => useInterfaceStore().isAnonymous
   },
   actions: {
     async initialize() {
@@ -24,8 +25,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       useInterfaceStore().$subscribe((_, state) => {
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
-        console.log('^&* client store setting hasMemproofs:', state.hasMemproofs)
-        this.hasMemproofs = state.hasMemproofs
+
+        this.hasMemproofs = state?.agentState?.hasMemproofs
 
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key
@@ -56,8 +57,9 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       return result
     },
 
-    provideMemproofs(memproofs) { // memproofs is { [key: string]: Uint8Array }
-      return this.useInterfaceStore().provideMemproofs(memproofs)
+    async provideMemproofs(memproofs) { // memproofs is { [key: string]: Uint8Array }
+      await useInterfaceStore().provideMemproofs(memproofs)
+      return this.appInfo()
     },
 
     async loadAgentKycLevel(environment, hbsServicePort) {

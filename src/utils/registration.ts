@@ -1,4 +1,4 @@
-const msgpack = require('@msgpack/msgpack')
+import * as msgpack from '@msgpack/msgpack'
 
 // getMembraneProof has two cases. If membrane_proof_server_url is provided
 // it passes registration_code to the membrane proof server and returns the membrane proof returned from the server

@@ -1,6 +1,6 @@
 <template>
-  <slot v-if="hasMemproofs" />
-  <div v-else>
+
+  <div v-if="shouldShowRegisterScreen">
     <input type="text" id="register-email"
       v-model="email"
       class="modal-input"
@@ -13,18 +13,19 @@
       data-testid='registration-code-input'
       placeholder="Registration code..." >
     
-    <Button class='save-button' :color="confirmButtonColor" :disabled="!isValid" :isBusy="isBusy" @click="handleRegister">Register</Button>
+    <Button class='save-button' color="primary" :disabled="!isValid" :isBusy="isBusy" @click="handleRegister">Register</Button>
   </div>
+
+  <slot v-else />
 </template>
 
 <script>
 import Button from './Button.vue'
-import { getMembraneProof } from '../utils/registration.js'
+import { getMembraneProof } from '../utils/registration.ts'
 
 export default {
   name: 'RegisterHapp',
   components: {
-    Modal,
     Button
   },
   props: {
@@ -36,7 +37,11 @@ export default {
       type: Boolean,      
       required: true
     },
-    agentKey: {
+    isAnonymous: {
+      type: Boolean,
+      required: true
+    },
+    agentId: {
       type: String,
       required: true,
     },
@@ -62,6 +67,10 @@ export default {
     isValid () {
       // TODO this should check email
       return this.email && this.registrationCode
+    },
+    shouldShowRegisterScreen () {
+      console.log(`^&* this.isAnonymous: ${this.isAnonymous} - this.hasMemproofs ${this.hasMemproofs}`)
+      return !this.isAnonymous && !this.hasMemproofs
     }
   },
   methods: {
@@ -74,12 +83,12 @@ export default {
           email: this.email,
           membrane_proof_server_url: this.membraneProofServerUrl,
           membrane_proof_server_payload: this.membraneProofServerPayload,
-          agent_id: this.agentKey,
+          agent_id: this.agentId,
         })
 
         console.log('^&* memproof', memproof)
         
-        const response = await provideMemproofs({
+        const response = await this.provideMemproofs({
           [this.roleName]: memproof
         })
 

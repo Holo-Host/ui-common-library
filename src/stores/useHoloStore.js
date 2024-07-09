@@ -17,10 +17,11 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     appInfo: null,
   }),
   getters: {
-    isAnonymous: state => state.agentState && state.agentState.isAnonymous,
+    // isAnonymous: state => state?.agentState?.isAnonymous === undefined ? true : state.agentState.isAnonymous,
+    isAnonymous: state => state?.agentState?.isAnonymous,
     isAvailable: state => state.agentState && state.agentState.isAvailable,
     isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
-    hasMemproofs: state => state.agentState?.handleSignal,
+    hasMemproofs: state => state.agentState?.hasMemproofs,
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
@@ -44,6 +45,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       }
 
       const onAgentState = agentState => {
+        console.log('^&* got agentState', agentState)
         if (agentState && agentState.unrecoverableError) {
           console.error('unrecoverable agent state', agentState.unrecoverableError)
         }
