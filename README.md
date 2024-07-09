@@ -93,7 +93,7 @@ export const useHoloStore = makeUseHoloStore({
 })
 
 export const useClientStore = makeUseClientStore({
-  useInterfaceStore: IS_HOLO_HOSTED ? useHoloStore : useHolochainStore,
+  useInterfaceStore: IS_HOSTED ? useHoloStore : useHolochainStore,
   onInit: () => {
     useSignalStore().addCallback(signal => useYourCustomDnaStore().handleSignal(signal))
   }
