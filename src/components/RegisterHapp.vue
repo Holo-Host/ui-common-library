@@ -119,6 +119,9 @@ export default {
           [this.roleName]: memproof
         })
 
+        this.emailInput = ""
+        this.registrationCode = ""
+        
       } catch (e) {
         console.error('registration failed with', e)
       } finally {
