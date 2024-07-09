@@ -19,6 +19,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
   }),
   getters: {
     isAnonymous: _ => false, // for compatibility with holo
+    agentEmail: _ => null, // for compatibility with holo
   },
   actions: {
     // BEGIN useInterfaceStore methods

@@ -2,7 +2,7 @@
 
   <div v-if="shouldShowRegisterScreen">
     <input type="text" id="register-email"
-      v-model="email"
+      v-model="emailInput"
       class="modal-input"
       data-testid='register-email-input'
       placeholder="Email" >
@@ -33,6 +33,9 @@ export default {
       type: String,
       required: true,      
     },
+    email: {
+      type: String,
+    },
     hasMemproofs: {
       type: Boolean,      
       required: true
@@ -59,17 +62,17 @@ export default {
   data () {
     return {
       registrationCode: '',
-      email: '',
+      emailInput: '',
       isBusy: false
     }
-  },  
+  },
   computed: {
     isValid () {
-      // TODO this should check email
-      return this.email && this.registrationCode
+      // Simple, permissive email validation
+      const emailIsValid = this.email?.length > 5 && this.email?.includes('@')
+      return  emailIsValid && this.registrationCode?.length > 0
     },
     shouldShowRegisterScreen () {
-      console.log(`^&* this.isAnonymous: ${this.isAnonymous} - this.hasMemproofs ${this.hasMemproofs}`)
       return !this.isAnonymous && !this.hasMemproofs
     }
   },
@@ -86,13 +89,10 @@ export default {
           agent_id: this.agentId,
         })
 
-        console.log('^&* memproof', memproof)
-        
         const response = await this.provideMemproofs({
           [this.roleName]: memproof
         })
 
-        console.log('^&* response', response)
       } catch (e) {
         console.error('registration failed with', e)
       } finally {
@@ -102,8 +102,9 @@ export default {
     }
   },
   watch: {
-    hasMemproofs(hasMemproofs, old) {
-      console.log(`^&* WATCH hasMemproofs triggered`, hasMemproofs, '. old:', old)
+    email (newEmail) {
+      // copy the prop to the model value. this.email should change at most once in the lifecycle of the app, and never while we're on this page
+      this.emailInput = newEmail
     }
   }
 }

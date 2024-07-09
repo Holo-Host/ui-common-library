@@ -8,14 +8,15 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
-    hasMemproofs: false,
+    hasMemproofs: true, // we assume we have memproofs until holochain tells us otherwise
     agentKyc: null,
     waitTilInitialized: new Promise(resolve => completeInitialization = resolve)
   }),
   getters: {
     agentId: state => state.agentKey && encodeAgentId(state.agentKey),
     agentKycLevel: state => state.agentKyc,
-    isAnonymous: _ => useInterfaceStore().isAnonymous
+    isAnonymous: _ => useInterfaceStore().isAnonymous,
+    agentEmail: _ => useInterfaceStore().agentEmail,
   },
   actions: {
     async initialize() {

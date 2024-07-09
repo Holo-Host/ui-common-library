@@ -45,7 +45,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       }
 
       const onAgentState = agentState => {
-        console.log('^&* got agentState', agentState)
         if (agentState && agentState.unrecoverableError) {
           console.error('unrecoverable agent state', agentState.unrecoverableError)
         }
