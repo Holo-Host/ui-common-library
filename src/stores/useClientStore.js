@@ -2,15 +2,21 @@ import { inspect } from 'util'
 import { defineStore } from 'pinia'
 import { encodeAgentId } from '../utils/agent'
 
+let completeInitialization = () => {} // updated in the state fn below
+
 const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => defineStore('client', {
   state: () => ({
     agentKey: null, // the Uint8Array of raw bytes. See also agentId in getters, below
     isReady: false,
-    agentKyc: null
+    hasMemproofs: true, // we assume we have memproofs until holochain tells us otherwise
+    agentKyc: null,
+    waitTilInitialized: new Promise(resolve => completeInitialization = resolve)
   }),
   getters: {
     agentId: state => state.agentKey && encodeAgentId(state.agentKey),
-    agentKycLevel: state => state.agentKyc
+    agentKycLevel: state => state.agentKyc,
+    isAnonymous: _ => useInterfaceStore().isAnonymous,
+    agentEmail: _ => useInterfaceStore().agentEmail,
   },
   actions: {
     async initialize() {
@@ -21,12 +27,16 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
 
+        this.hasMemproofs = state?.agentState?.hasMemproofs
+
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key
         }
       })
 
-      useInterfaceStore().initialize()
+      await useInterfaceStore().initialize()
+
+      completeInitialization()
     },
 
     async appInfo() {
@@ -46,6 +56,11 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       console.log(`${zomePath} result`, result)
 
       return result
+    },
+
+    async provideMemproofs(memproofs) { // memproofs is { [key: string]: Uint8Array }
+      await useInterfaceStore().provideMemproofs(memproofs)
+      return this.appInfo()
     },
 
     async loadAgentKycLevel(environment, hbsServicePort) {

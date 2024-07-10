@@ -17,7 +17,13 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     isReady: false,
     signingCredentials: null
   }),
+  getters: {
+    isAnonymous: _ => false, // for compatibility with holo
+    agentEmail: _ => null, // for compatibility with holo
+  },
   actions: {
+    // BEGIN useInterfaceStore methods
+
     async initialize() {
       try {
         const holochainClient = await AppWebsocket.connect(
@@ -72,6 +78,16 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         useIsLoadingStore().callIsNotLoading({ zome_name, fn_name })
       }
     },
+
+    async provideMemproofs(memproofs) {
+      await this.client.provideMemproofs(memproofs)
+       // attempt to enable after providing memproofs (we don't need to do this on the holo side because envoy does it automatically)
+      return this.client.enableApp()
+    },
+
+    // END useInterfaceStore methods
+    // BEGIN holochain specific methods
+
     async holochainCallZome(args) {
       const { zome_name, fn_name, payload, role_name } = args
 

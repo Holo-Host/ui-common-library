@@ -5,6 +5,7 @@ import useSignalStore from './useSignalStore'
 
 let client
 
+
 const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => defineStore('holo', {
   state: () => ({
     agentState: {},
@@ -12,19 +13,21 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     connectionError: null,
     isAuthFormOpen: false,
     // These two values are subscribed to by clientStore
-    isReady: false,
-    appInfo: null
+    isReady: false,    
+    appInfo: null,
   }),
   getters: {
-    isAnonymous: state => state.agentState && state.agentState.isAnonymous,
+    isAnonymous: state => state?.agentState?.isAnonymous,
     isAvailable: state => state.agentState && state.agentState.isAvailable,
     isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,
+    hasMemproofs: state => state.agentState?.hasMemproofs,
     error: state => state.agentState && !state.agentState.isAvailable && (state.connectionError || state.agentState.unrecoverableError),
     agentKey: (state) => state.appInfo?.agent_pub_key,
     agentId: state => state.agentState?.id,
     agentEmail: state => state.agentState?.email
   },
   actions: {
+    // BEGIN useInterfaceStore methods
     async initialize() {
       try {
         if (MockWebSdk) {
@@ -52,6 +55,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
 
         this.agentState = agentState
 
+
         this.isReady = this.isLoggedIn
       }
 
@@ -61,21 +65,7 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       this.happId = client.happId
 
       // Set agent state in case `agent-state` event is never emitted. This is the case with Mock Web SDK because it never emits events
-      onAgentState(client.agent)
-    },
-
-    signIn() {
-      this.isAuthFormOpen = true
-      return client.signIn({ cancellable: false })
-    },
-
-    signUp() {
-      this.isAuthFormOpen = true
-      client.signUp({ cancellable: false })
-    },
-
-    signOut() {
-      client.signOut()
+      onAgentState(client.agentState)
     },
 
     async callZome(args) {
@@ -103,9 +93,31 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
       this.appInfo = await client.appInfo()
       return this.appInfo
     },
+
+    provideMemproofs(memproofs) {
+      return client.provideMemproofs(memproofs)
+    },
+
+    // END useInterfaceStore methods
+    // BEGIN holo specific methods
+
     async signPayload(payload) {
       return client.signPayload(payload)
-    }   
+    },
+
+    signIn() {
+      this.isAuthFormOpen = true
+      return client.signIn({ cancellable: false })
+    },
+
+    signUp() {
+      this.isAuthFormOpen = true
+      client.signUp({ cancellable: false })
+    },
+
+    signOut() {
+      client.signOut()
+    },
   }
 })
 
