@@ -14,7 +14,7 @@ export const hposHolochainCall = async ({
     }
 
     const HPOS_API_URL = `${window.location.protocol}//${window.location.host}`
-    const pathPrefix = '/holochain-api/v1/'
+    const pathPrefix = '/api/v2/'
     const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
 
     const authToken = localStorage.getItem('authToken')

@@ -87,7 +87,7 @@ const paginationLegend = computed(() => {
 })
 
 const hasPrevPage = computed(() => props.currentPage > 0)
-const hasNextPage = computed(() => (props.currentPage + 1) * props.pageSize <= props.itemsCount)
+const hasNextPage = computed(() => (props.currentPage + 1) * props.pageSize < props.itemsCount)
 
 function onPageSizeChanged({ target: { value } }) {
   emit('pageSizeChanged', Number(value))
