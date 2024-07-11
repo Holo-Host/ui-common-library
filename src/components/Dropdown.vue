@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="label" v-if="label && label.length > 0">{{ label }}:</div>
+    <!-- <div class="label" v-if="label && label.length > 0">{{ label }}:</div>
     <select v-model="selectedOption" :disabled="disabled" class="drop-down" @change="$emit('optionChanged', selectedOption)">
       <option v-for="option in options" :value="option" :key="option">
         {{ option }}
       </option>
-    </select>
+    </select> -->
   </div>
 </template>
 

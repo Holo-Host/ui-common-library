@@ -74,6 +74,6 @@ export async function getMembraneProof (input: GetMembraneProofInput): Promise<B
 }
 
 export function generateUnusedMemproof (): Buffer {
-  return Buffer.from(msgpack.encode(process.env.UNUSED_MEMPROOF))
+  return Buffer.from(msgpack.encode(import.meta.env.UNUSED_MEMPROOF))
 }
 
