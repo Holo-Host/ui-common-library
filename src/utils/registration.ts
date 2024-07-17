@@ -51,8 +51,6 @@ export async function getBase64EncodedMembraneProof ({
       throw new Error('Membrane Proof payload parsing error')
   }
 
-
-
   console.log(`^&* about to fetch registration`, membrane_proof_server_url)
   console.log(`^&* params`, params)
   console.log(`^&* JSON.stringify(params)`, JSON.stringify(params))

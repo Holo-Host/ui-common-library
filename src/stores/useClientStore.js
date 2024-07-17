@@ -23,6 +23,7 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
       // onInit is a hack, see stores/index.js for details
       onInit?.()
 
+      // TODO: this subscribe is getting hacky. investigate a neater way of doing this
       useInterfaceStore().$subscribe((_, state) => {
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
@@ -31,6 +32,11 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
 
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key
+        }
+
+        // we override here the above here because in the holo case, agentState is in general much more up to date than appInfo
+        if (state.agentState?.pubkey) {
+          this.agentKey = state.agentState.pubkey
         }
       })
 
