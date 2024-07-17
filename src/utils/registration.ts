@@ -36,12 +36,16 @@ export async function getBase64EncodedMembraneProof ({
   // Get the membrane_proof from the server
   let params
 
+  const payload = typeof membrane_proof_server_payload === 'string'
+    ? JSON.parse(membrane_proof_server_payload)
+    : membrane_proof_server_payload
+
   try {
       params = {
-      registration_code,
-      agent_pub_key: agent_id,
-      email: email,
-      payload: JSON.parse(membrane_proof_server_payload)
+        registration_code,
+        agent_pub_key: agent_id,
+        email: email,
+        payload,
       }
   } catch {
       throw new Error('Membrane Proof payload parsing error')
