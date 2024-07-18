@@ -86,7 +86,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     },
 
     // END useInterfaceStore methods
-    // BEGIN holo specific methods
+    // BEGIN holochain specific methods
 
     async holochainCallZome(args) {
       const { zome_name, fn_name, payload, role_name } = args
