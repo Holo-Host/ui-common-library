@@ -28,6 +28,8 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
 
+        console.log('^&* useClientStore agent state', state)
+
         this.hasMemproofs = state?.agentState?.hasMemproofs
 
         if (state.appInfo?.agent_pub_key) {
