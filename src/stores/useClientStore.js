@@ -36,6 +36,10 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
 
         // we override here the above here because in the holo case, agentState is in general much more up to date than appInfo
         if (state.agentState?.pubkey) {
+
+          console.log('^&* useClientStore agent.id', state.agentState?.id)
+          console.log('^&* useClientStore setting pubkey', state.agentState?.pubkey)
+
           this.agentKey = state.agentState.pubkey
         }
       })
