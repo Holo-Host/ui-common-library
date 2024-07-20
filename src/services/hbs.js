@@ -77,31 +77,38 @@ async function registrationFetchHostCriteria(payload, environment, hbsServicePor
 //   {
 //     "_id": "string",
 //     "jurisdiction": "string",
-//     "kyc": "string", // Note: Either holo_kyc_1 or holo_kyc_2
+//     "kyc": "string", // Note: Either `holo_kyc_1` or `holo_kyc_2`
 //     "error": "string",
 //     "pubkey": "string"
 //   }
 // ]
-export async function fetchHostCriteria(hostIds, environment, hbsServicePort, page = 0, itemsPerPage = 50) {
+export async function fetchHostCriteria(hostIds = [], environment, hbsServicePort, page = 0, itemsPerPage = 50) {
   let currentPageNumber = page;
-  let hostsWithCriteria, totalItems, currentItems
+  let hostsWithCriteria = [];
+  let currentItems = 0
+  let totalItems = itemsPerPage
+
   do {
-    console.log(`Fetching next page (p${currentPageNumber}) from uptime records...`)
+    console.log(`Fetching page ${currentPageNumber} from uptime records...`)
     const payload = {
       "page": currentPageNumber,
       "itemsPerPage": itemsPerPage,
       "ids": hostIds || []
     }
   
-    const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
+    // TODO: This endpoint needs to be update in HBS to return the standard hbs "pagination" type,
+    // which returns a result obj containing 3 things: items, page, & totalItems.
+    // Note: This currently endpoint implementation seems to return ALL results still, which means it doesn't matter right now
+    // that the result obj isn't reutrning the total number of items, as we get the full run the first time
+    const items = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
 
-    for (item in result.items) {
+    for (let item of items) {
       hostsWithCriteria.push(item)
     }
-    
-    currentPageNumber = result.page + 1; // NB: the first page starts at 0, not 1
-    currentItems = currentPageNumber * result.itemsPerPage;
-    totalItems = result.totalItems;
+
+    currentPageNumber++;  // result.page + 1 // NB: the first page starts at 0, not 1    
+    currentItems = currentPageNumber * itemsPerPage; // result.itemsPerPage
+    totalItems = totalItems; // result.totalItems
   } while (totalItems > currentItems);
 
   return hostsWithCriteria
