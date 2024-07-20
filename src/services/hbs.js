@@ -93,7 +93,7 @@ export async function fetchHostCriteria(hostIds = [], environment, hbsServicePor
     const payload = {
       "page": currentPageNumber,
       "itemsPerPage": itemsPerPage,
-      "ids": hostIds || []
+      "ids": hostIds
     }
   
     // TODO: This endpoint needs to be update in HBS to return the standard hbs "pagination" type,
