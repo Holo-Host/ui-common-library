@@ -83,32 +83,29 @@ async function registrationFetchHostCriteria(payload, environment, hbsServicePor
 //   }
 // ]
 export async function fetchHostCriteria(hostIds = [], environment, hbsServicePort, page = 0, itemsPerPage = 50) {
-  let currentPageNumber = page;
   let hostsWithCriteria = [];
   let currentItems = 0
-  let totalItems = itemsPerPage
+  // Initialize `totalItems` with the page number for first HBS loop
+  // ...once first loop is complete, `totalItems` will be updated with full number of records in the collection 
+  let totalItems = itemsPerPage;
 
   do {
-    console.log(`Fetching page ${currentPageNumber} from uptime records...`)
+    console.log(`Fetching page ${page} from uptime records...`)
     const payload = {
-      "page": currentPageNumber,
+      "page": page,
       "itemsPerPage": itemsPerPage,
       "ids": hostIds
     }
   
-    // TODO: This endpoint needs to be update in HBS to return the standard hbs "pagination" type,
-    // which returns a result obj containing 3 things: items, page, & totalItems.
-    // Note: This currently endpoint implementation seems to return ALL results still, which means it doesn't matter right now
-    // that the result obj isn't reutrning the total number of items, as we get the full run the first time
-    const items = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
+    const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
 
-    for (let item of items) {
+    for (let item of result.items) {
       hostsWithCriteria.push(item)
     }
 
-    currentPageNumber++;  // result.page + 1 // NB: the first page starts at 0, not 1    
-    currentItems = currentPageNumber * itemsPerPage; // result.itemsPerPage
-    totalItems = totalItems; // result.totalItems
+    page = result.page + 1 // NB: pages are 0-indexed
+    currentItems = page * result.itemsPerPage
+    totalItems = result.totalItems
   } while (totalItems > currentItems);
 
   return hostsWithCriteria
