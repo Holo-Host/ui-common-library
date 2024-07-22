@@ -72,13 +72,43 @@ async function registrationFetchHostCriteria(payload, environment, hbsServicePor
   }
 }
 
-export async function fetchHostCriteria(hostIds, environment, hbsServicePort) {
-  const payload = {
-    "ids": hostIds || []
-  }
+// Returns:
+// [
+//   {
+//     "_id": "string",
+//     "jurisdiction": "string",
+//     "kyc": "string", // Note: Either `holo_kyc_1` or `holo_kyc_2`
+//     "error": "string",
+//     "pubkey": "string"
+//   }
+// ]
+export async function fetchHostCriteria(hostIds = [], environment, hbsServicePort, page = 0, itemsPerPage = 50) {
+  let hostsWithCriteria = [];
+  let currentItems = 0
+  // Initialize `totalItems` with the page number for first HBS loop
+  // ...once first loop is complete, `totalItems` will be updated with full number of records in the collection 
+  let totalItems = itemsPerPage;
 
-  const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
-  return result
+  do {
+    console.log(`Fetching page ${page} from uptime records...`)
+    const payload = {
+      "page": page,
+      "itemsPerPage": itemsPerPage,
+      "ids": hostIds
+    }
+  
+    const result = await registrationFetchHostCriteria(payload, environment, hbsServicePort)
+
+    for (let item of result.items) {
+      hostsWithCriteria.push(item)
+    }
+
+    page = result.page + 1 // NB: pages are 0-indexed
+    currentItems = page * result.itemsPerPage
+    totalItems = result.totalItems
+  } while (totalItems > currentItems);
+
+  return hostsWithCriteria
 }
 
 export async function registrationFetchJurisdictions(environment, hbsServicePort) {
