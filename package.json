@@ -16,6 +16,7 @@
     "holo:chaperone": "npx chaperone-server --config ./chaperone.json"
   },
   "dependencies": {
+    "@holochain/client": "^0.18.0-dev.6",
     "@holo-host/identicon": "^0.1.0",
     "@holo-host/web-sdk": "^0.6.9-prerelease",
     "@testing-library/user-event": "^13.2.1",

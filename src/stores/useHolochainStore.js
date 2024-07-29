@@ -1,5 +1,5 @@
 import { inspect } from 'util'
-import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
+import { AdminWebsocket, AppWebsocket } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
