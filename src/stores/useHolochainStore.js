@@ -7,6 +7,11 @@ import useSignalStore from './useSignalStore'
 import { kycLevel2 } from '../services/hbs'
 import { hposHolochainCall } from '../services/hpos'
 
+const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
+const __HC_ZOME_CALL_SIGNER__ = "__HC_ZOME_CALL_SIGNER__";
+const isLauncher = () => globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
+const getLauncherEnvironment = () => isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
+
 const HC_APP_TIMEOUT = 35_000
 
 const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) => defineStore('holochain', {
@@ -29,11 +34,11 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
 
     async initialize() {
       try {
-        let happConnectionExpiration = this.happConnectionCache.get("expiresAt");
-        let happConnectionToken = this.happConnectionCache.get("token");
+        let happConnectionExpiration = this.happConnectionCache["expiresAt"];
+        let happConnectionToken = this.happConnectionCache["token"];
         let launcherEnv = getLauncherEnvironment();
 
-        if (!!launcherEnv && !happConnectionToken) {
+        if (!!launcherEnv) {
           this.isLauncherEnv = true;
           if (!launcherEnv.APP_INTERFACE_TOKEN) {
             console.warn(`Failed to locate the app interface token for app in launcher env: ${launcherEnv}`);
@@ -41,7 +46,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
           if (!launcherEnv.APP_INTERFACE_PORT) {
             console.warn(`Failed to locate the app interface port for app in launcher env: ${launcherEnv}`);
           }
-          this.happConnectionCache.set("token", launcherEnv.APP_INTERFACE_TOKEN);
+          this.happConnectionCache["token"] = launcherEnv.APP_INTERFACE_TOKEN;
           happConnectionToken = launcherEnv.APP_INTERFACE_TOKEN;
           app_ws_url = `ws:localhost:${launcherEnv.APP_INTERFACE_PORT}`
         } else if (!happConnectionToken || !happConnectionExpiration || happConnectionExpiration <= Date.now()) {
@@ -57,17 +62,22 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
               expiry_seconds: 0,
             });
   
-            this.happConnectionCache.set("expiresAt", issuedToken.expires_at);
-            this.happConnectionCache.set("token", issuedToken.token);
+            this.happConnectionCache["expiresAt"] = issuedToken.expires_at;
+            this.happConnectionCache["token"] = issuedToken.token;
             happConnectionToken = issuedToken.token
-        }
+          }
 
-        const holochainClient = await AppWebsocket.connect({
+        console.log("app_ws_url : ", app_ws_url)
+        console.log("happConnectionToken : ", happConnectionToken)
+
+        holochainClient = await AppWebsocket.connect({
           url: new URL(app_ws_url),
           wsClientOptions: { origin: 'ui-common-lib' },
-          token: happConnectionToken,
+          token: happConnectionToken, // do we need this for launcher?
           defaultTimeout: HC_APP_TIMEOUT,
         })
+          
+        console.log("holochainClient : ", happConnectionToken)
 
         holochainClient.on("signal", useSignalStore().handleSignal(presentHcSignal(signal)));
         this.client = holochainClient
