@@ -15,7 +15,9 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
-    signingCredentials: null
+    adminWebsocketCache: null,
+    signingCredentialsCache: {}, // An installed app may have multiple cells, therefore we create a map of signing credentials per cell id 
+    happConnectionCache: {}
   }),
   getters: {
     isAnonymous: _ => false, // for compatibility with holo
@@ -26,11 +28,34 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
 
     async initialize() {
       try {
-        const holochainClient = await AppWebsocket.connect(
-          app_ws_url,
-          HC_APP_TIMEOUT,
-          signal => useSignalStore().handleSignal(presentHcSignal(signal))
-        )
+        if (!this.adminWebsocketCache) {
+          this.adminWebsocketCache = await AdminWebsocket.connect({
+            url: new URL(`ws:localhost:${hc_admin_port}`),
+            wsClientOptions: { origin: 'ui-common-lib' },
+          });
+        }
+        let adminWs = this.adminWebsocketCache;
+        let happConnectionToken = this.happConnectionCache.get(token);
+        let happConnectionExpiration = this.happConnectionCache.get(expiresAt);
+        if (!happConnectionToken| !happConnectionExpiration || happConnectionExpiration <= Date.now()) {
+          const issuedToken = await adminWs.issueAppAuthenticationToken({
+            installed_app_id,
+            expiry_seconds: 0,
+          });
+
+          this.happConnectionCache.set(expiresAt, issuedToken.expires_at);
+          this.happConnectionCache.set(token, issuedToken.token);
+          happConnectionToken = issuedToken.token
+        }
+
+        const holochainClient = await AppWebsocket.connect({
+          url: new URL(app_ws_url),
+          wsClientOptions: { origin: 'ui-common-lib' },
+          token: happConnectionToken,
+          defaultTimeout: HC_APP_TIMEOUT,
+        })
+
+        holochainClient.on("signal", useSignalStore().handleSignal(presentHcSignal(signal)));
 
         this.client = holochainClient
 
@@ -98,12 +123,12 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      if( !this.signingCredentials)
+      if( !this.signingCredentialsCache[cellId])
       {
         this.setCredentials(cellId)
       }
 
-      await this.signingCredentials
+      await this.signingCredentialsCache[cellId]
 
       let result = null
 
@@ -127,9 +152,15 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
       return result
     },
     setCredentials(cellId) {
-      this.signingCredentials = new Promise(async (resolve, reject) => {
+      this.signingCredentialsCache[cellId] = new Promise(async (resolve, reject) => {
         try {
-          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
+          if (!this.adminWebsocketCache) {
+            this.adminWebsocketCache = await AdminWebsocket.connect({
+              url: new URL(`ws:localhost:${hc_admin_port}`),
+              wsClientOptions: { origin: 'ui-common-lib' },
+            });
+          }
+          let adminWs = this.adminWebsocketCache;
           await adminWs.authorizeSigningCredentials(cellId)
         } catch(e) {
           console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
