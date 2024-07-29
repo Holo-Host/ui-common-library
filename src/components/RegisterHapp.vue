@@ -34,7 +34,7 @@
 
 <script>
 import Button from './Button.vue'
-import { getMembraneProof } from '../utils/registration.hs'
+import { getMembraneProof } from '../utils/registration.js'
 
 export default {
   name: 'RegisterHapp',
