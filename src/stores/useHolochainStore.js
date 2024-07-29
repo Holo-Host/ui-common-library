@@ -15,6 +15,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
+    isLauncherEnv: false,
     adminWebsocketCache: null,
     signingCredentialsCache: {}, // An installed app may have multiple cells, therefore we create a map of signing credentials per cell id 
     happConnectionCache: {}
@@ -28,24 +29,37 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
 
     async initialize() {
       try {
-        if (!this.adminWebsocketCache) {
-          this.adminWebsocketCache = await AdminWebsocket.connect({
-            url: new URL(`ws:localhost:${hc_admin_port}`),
-            wsClientOptions: { origin: 'ui-common-lib' },
-          });
-        }
-        let adminWs = this.adminWebsocketCache;
-        let happConnectionToken = this.happConnectionCache.get(token);
-        let happConnectionExpiration = this.happConnectionCache.get(expiresAt);
-        if (!happConnectionToken| !happConnectionExpiration || happConnectionExpiration <= Date.now()) {
-          const issuedToken = await adminWs.issueAppAuthenticationToken({
-            installed_app_id,
-            expiry_seconds: 0,
-          });
+        let happConnectionExpiration = this.happConnectionCache.get("expiresAt");
+        let happConnectionToken = this.happConnectionCache.get("token");
+        let launcherEnv = getLauncherEnvironment();
 
-          this.happConnectionCache.set(expiresAt, issuedToken.expires_at);
-          this.happConnectionCache.set(token, issuedToken.token);
-          happConnectionToken = issuedToken.token
+        if (!!launcherEnv && !happConnectionToken) {
+          this.isLauncherEnv = true;
+          if (!launcherEnv.APP_INTERFACE_TOKEN) {
+            console.warn(`Failed to locate the app interface token for app in launcher env: ${launcherEnv}`);
+          }
+          if (!launcherEnv.APP_INTERFACE_PORT) {
+            console.warn(`Failed to locate the app interface port for app in launcher env: ${launcherEnv}`);
+          }
+          this.happConnectionCache.set("token", launcherEnv.APP_INTERFACE_TOKEN);
+          happConnectionToken = launcherEnv.APP_INTERFACE_TOKEN;
+          app_ws_url = `ws:localhost:${launcherEnv.APP_INTERFACE_PORT}`
+        } else if (!happConnectionToken || !happConnectionExpiration || happConnectionExpiration <= Date.now()) {
+            if (!this.adminWebsocketCache) {
+              this.adminWebsocketCache = await AdminWebsocket.connect({
+                url: new URL(`ws:localhost:${hc_admin_port}`),
+                wsClientOptions: { origin: 'ui-common-lib' },
+              });
+            }
+            let adminWs = this.adminWebsocketCache;
+            const issuedToken = await adminWs.issueAppAuthenticationToken({
+              installed_app_id,
+              expiry_seconds: 0,
+            });
+  
+            this.happConnectionCache.set("expiresAt", issuedToken.expires_at);
+            this.happConnectionCache.set("token", issuedToken.token);
+            happConnectionToken = issuedToken.token
         }
 
         const holochainClient = await AppWebsocket.connect({
@@ -56,7 +70,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         })
 
         holochainClient.on("signal", useSignalStore().handleSignal(presentHcSignal(signal)));
-
         this.client = holochainClient
 
         holochainClient.client.socket.onclose = function(e) {
@@ -123,12 +136,14 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      if( !this.signingCredentialsCache[cellId])
-      {
-        this.setCredentials(cellId)
+      if (!this.isLauncherEnv) {
+        if(!this.signingCredentialsCache[cellId])
+        {
+          this.setCredentials(cellId)
+        }
+  
+        await this.signingCredentialsCache[cellId]
       }
-
-      await this.signingCredentialsCache[cellId]
 
       let result = null
 
