@@ -9,28 +9,34 @@ import { hposHolochainCall } from '../services/hpos'
 
 const HC_APP_TIMEOUT = 35_000
 
+const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
+const isLauncher = () => globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
+const getLauncherEnvironment = () => isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
+
 const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) => defineStore('holochain', {
   state: () => ({
     client: null,
+    signingCredentials: null,
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
-    signingCredentials: null
   }),
   getters: {
     isAnonymous: _ => false, // for compatibility with holo
-    agentEmail: _ => null, // for compatibility with holo
+    agentEmail: _ => null, // for compatibility with holo,
+    isLauncher,
   },
   actions: {
     // BEGIN useInterfaceStore methods
 
     async initialize() {
       try {
-        const holochainClient = await AppWebsocket.connect(
-          app_ws_url,
-          HC_APP_TIMEOUT,
-          signal => useSignalStore().handleSignal(presentHcSignal(signal))
-        )
+        const holochainClient = await AppWebsocket.connect({
+          url: app_ws_url,
+          defaultTimeout: HC_APP_TIMEOUT,
+        })
+
+        holochainClient.on('signal', signal => useSignalStore().handleSignal(presentHcSignal(signal)))
 
         this.client = holochainClient
 
@@ -52,9 +58,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
 
     async loadAppInfo() {
       try {
-        const appInfo = await this.client.appInfo({
-          installed_app_id
-        })
+        const appInfo = await this.client.appInfo()
         this.appInfo = appInfo
         this.isReady = true
 
@@ -98,8 +102,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      if( !this.signingCredentials)
-      {
+      if(!this.isLauncher && !this.signingCredentials) {
         this.setCredentials(cellId)
       }
 
