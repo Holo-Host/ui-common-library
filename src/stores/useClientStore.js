@@ -28,10 +28,16 @@ const makeUseClientStore = ({ useInterfaceStore, onInit, fetchKycLevel }) => def
         // This could be more efficient by inspecting the contents of mutation
         this.isReady = state.isReady
 
-        this.hasMemproofs = state?.agentState?.hasMemproofs
-
         if (state.appInfo?.agent_pub_key) {
           this.agentKey = state.appInfo.agent_pub_key
+        }
+
+        // how we know we have memproofs in holo
+        this.hasMemproofs = state?.agentState?.hasMemproofs
+
+        // how we know we have memproofs in holochain (I realize this is not pretty rn)
+        if (state.appInfo) {
+          this.hasMemproofs = state.appInfo.status !== 'awaiting_memproofs'
         }
 
         // we override here the above here because in the holo case, agentState is in general much more up to date than appInfo
