@@ -1,5 +1,5 @@
 import { inspect } from 'util'
-import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
+import { AppWebsocket } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
@@ -11,12 +11,10 @@ const HC_APP_TIMEOUT = 35_000
 
 const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
 const isLauncher = () => globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
-const getLauncherEnvironment = () => isLauncher() ? globalThis.window[__HC_LAUNCHER_ENV__] : undefined;
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) => defineStore('holochain', {
+const makeUseHolochainStore = ({ app_ws_url }) => defineStore('holochain', {
   state: () => ({
     client: null,
-    signingCredentials: null,
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
@@ -102,12 +100,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
 
-      if(!this.isLauncher && !this.signingCredentials) {
-        this.setCredentials(cellId)
-      }
-
-      await this.signingCredentials
-
       let result = null
 
       const cell_id = [new Uint8Array(listify(cellId[0], (_, value) => (Number(value)))), new Uint8Array(listify(cellId[1], (_, value) => (Number(value))))]
@@ -128,19 +120,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
       }
 
       return result
-    },
-    setCredentials(cellId) {
-      this.signingCredentials = new Promise(async (resolve, reject) => {
-        try {
-          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-          await adminWs.authorizeSigningCredentials(cellId)
-        } catch(e) {
-          console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
-          reject()
-        }
-
-        resolve()
-      })
     },
     async fetchAgentKycLevel(_, __) {
       const kycLevel = await hposHolochainCall({path: 'host/kyc_level', headers: {}, params: {}, method: 'get'})
