@@ -122,6 +122,7 @@ const makeUseHolochainStore = ({ app_ws_url }) => defineStore('holochain', {
       return result
     },
     async fetchAgentKycLevel(_, __) {
+      console.log("🦋useHolochainStore.js fetchAgentKycLevel")
       const kycLevel = await hposHolochainCall({path: 'host/kyc_level', headers: {}, params: {}, method: 'get'})
       return kycLevel ? (kycLevel === kycLevel2) ? 2 : 1 : null
     },
