@@ -1,5 +1,34 @@
 import axios from 'axios'
 
+export const getHolofuelAppIdAxios = async() => {
+
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  }
+
+  const HPOS_API_URL = `${location.protocol}//${location.host}`
+  const pathPrefix = '/api/v2/'
+  const path = 'apps/holofuel/version'
+  const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
+
+  const authToken = localStorage.getItem('authToken')
+
+  console.log(`🦋 getHolofuelAppIdAxios: authToken: ${authToken}`)
+
+  const headers = {
+    'X-Hpos-Auth-Token': authToken,
+    ...axiosConfig.headers,
+    ...userHeaders
+  }
+
+  response = await axios.get(fullUrl, { params, headers })
+  return response.data.version
+
+}
+
 export const hposHolochainCall = async ({
     path,
     headers: userHeaders = {},
