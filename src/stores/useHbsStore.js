@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { registrationFetchJurisdictions } from '../services/hbs'
+import { registrationFetchJurisdictions, authenticateAgent } from '../services/hbs'
 
 const makeUseHbsStore = ({ useHoloStore }) => {
     return defineStore('hbs', {
