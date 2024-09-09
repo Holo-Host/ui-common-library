@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const REQUEST_TIMEOUT = 10000
+const REQUEST_TIMEOUT = 30000
 
 
 export async function serviceApiHttpCall({
