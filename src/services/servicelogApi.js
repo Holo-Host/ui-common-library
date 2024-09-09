@@ -3,8 +3,8 @@ import { serviceLogApiUrl } from '../utils/serviceLogConfiguration'
 import { serviceApiHttpCall } from '../utils/httpProvider'
 
 async function serviceLogApiCall(args, signature, nonce, timestamp, pubkey, environment, serviceLogPort) {
-    // const { Codec } = await import('@holo-host/cryptolib')
-    // const url = serviceLogApiUrl(environment, serviceLogPort)
+    const { Codec } = await import('@holo-host/cryptolib')
+    const url = serviceLogApiUrl(environment, serviceLogPort)
 
     // return serviceApiHttpCall({
     //     serviceUrl: url,
