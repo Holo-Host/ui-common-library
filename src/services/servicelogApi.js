@@ -6,17 +6,17 @@ async function serviceLogApiCall(args, signature, nonce, timestamp, pubkey, envi
     const { Codec } = await import('@holo-host/cryptolib')
     const url = serviceLogApiUrl(environment, serviceLogPort)
 
-    // return serviceApiHttpCall({
-    //     serviceUrl: url,
-    //     headers: {
-    //         "X-Nonce": nonce,
-    //         "X-Timestamp": timestamp,
-    //         "X-Pubkey": Codec.AgentId.encode(pubkey),
-    //         "X-Signature": signature
-    //     },        
-    //     method: 'get',
-    //     ...args
-    // })
+    return serviceApiHttpCall({
+        serviceUrl: url,
+        headers: {
+            "X-Nonce": nonce,
+            "X-Timestamp": timestamp,
+            "X-Pubkey": Codec.AgentId.encode(pubkey),
+            "X-Signature": signature
+        },        
+        method: 'get',
+        ...args
+    })
 }
 
 export async function hAppServiceLogs(payload, signature, pubkey, environment, serviceLogPort) {
