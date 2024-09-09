@@ -17,7 +17,6 @@ const makeUseHoloStore = ({ connectionArgs, MockWebSdk, addClientToWindow }) => 
     appInfo: null,
   }),
   getters: {
-    // isAnonymous: state => state?.agentState?.isAnonymous === undefined ? true : state.agentState.isAnonymous,
     isAnonymous: state => state?.agentState?.isAnonymous,
     isAvailable: state => state.agentState && state.agentState.isAvailable,
     isLoggedIn: state => state.agentState && state.agentState.isAnonymous === false && state.agentState.isAvailable === true,

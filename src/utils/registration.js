@@ -6,24 +6,25 @@ import * as msgpack from '@msgpack/msgpack'
 // In either case, the membrane_proof is assumed to be the original element, msgpack encoded and then encoded as a base64 string
 // Envoy expects the msgpack encoded data, so we decode the base64 string before passing it to Envoy
 
-export type GetMembraneProofInput = {
-  registration_code: string,
-  membrane_proof_server_url?: string, // the presence or absence of the url changes the behavior of the function
-  membrane_proof_server_payload: string,
-  agent_id: string,
-  email: string
-}
+// export type GetMembraneProofInput = {
+//   registration_code: string,
+//   membrane_proof_server_url?: string, // the presence or absence of the url changes the behavior of the function
+//   membrane_proof_server_payload: string,
+//   agent_id: string,
+//   email: string
+// }
 
-export type MembraneProof = Buffer
+// export type MembraneProof = Buffer
 
 // Mostly for internal use and testing. You probably want getMembraneProof below
+// GetMembraneProofInput -> Promise<string>
 export async function getBase64EncodedMembraneProof ({
   registration_code,
   membrane_proof_server_url,
   membrane_proof_server_payload,
   agent_id,
   email
-}: GetMembraneProofInput): Promise<string> {
+}) {
   if (!registration_code) {
     throw new Error('No registration code provided')
   }
@@ -36,12 +37,16 @@ export async function getBase64EncodedMembraneProof ({
   // Get the membrane_proof from the server
   let params
 
+  const payload = typeof membrane_proof_server_payload === 'string'
+    ? JSON.parse(membrane_proof_server_payload)
+    : membrane_proof_server_payload
+
   try {
       params = {
-      registration_code,
-      agent_pub_key: agent_id,
-      email: email,
-      payload: JSON.parse(membrane_proof_server_payload)
+        registration_code,
+        agent_pub_key: agent_id,
+        email: email,
+        payload,
       }
   } catch {
       throw new Error('Membrane Proof payload parsing error')
@@ -58,7 +63,7 @@ export async function getBase64EncodedMembraneProof ({
       })
 
       data = await resp.json()
-  } catch (e: any) {
+  } catch (e) {
       throw new Error(`Membrane Proof Server network error: ${e?.message}`)
   }
 
@@ -69,11 +74,13 @@ export async function getBase64EncodedMembraneProof ({
   return data.mem_proof
 }
 
-export async function getMembraneProof (input: GetMembraneProofInput): Promise<Buffer> {  
+// GetMembraneProofInput -> Promise<Buffer>
+export async function getMembraneProof (input) {  
   return Buffer.from(await getBase64EncodedMembraneProof(input), 'base64')
 }
 
-export function generateUnusedMemproof (): Buffer {
-  return Buffer.from(msgpack.encode(import.meta.env.UNUSED_MEMPROOF))
+// () -> Buffer
+export function generateUnusedMemproof () {
+  return Buffer.from(msgpack.encode(process.env.UNUSED_MEMPROOF))
 }
 

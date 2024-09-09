@@ -1,32 +1,37 @@
 <template>
 
   <div v-if="shouldShowRegisterScreen" class="register-screen">
-    <img v-if="logoUrl" :src="logoUrl" class="logo" />
-    <h1 class="happ-name">{{ happName }}</h1>
-    <div class="body">
-      Please enter the email you registered with and the registration code you received in your email.
-    </div>
+    <template v-if="isLoading">
+      LOADING...
+    </template>
+    <template v-else>
+      <img v-if="logoUrl" :src="logoUrl" class="logo" />
+      <h1 class="happ-name">{{ happName }}</h1>
+      <div class="body">
+        Please enter the email you registered with and the registration code you received in your email.
+      </div>
 
-    <input type="email" id="register-email"
-      v-model="emailInput"
-      class="register-input"
-      data-testid='register-email-input'
-      placeholder="Enter Email">
+      <input type="email" id="register-email"
+        v-model="emailInput"
+        class="register-input"
+        data-testid='register-email-input'
+        placeholder="Enter Email">
 
-    <input type="text" id="register-registration-code"
-      v-model="registrationCode"
-      class="register-input"
-      data-testid='registration-code-input'
-      placeholder="Enter Registration code">
+      <input type="text" id="register-registration-code"
+        v-model="registrationCode"
+        class="register-input"
+        data-testid='registration-code-input'
+        placeholder="Enter Registration code">
 
-    <div class="buttons">
-      <button v-if="signOut" class="logout-button" @click="handleLogout">Logout</button>
-      <Button class='save-button' :color="buttonColor" :disabled="!isValid" :isBusy="isBusy" @click="handleRegister">Submit</Button>
-    </div>
+      <div class="buttons">
+        <button v-if="signOut" class="logout-button" @click="handleLogout">Logout</button>
+        <Button class='save-button' :color="buttonColor" :disabled="!isValid" :isBusy="isBusy" @click="handleRegister">Submit</Button>
+      </div>
 
-    <div class="help-text">
-      Don't have a registration code? Please <a href="https://register.holo.host/" target="_blank">register with Holo.</a>
-    </div>
+      <div class="help-text">
+        Don't have a registration code? Please <a href="https://register.holo.host/" target="_blank">register with Holo.</a>
+      </div>
+    </template>
   </div>
 
   <slot v-else />
@@ -34,7 +39,7 @@
 
 <script>
 import Button from './Button.vue'
-import { getMembraneProof } from '../utils/registration.ts'
+import { getMembraneProof } from '../utils/registration.js'
 
 export default {
   name: 'RegisterHapp',
@@ -92,8 +97,12 @@ export default {
   computed: {
     isValid () {
       // Simple, permissive email validation
-      const emailIsValid = this.email?.length > 5 && this.email?.includes('@')
+      const emailIsValid = this.emailInput?.length > 5 && this.emailInput?.includes('@')
+
       return  emailIsValid && this.registrationCode?.length > 0
+    },
+    isLoading () {
+      return !this.agentId
     },
     shouldShowRegisterScreen () {
       return !this.isAnonymous && !this.hasMemproofs
@@ -109,7 +118,7 @@ export default {
       try {
         let memproof = await getMembraneProof({
           registration_code: this.registrationCode,
-          email: this.email,
+          email: this.emailInput,
           membrane_proof_server_url: this.membraneProofServerUrl,
           membrane_proof_server_payload: this.membraneProofServerPayload,
           agent_id: this.agentId,

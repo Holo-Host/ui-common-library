@@ -1,5 +1,5 @@
 import { inspect } from 'util'
-import { AdminWebsocket, AppWebsocket, generateSigningKeyPair, setSigningCredentials } from '@holochain/client'
+import { AppWebsocket } from '@holochain/client'
 import { defineStore } from 'pinia'
 import { presentHcSignal, listify } from '../utils'
 import useIsLoadingStore from './useIsLoadingStore'
@@ -9,28 +9,32 @@ import { hposHolochainCall } from '../services/hpos'
 
 const HC_APP_TIMEOUT = 35_000
 
-const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) => defineStore('holochain', {
+const __HC_LAUNCHER_ENV__ = "__HC_LAUNCHER_ENV__";
+const isLauncher = () => globalThis.window && __HC_LAUNCHER_ENV__ in globalThis.window;
+
+const makeUseHolochainStore = ({ app_ws_url }) => defineStore('holochain', {
   state: () => ({
     client: null,
     // These two values are subscribed to by clientStore
     appInfo: null,
     isReady: false,
-    signingCredentials: null
   }),
   getters: {
     isAnonymous: _ => false, // for compatibility with holo
-    agentEmail: _ => null, // for compatibility with holo
+    agentEmail: _ => null, // for compatibility with holo,
+    isLauncher,
   },
   actions: {
     // BEGIN useInterfaceStore methods
 
     async initialize() {
       try {
-        const holochainClient = await AppWebsocket.connect(
-          app_ws_url,
-          HC_APP_TIMEOUT,
-          signal => useSignalStore().handleSignal(presentHcSignal(signal))
-        )
+        const holochainClient = await AppWebsocket.connect({
+          url: app_ws_url,
+          defaultTimeout: HC_APP_TIMEOUT,
+        })
+
+        holochainClient.on('signal', signal => useSignalStore().handleSignal(presentHcSignal(signal)))
 
         this.client = holochainClient
 
@@ -52,9 +56,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
 
     async loadAppInfo() {
       try {
-        const appInfo = await this.client.appInfo({
-          installed_app_id
-        })
+        const appInfo = await this.client.appInfo()
         this.appInfo = appInfo
         this.isReady = true
 
@@ -86,7 +88,7 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
     },
 
     // END useInterfaceStore methods
-    // BEGIN holo specific methods
+    // BEGIN holochain specific methods
 
     async holochainCallZome(args) {
       const { zome_name, fn_name, payload, role_name } = args
@@ -97,13 +99,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
       if (!cellId) {
         throw new Error(`Couldn't find provisioned cell with role_name ${role_name}`)
       }
-
-      if( !this.signingCredentials)
-      {
-        this.setCredentials(cellId)
-      }
-
-      await this.signingCredentials
 
       let result = null
 
@@ -125,19 +120,6 @@ const makeUseHolochainStore = ({ installed_app_id, app_ws_url, hc_admin_port }) 
       }
 
       return result
-    },
-    setCredentials(cellId) {
-      this.signingCredentials = new Promise(async (resolve, reject) => {
-        try {
-          const adminWs = await AdminWebsocket.connect(`ws:localhost:${hc_admin_port}`)
-          await adminWs.authorizeSigningCredentials(cellId)
-        } catch(e) {
-          console.log(`holochainCallZome error authorizeSigningCredentials AdminWebsocket: ws:localhost:${hc_admin_port}`, e)
-          reject()
-        }
-
-        resolve()
-      })
     },
     async fetchAgentKycLevel(_, __) {
       const kycLevel = await hposHolochainCall({path: 'host/kyc_level', headers: {}, params: {}, method: 'get'})

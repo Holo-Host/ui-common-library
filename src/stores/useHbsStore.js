@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { fetchAgentKycLevel, registrationFetchJurisdictions } from '../services/hbs'
+import { registrationFetchJurisdictions, authenticateAgent, kycLevel2 } from '../services/hbs'
 
 const makeUseHbsStore = ({ useHoloStore }) => {
     return defineStore('hbs', {
         state: () => ({
             kycLevel: null,
+            publisherJurisdiction: null,
             jurisdictions: []
         }),
         getters: {
@@ -13,6 +14,11 @@ const makeUseHbsStore = ({ useHoloStore }) => {
         },
         actions: {
             async loadAgentKycLevel(environment, hbsServicePort) {
+                const { kycLevel } = this.loadAgent(environment, hbsServicePort);
+                this.kycLevel = kycLevel
+                return kycLevel
+            },
+            async loadAgent(environment, hbsServicePort) {
                 const payload = {
                     "email": useHoloStore().agentEmail,
                     "timestamp": Date.now() - (30 * 1000), // Subtract 30 sec to prevent "future" timestamp error from API
@@ -20,9 +26,17 @@ const makeUseHbsStore = ({ useHoloStore }) => {
                 }
             
                 const { _, signature  } = await await useHoloStore().signPayload(payload)
-                const kycLevel = await fetchAgentKycLevel(payload, signature, environment, hbsServicePort)
-                this.kycLevel = kycLevel
-                return kycLevel
+                const result = await authenticateAgent(payload, signature, environment, hbsServicePort)
+                if (result) {
+                    if (result.kyc)
+                        this.kycLevel = result.kyc === kycLevel2 ? 2 : 1;
+                    if (result.jurisdiction)
+                        this.publisherJurisdiction = result.jurisdiction;
+                }
+                return {
+                    kycLevel: this.kycLevel,
+                    publisherJurisdiction: this.publisherJurisdiction
+                };
             },
             async loadJurisdictions(environment, hbsServicePort) {
                 try {
