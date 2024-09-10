@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="label" v-if="label && label.length > 0">{{ label }}:</div>
-    <select v-model="selectedOption" :disabled="disabled" class="drop-down" @change="$emit('optionChanged', selectedOption)">
+    <select :value="selectedOption" :disabled="disabled" class="drop-down" @change="updateSelection($event.target.value)">
       <option v-for="option in options" :value="option" :key="option">
         {{ option }}
       </option>
@@ -18,6 +18,11 @@ export default {
     label: String,
     options: Array,
     selectedOption: String
+  },
+  methods: {
+    updateSelection(value) {
+      this.$emit('optionChanged', value);
+    }
   }
 }
 </script>
