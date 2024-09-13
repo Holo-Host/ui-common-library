@@ -20,8 +20,7 @@ export const getHolofuelAppIdAxios = async() => {
 
   const headers = {
     'X-Hpos-Auth-Token': authToken,
-    ...axiosConfig.headers,
-    ...userHeaders
+    ...axiosConfig.headers
   }
 
   response = await axios.get(fullUrl, { params, headers })

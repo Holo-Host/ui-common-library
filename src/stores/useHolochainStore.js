@@ -29,10 +29,14 @@ const makeUseHolochainStore = ({ app_ws_url }) => defineStore('holochain', {
 
     async initialize() {
       try {
+        console.log(`🦋 useHolochainStore initialize() before connect: ${app_ws_url}`)
+
         const holochainClient = await AppWebsocket.connect({
           url: app_ws_url,
           defaultTimeout: HC_APP_TIMEOUT,
         })
+
+        console.log(`🦋 useHolochainStore initialize() after connect: ${app_ws_url}`)
 
         holochainClient.on('signal', signal => useSignalStore().handleSignal(presentHcSignal(signal)))
 
