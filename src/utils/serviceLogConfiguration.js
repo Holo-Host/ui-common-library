@@ -4,10 +4,10 @@ import { Environment } from './consts'
 const ServicelogApiURLForEnvironment = (key, port) => {
     switch (key) {
       case Environment.local:
-        return `http://localhost:${port}`
+        return `http://localhost:8080/servicelog`
   
       case Environment.localNoBackend:
-        return `https://servicelog-vault.dev.holotest.net/v1`
+        return `http://localhost:8080/servicelog`
   
       case Environment.development:
         return `https://servicelog-vault.dev.holotest.net/v1`
